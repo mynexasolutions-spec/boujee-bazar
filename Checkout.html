@@ -231,7 +231,7 @@
                   <a href="about.html">About Us</a>
 
                   <div class="has-sub-menu has-mega-menu">
-                    <a href="shop.html" style="cursor: pointer;">Shop <i class="flaticon-down" style="font-size: 10px; margin-left: 4px;"></i></a>
+                    <a href="shop.html" style="cursor: pointer;">Shop <i class="flaticon-down"></i></a>
 
                     <div class="ul-header-submenu ul-header-megamenu">
                       <div class="single-col">
@@ -283,7 +283,7 @@
 
 
                   <div class="has-sub-menu has-mega-menu">
-                    <a role="button" style="cursor: pointer;">Pages <i class="flaticon-down" style="font-size: 10px; margin-left: 4px;"></i></a>
+                    <a role="button" style="cursor: pointer;">Pages <i class="flaticon-down"></i></a>
 
                     <div class="ul-header-submenu ul-header-megamenu">
                       <div class="single-col">
@@ -300,7 +300,7 @@
                         <span class="single-col-title">Shop Pages</span>
                         <ul>
                           <li><a href="wishlist.html">Wishlist</a></li>
-                          <li><a href="cart.html">Cart</a></li>
+                          <li><a href="#" data-bs-toggle="offcanvas" data-bs-target="#cartOffcanvas">Cart</a></li>
                           <li><a href="Checkout.html">Checkout</a></li>
                         </ul>
                       </div>
@@ -353,7 +353,7 @@
               </button>
               <a href="login.html"><i class="flaticon-user"></i></a>
               <a href="wishlist.html"><i class="flaticon-heart"></i></a>
-              <a href="cart.html"><i class="flaticon-shopping-bag"></i></a>
+              <a href="#" data-bs-toggle="offcanvas" data-bs-target="#cartOffcanvas"><i class="flaticon-shopping-bag"></i></a>
             </div>
 
             <!-- sidebar opener -->
@@ -665,6 +665,50 @@
     </footer>
     <!-- FOOTER SECTION END -->
 
+    <!-- CART OFFCANVAS START -->
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="cartOffcanvas" aria-labelledby="cartOffcanvasLabel">
+      <div class="offcanvas-header border-bottom">
+        <h5 class="offcanvas-title" id="cartOffcanvasLabel">Shopping Cart</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      </div>
+      <div class="offcanvas-body d-flex flex-column">
+        <!-- Cart Items List -->
+        <div class="cart-items flex-grow-1 overflow-auto">
+          <!-- Item 1 -->
+          <div class="d-flex align-items-center mb-3 pb-3 border-bottom">
+            <img src="assets/img/products/product-img-1.jpg" alt="Product" class="img-fluid rounded" style="width: 70px; height: 70px; object-fit: cover;">
+            <div class="ms-3 flex-grow-1">
+              <h6 class="mb-0">Orange Airsuit</h6>
+              <span class="text-muted small">1 × ₹99.00</span>
+            </div>
+            <button class="btn btn-sm btn-link text-danger"><i class="flaticon-close"></i></button>
+          </div>
+          <!-- Item 2 -->
+          <div class="d-flex align-items-center mb-3 pb-3 border-bottom">
+            <img src="assets/img/products/product-img-2.jpg" alt="Product" class="img-fluid rounded" style="width: 70px; height: 70px; object-fit: cover;">
+            <div class="ms-3 flex-grow-1">
+              <h6 class="mb-0">Leather Bag</h6>
+              <span class="text-muted small">1 × ₹120.00</span>
+            </div>
+            <button class="btn btn-sm btn-link text-danger"><i class="flaticon-close"></i></button>
+          </div>
+        </div>
+
+        <!-- Cart Footer / Actions -->
+        <div class="cart-sidebar-footer pt-3 mt-auto">
+          <div class="d-flex justify-content-between fw-bold mb-3">
+            <span>Subtotal:</span>
+            <span>₹219.00</span>
+          </div>
+          <div class="d-grid gap-2">
+            <a href="cart.html" class="ul-btn ul-btn-outline w-100" style="background: transparent; color: var(--color-black); border: 1px solid var(--color-black);">View Cart</a>
+            <a href="Checkout.html" class="ul-btn w-100">Checkout</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- CART OFFCANVAS END -->
+
     <!-- libraries JS -->
     <script src="assets/js/bootstrap.bundle.min.js"></script>
     <script src="assets/js/splide.min.js"></script>
@@ -679,5 +723,70 @@
     <!-- custom JS -->
     <script src="assets/js/main.js"></script>
 
+
+    <!-- CART OFFCANVAS START -->
+    <div class="offcanvas offcanvas-end ul-cart-offcanvas" tabindex="-1" id="cartOffcanvas" aria-labelledby="cartOffcanvasLabel">
+        <div class="offcanvas-header ul-cart-header">
+            <h5 class="offcanvas-title" id="cartOffcanvasLabel">Shopping Cart (2)</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body ul-cart-body">
+            <!-- Cart Item -->
+            <div class="ul-cart-item">
+                <div class="ul-cart-img">
+                    <img src="images/product-img-1.jpg" alt="Product">
+                </div>
+                <div class="ul-cart-info">
+                    <div class="ul-cart-top">
+                        <h6 class="ul-cart-title">Tailored Coat</h6>
+                        <button class="ul-cart-remove"><i class="flaticon-close"></i></button>
+                    </div>
+                    <span class="ul-cart-variant">Size: M | Color: Black</span>
+                    <div class="ul-cart-bottom">
+                        <div class="ul-cart-quantity">
+                            <button class="minus">-</button>
+                            <input type="number" value="1" min="1">
+                            <button class="plus">+</button>
+                        </div>
+                        <span class="ul-cart-price">$120.00</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Cart Item -->
+            <div class="ul-cart-item">
+                <div class="ul-cart-img">
+                    <img src="images/product-img-2.jpg" alt="Product">
+                </div>
+                <div class="ul-cart-info">
+                    <div class="ul-cart-top">
+                        <h6 class="ul-cart-title">Classic Shoes</h6>
+                        <button class="ul-cart-remove"><i class="flaticon-close"></i></button>
+                    </div>
+                    <span class="ul-cart-variant">Size: 42 | Color: Brown</span>
+                    <div class="ul-cart-bottom">
+                        <div class="ul-cart-quantity">
+                            <button class="minus">-</button>
+                            <input type="number" value="1" min="1">
+                            <button class="plus">+</button>
+                        </div>
+                        <span class="ul-cart-price">$90.00</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="ul-cart-footer">
+            <div class="ul-cart-subtotal">
+                <span>Subtotal</span>
+                <span class="amount">$210.00</span>
+            </div>
+            <p class="ul-cart-shipping-msg">Taxes and shipping calculated at checkout</p>
+            <div class="ul-cart-buttons">
+                <a href="Checkout.html" class="ul-cart-btn ul-cart-btn-primary">Checkout</a>
+                <a href="shop.html" class="ul-cart-btn ul-cart-btn-secondary" data-bs-dismiss="offcanvas">Continue Shopping</a>
+            </div>
+        </div>
+    </div>
+    <!-- CART OFFCANVAS END -->
 
 </body></html>

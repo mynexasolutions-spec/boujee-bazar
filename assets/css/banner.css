@@ -1,0 +1,626 @@
+/* ============================================================
+     1. DESIGN TOKENS — light theme (edit to re-skin instantly)
+     ============================================================ */
+:root {
+  --color-bg: #f4f2ee; /* warm off-white stage background       */
+  --color-bg-2: #eae6df; /* soft sand for gradient depth          */
+  --color-ink: #1c1a17; /* near-black ink — primary text         */
+  --color-ink-soft: #6b655c; /* muted ink — secondary text            */
+  --color-gold: #b08a4f; /* warm bronze — accents / CTA           */
+  --color-gold-2: #d8b878; /* light champagne for gradients         */
+  --color-line: rgba(28, 26, 23, 0.1);
+
+  --font-sans: "Inter", "Helvetica Neue", "Segoe UI", Arial, sans-serif;
+
+  --ease-luxury: cubic-bezier(0.22, 1, 0.36, 1); /* signature settle ease */
+  --ease-smooth: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-flow: cubic-bezier(0.45, 0, 0.15, 1); /* horizontal sweep ease  */
+
+  /* Card dimensions — shrunk on mobile in ONE place (the media query)
+       so the phone shows the exact same flow at a lower aspect ratio. */
+  --card-w: 320px;
+  --card-h: 440px;
+  --ring-radius: 300px;
+  --strip-h: 255px; /* height of the bottom card strip in banner phase */
+}
+
+/* Respect reduced-motion users */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* ============================================================
+     3. STAGE — full-viewport hero (everything centered & full-width)
+     ============================================================ */
+.hero {
+  position: relative;
+  width: 100%;
+  height: 80vh;
+  min-height: 600px;
+  overflow: hidden;
+  background:
+    radial-gradient(
+      ellipse at 50% 20%,
+      rgba(216, 184, 120, 0.18),
+      transparent 60%
+    ),
+    radial-gradient(
+      ellipse at 80% 90%,
+      rgba(176, 138, 79, 0.1),
+      transparent 55%
+    ),
+    linear-gradient(170deg, var(--color-bg) 0%, var(--color-bg-2) 100%);
+  perspective: 1500px; /* shared 3D perspective for the stage */
+  isolation: isolate;
+}
+
+/* soft framing fade */
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse at 50% 50%,
+    transparent 55%,
+    rgba(28, 26, 23, 0.06) 100%
+  );
+  pointer-events: none;
+  z-index: 9;
+}
+
+/* ============================================================
+     4. PHASE 1 — 3D ROTATING RING (centered, full-width)
+     ============================================================ */
+.ring-stage {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: var(--card-w);
+  height: var(--card-h);
+  transform: translate3d(-50%, -50%, 0);
+  transform-style: preserve-3d;
+  z-index: 3;
+  opacity: 1;
+  transition:
+    opacity 1s var(--ease-smooth),
+    transform 1s var(--ease-smooth);
+  will-change: opacity, transform;
+}
+/* Phase 2: ring shrinks away as cards unfold into horizontal flow */
+.hero.is-flowing .ring-stage {
+  opacity: 0;
+  pointer-events: none;
+  transform: translate3d(-50%, -50%, 0) scale(0.8);
+}
+
+.ring {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  will-change: transform;
+  transform: translateZ(calc(var(--ring-radius) * -1))
+    rotateY(var(--angle, 0deg));
+  transition: transform 1s var(--ease-smooth);
+}
+
+.ring-card {
+  position: absolute;
+  inset: 0;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid var(--color-line);
+  box-shadow:
+    0 26px 50px -18px rgba(28, 26, 23, 0.35),
+    0 2px 6px rgba(28, 26, 23, 0.06);
+  backface-visibility: hidden;
+  will-change: transform, opacity;
+  /* placed around the Y axis by JS-set custom props */
+  transform: rotateY(var(--rot, 0deg)) translateZ(var(--ring-radius))
+    scale(var(--scale, 0.6));
+  opacity: var(--opacity, 0.25);
+  z-index: var(--z, 1);
+  filter: brightness(var(--brightness, 0.8));
+  transition:
+    transform 0.9s var(--ease-smooth),
+    opacity 0.9s var(--ease-smooth),
+    filter 0.9s var(--ease-smooth);
+}
+.ring-card img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+/* glossy sweep across each card */
+.ring-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    115deg,
+    transparent 35%,
+    rgba(255, 255, 255, 0.35) 50%,
+    transparent 65%
+  );
+  pointer-events: none;
+}
+
+/* product label on the front card */
+.ring-card .tag {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 30px 16px 14px;
+  background: linear-gradient(transparent, rgba(28, 26, 23, 0.55));
+  color: #fff;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  opacity: 0;
+  transform: translateY(8px);
+  transition:
+    opacity 0.5s ease,
+    transform 0.5s ease;
+  z-index: 2;
+}
+.ring-card.is-front .tag {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ============================================================
+     5. PHASE 2 — INFINITE HORIZONTAL MARQUEE
+     ============================================================ */
+
+/* Outer: viewport window — handles vertical position & clipping */
+.flow-track {
+  position: absolute;
+  top: calc(50% - var(--card-h) / 2);
+  left: 0;
+  width: 100%;
+  height: var(--card-h);
+  overflow: hidden;
+  z-index: 4;
+  pointer-events: none;
+  opacity: 0;
+  transition:
+    opacity 0.9s var(--ease-smooth),
+    top 1.5s cubic-bezier(0.22, 1, 0.36, 1),
+    height 1.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.hero.is-flowing .flow-track {
+  opacity: 1;
+}
+.hero.is-banner .flow-track {
+  top: calc(100% - var(--strip-h) - 28px);
+  height: var(--strip-h);
+  z-index: 6;
+  pointer-events: auto;
+}
+
+/* Inner: the scrolling belt — driven by RAF in JS */
+.flow-inner {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  width: max-content;
+  will-change: transform;
+}
+
+.flow-card {
+  position: relative;
+  flex: 0 0 auto;
+  width: var(--card-w);
+  height: var(--card-h);
+  border-radius: 16px;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid var(--color-line);
+  box-shadow: 0 22px 44px -18px rgba(28, 26, 23, 0.32);
+  transition:
+    width 1.5s cubic-bezier(0.22, 1, 0.36, 1),
+    height 1.5s cubic-bezier(0.22, 1, 0.36, 1),
+    border-radius 1.5s ease;
+}
+/* Smaller cards in the bottom strip */
+.hero.is-banner .flow-card {
+  width: calc(var(--strip-h) * 0.72);
+  height: var(--strip-h);
+  border-radius: 10px;
+}
+
+.flow-card img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.flow-card .tag {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 28px 16px 14px;
+  background: linear-gradient(transparent, rgba(28, 26, 23, 0.55));
+  color: #fff;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  z-index: 2;
+}
+
+/* ============================================================
+     6. PHASE 3 — BANNER (zooms in, fills the stage)
+     ============================================================ */
+.banner {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  opacity: 0;
+  transform: scale(1.06);
+  will-change: opacity, transform;
+  transition:
+    opacity 1.3s var(--ease-luxury),
+    transform 1.3s var(--ease-luxury);
+  z-index: 5;
+  /* push content below the navbar + add room at bottom for card strip */
+  padding-top: calc(64px + 6vh);
+  /* reserve space at the bottom for the image strip */
+  padding-bottom: calc(var(--strip-h) + 56px);
+}
+.hero.is-banner .banner {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* full-bleed background — starts slightly zoomed in, settles to normal */
+.banner-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  z-index: 0;
+  transform: scale(1.12);
+  transition: transform 2.6s var(--ease-luxury);
+}
+.hero.is-banner .banner-bg {
+  transform: scale(1);
+}
+.banner-bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    100deg,
+    rgba(244, 242, 238, 0.94) 0%,
+    rgba(244, 242, 238, 0.78) 42%,
+    rgba(244, 242, 238, 0.3) 100%
+  );
+}
+
+/* decorative floating shapes (vmin-sized so they scale on phones too) */
+.banner-shape {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 1;
+  will-change: transform;
+}
+.banner-shape--a {
+  width: 46vmin;
+  height: 46vmin;
+  top: -14vmin;
+  right: -8vmin;
+  background: radial-gradient(
+    circle at 35% 35%,
+    rgba(216, 184, 120, 0.55),
+    transparent 70%
+  );
+  animation: float-a 9s ease-in-out infinite;
+}
+.banner-shape--b {
+  width: 34vmin;
+  height: 34vmin;
+  bottom: -12vmin;
+  right: 24%;
+  background: radial-gradient(
+    circle at 60% 40%,
+    rgba(176, 138, 79, 0.32),
+    transparent 70%
+  );
+  animation: float-b 11s ease-in-out infinite;
+}
+@keyframes float-a {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(-16px, 20px, 0) scale(1.05);
+  }
+}
+@keyframes float-b {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(14px, -16px, 0) scale(0.96);
+  }
+}
+
+/* floating particles */
+.particle {
+  position: absolute;
+  border-radius: 50%;
+  background: var(--color-gold);
+  opacity: 0.4;
+  pointer-events: none;
+  z-index: 1;
+  will-change: transform, opacity;
+  animation: particle-drift linear infinite;
+}
+@keyframes particle-drift {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+    opacity: 0;
+  }
+  12% {
+    opacity: 0.5;
+  }
+  50% {
+    transform: translate3d(var(--driftX, 20px), -130px, 0) scale(1.1);
+  }
+  100% {
+    transform: translate3d(calc(var(--driftX, 20px) * 2), -260px, 0) scale(0.6);
+    opacity: 0;
+  }
+}
+
+/* ---- Brand overlay (Phase 1 & 2 — above the ring) ---- */
+.brand-overlay {
+  position: absolute;
+  top: calc(64px + 3vh);
+  left: 50%;
+  transform: translateX(-50%) translateY(-14px);
+  text-align: center;
+  white-space: nowrap;
+  z-index: 5;
+  pointer-events: none;
+  opacity: 0;
+  transition:
+    opacity 1s var(--ease-luxury),
+    transform 1s var(--ease-luxury);
+}
+.brand-overlay.is-visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+.hero.is-flowing .brand-overlay,
+.hero.is-banner .brand-overlay {
+  opacity: 0;
+  transform: translateX(-50%) translateY(-10px);
+}
+.brand-name {
+  display: block;
+  font-size: clamp(1.5rem, 3.8vw, 2.8rem);
+  font-weight: 800;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--color-gold);
+}
+.brand-sub {
+  display: block;
+  font-size: clamp(0.55rem, 1vw, 0.68rem);
+  letter-spacing: 0.5em;
+  text-transform: uppercase;
+  color: var(--color-ink-soft);
+  margin-top: 6px;
+}
+
+/* ---- Banner content — centered brand + CTA ---- */
+.banner-content {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  padding: 0 6vw;
+  text-align: center;
+  opacity: 0;
+  transform: translateY(32px);
+  transition:
+    opacity 1s var(--ease-luxury) 0.35s,
+    transform 1s var(--ease-luxury) 0.35s;
+}
+.hero.is-banner .banner-content {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.banner-title {
+  font-family: var(--font-sans);
+  font-weight: 800;
+  font-size: clamp(2rem, 5.5vw, 5rem);
+  line-height: 1;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #f8f4ee;
+  -webkit-text-stroke: 0;
+  text-shadow:
+    0 2px 16px rgba(0, 0, 0, 0.55),
+    0 6px 48px rgba(0, 0, 0, 0.38),
+    0 12px 80px rgba(0, 0, 0, 0.22);
+  filter: none;
+  margin-bottom: 44px;
+  animation: gentle-float 6s ease-in-out infinite;
+}
+/* accent word in warm champagne gold */
+.banner-title span {
+  color: var(--color-gold-2);
+  -webkit-text-stroke: 0;
+}
+@keyframes gentle-float {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, -6px, 0);
+  }
+}
+
+.banner-cta {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 18px 44px;
+  background: var(--color-ink);
+  color: #fff;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  border: none;
+  border-radius: 40px;
+  cursor: pointer;
+  overflow: hidden;
+  will-change: transform;
+  transition:
+    transform 0.4s var(--ease-luxury),
+    box-shadow 0.4s var(--ease-luxury);
+  box-shadow: 0 16px 34px -12px rgba(28, 26, 23, 0.5);
+}
+.banner-cta:hover {
+  transform: translate3d(0, -3px, 0);
+  box-shadow: 0 22px 44px -12px rgba(28, 26, 23, 0.55);
+}
+.banner-cta:active {
+  transform: translate3d(0, -1px, 0) scale(0.98);
+}
+.banner-cta::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -60%;
+  width: 40%;
+  height: 100%;
+  background: linear-gradient(
+    115deg,
+    transparent,
+    rgba(255, 255, 255, 0.35),
+    transparent
+  );
+  transform: skewX(-20deg);
+  animation: cta-sheen 3.4s ease-in-out 2s infinite;
+}
+@keyframes cta-sheen {
+  0% {
+    left: -60%;
+  }
+  40% {
+    left: 130%;
+  }
+  100% {
+    left: 130%;
+  }
+}
+
+/* ============================================================
+     7. PHASE INDICATOR DOTS
+     ============================================================ */
+.phase-dots {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translate3d(-50%, 0, 0);
+  display: flex;
+  gap: 8px;
+  z-index: 7;
+  transition: opacity 0.5s ease;
+}
+.hero.is-flowing .phase-dots,
+.hero.is-banner .phase-dots {
+  opacity: 0;
+  pointer-events: none;
+}
+.phase-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(28, 26, 23, 0.18);
+  transition:
+    background 0.3s ease,
+    transform 0.3s ease;
+}
+.phase-dot.is-active {
+  background: var(--color-gold);
+  transform: scale(1.4);
+}
+
+/* ============================================================
+     8. RESPONSIVE — IDENTICAL behaviour, lower aspect ratio.
+        Same full-width sequence on phone; only the card size + ring
+        radius shrink so the exact same flow plays, just smaller.
+     ============================================================ */
+@media (max-width: 768px) {
+  :root {
+    --card-w: 240px;
+    --card-h: 330px;
+    --ring-radius: 220px;
+    --strip-h: 195px;
+  }
+  .hero {
+    height: 60vh;
+    min-height: 440px;
+  }
+  .banner-content {
+    padding: 0 7vw;
+  }
+  .flow-inner {
+    gap: 18px;
+  }
+}
+
+@media (max-width: 430px) {
+  :root {
+    --card-w: 195px;
+    --card-h: 270px;
+    --ring-radius: 175px;
+    --strip-h: 160px;
+  }
+  .hero {
+    height: 55vh;
+    min-height: 400px;
+  }
+  .banner-cta {
+    padding: 14px 28px;
+    font-size: 13px;
+  }
+}
+
+/* very short / landscape phones — keep the ring fully visible */
+@media (max-height: 520px) {
+  :root {
+    --card-w: 175px;
+    --card-h: 245px;
+    --ring-radius: 165px;
+    --strip-h: 145px;
+  }
+}

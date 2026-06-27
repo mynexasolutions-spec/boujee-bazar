@@ -40,14 +40,20 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
         // menu dropdown/submenu in mobile
         const ulHeaderNavMobile = document.querySelector(".ul-header-nav");
-        const ulHeaderNavMobileItems = ulHeaderNavMobile.querySelectorAll(".has-sub-menu");
-        ulHeaderNavMobileItems.forEach((item) => {
-            if (window.innerWidth < 992) {
-                item.addEventListener("click", () => {
-                    item.classList.toggle("active");
-                });
-            }
-        });
+        if (ulHeaderNavMobile) {
+            const ulHeaderNavMobileItems = ulHeaderNavMobile.querySelectorAll(".has-sub-menu");
+            ulHeaderNavMobileItems.forEach((item) => {
+                const triggerLink = item.querySelector(":scope > a");
+                if (triggerLink) {
+                    triggerLink.addEventListener("click", (e) => {
+                        if (window.innerWidth < 992) {
+                            e.preventDefault();
+                            item.classList.toggle("active");
+                        }
+                    });
+                }
+            });
+        }
     }
 
     // header search in mobile start
@@ -268,37 +274,46 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
     // gallery slider
     new Swiper(".ul-gallery-slider", {
-        slidesPerView: 2.2,
+        slidesPerView: 3.2,
         loop: true,
-        autoplay: true,
-        centeredSlides: true,
+        freeMode: true,
+        freeModeMomentum: false,
+        autoplay: {
+            delay: 0,
+            disableOnInteraction: false,
+        },
+        speed: 3500,
+        centeredSlides: false,
         spaceBetween: 15,
         breakpoints: {
             480: {
-                slidesPerView: 3.4,
+                slidesPerView: 4.2,
             },
             576: {
-                slidesPerView: 4,
+                slidesPerView: 5,
             },
             768: {
-                slidesPerView: 5,
+                slidesPerView: 6,
             },
             992: {
                 spaceBetween: 20,
-                slidesPerView: 5.5,
+                slidesPerView: 7,
+            },
+            1400: {
+                spaceBetween: 24,
+                slidesPerView: 8,
             },
             1680: {
                 spaceBetween: 26,
-                slidesPerView: 5.5,
+                slidesPerView: 8.5,
             },
             1700: {
-                spaceBetween: 30,
-                slidesPerView: 5.5,
+                spaceBetween: 28,
+                slidesPerView: 9,
             },
             1920: {
                 spaceBetween: 30,
-                slidesPerView: 6,
-                centeredSlides: false,
+                slidesPerView: 9.5,
             }
         }
     });
@@ -308,11 +323,22 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
     if (priceFilterSlider) {
         noUiSlider.create(priceFilterSlider, {
-            start: [20, 80],
+            start: [19, 69],
             connect: true,
             range: {
                 'min': 0,
                 'max': 100
+            }
+        });
+
+        priceFilterSlider.noUiSlider.on('update', function (values, handle) {
+            var value = Math.round(values[handle]);
+            if (handle) {
+                var maxEl = document.querySelector('.filtered-price.increasing');
+                if (maxEl) maxEl.textContent = '₹' + value;
+            } else {
+                var minEl = document.querySelector('.filtered-price.decreasing');
+                if (minEl) minEl.textContent = '₹' + value;
             }
         });
     }
@@ -444,6 +470,150 @@ document.addEventListener("DOMContentLoaded", (event) => {
                 }
             });
         });
+    }
+
+    // Product Quick View Logic
+    const productCards = document.querySelectorAll('.ul-product, .ul-product-horizontal');
+    const quickViewOffcanvas = document.getElementById('productQuickView');
+    
+    if (productCards.length > 0 && quickViewOffcanvas) {
+        const bsOffcanvas = new bootstrap.Offcanvas(quickViewOffcanvas);
+        
+        productCards.forEach(card => {
+            card.style.cursor = 'pointer';
+            card.addEventListener('click', (e) => {
+                // Prevent opening if clicked on actions like add to cart or wishlist
+                if (e.target.closest('.ul-product-actions') || e.target.closest('.flaticon-shopping-bag') || e.target.closest('.flaticon-heart')) {
+                    return;
+                }
+                
+                // Prevent default navigation if clicking a link inside the card
+                if (e.target.tagName.toLowerCase() === 'a') {
+                    e.preventDefault();
+                }
+
+                // Extract data from the clicked card
+                const imgEl = card.querySelector('.ul-product-img img, .ul-product-horizontal-img img');
+                const titleEl = card.querySelector('.ul-product-title, .ul-product-horizontal-title');
+                const priceEl = card.querySelector('.ul-product-price');
+                const categoryEl = card.querySelector('.ul-product-category');
+                const discountEl = card.querySelector('.ul-product-discount-tag');
+
+                // Populate offcanvas elements
+                if (imgEl) document.getElementById('qv-image').src = imgEl.src;
+                if (titleEl) document.getElementById('qv-title').textContent = titleEl.textContent.trim();
+                if (priceEl) document.getElementById('qv-price').textContent = priceEl.textContent.trim();
+                if (categoryEl) {
+                    document.getElementById('qv-category').textContent = categoryEl.textContent.trim();
+                } else {
+                    document.getElementById('qv-category').textContent = '';
+                }
+                
+                const qvDiscount = document.getElementById('qv-discount');
+                if (discountEl) {
+                    qvDiscount.textContent = discountEl.textContent.trim();
+                    qvDiscount.style.display = 'inline-block';
+                } else {
+                    qvDiscount.style.display = 'none';
+                }
+
+                // Show the offcanvas
+                bsOffcanvas.show();
+            });
+        });
+    }
+
+    // --- CART OFFCANVAS LOGIC ---
+    const cartOffcanvasEl = document.getElementById('cartOffcanvas');
+    if (cartOffcanvasEl) {
+        // Initialize cart logic when the offcanvas is opened or just once
+        const cartItems = document.querySelectorAll('.ul-cart-item');
+        
+        function updateCartTotal() {
+            const items = document.querySelectorAll('.ul-cart-item:not(.removing)');
+            const totalEl = document.querySelector('.ul-cart-subtotal .amount');
+            const countEls = document.querySelectorAll('.cart-count');
+            
+            let total = 0;
+            let count = 0;
+            items.forEach(item => {
+                const priceText = item.querySelector('.ul-cart-price').textContent;
+                const price = parseFloat(priceText.replace('$', ''));
+                const qtyInput = item.querySelector('.ul-cart-quantity input');
+                const qty = qtyInput ? parseInt(qtyInput.value) : 1;
+                total += price * qty;
+                count += 1; // Assuming counting number of unique items or you can use qty
+            });
+            
+            if (totalEl) totalEl.textContent = '$' + total.toFixed(2);
+            countEls.forEach(el => el.textContent = count);
+        }
+
+        function checkEmptyCart() {
+            const itemsContainer = document.querySelector('.ul-cart-body');
+            const filledState = document.getElementById('ul-cart-filled');
+            const emptyState = document.getElementById('ul-cart-empty');
+            
+            if (itemsContainer && itemsContainer.querySelectorAll('.ul-cart-item:not(.removing)').length === 0) {
+                if (filledState) filledState.style.display = 'none';
+                if (emptyState) emptyState.style.display = 'flex';
+                document.querySelectorAll('.cart-count').forEach(el => el.textContent = '0');
+            }
+        }
+
+        cartItems.forEach(item => {
+            const minusBtn = item.querySelector('.minus');
+            const plusBtn = item.querySelector('.plus');
+            const input = item.querySelector('input');
+            const removeBtn = item.querySelector('.ul-cart-remove');
+
+            if (minusBtn && plusBtn && input) {
+                minusBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    let val = parseInt(input.value);
+                    if (val > 1) {
+                        input.value = val - 1;
+                        updateCartTotal();
+                    }
+                });
+                plusBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    let val = parseInt(input.value);
+                    input.value = val + 1;
+                    updateCartTotal();
+                });
+                input.addEventListener('change', () => {
+                    if (input.value < 1) input.value = 1;
+                    updateCartTotal();
+                });
+            }
+
+            if (removeBtn) {
+                removeBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    item.classList.add('removing');
+                    setTimeout(() => {
+                        item.remove();
+                        updateCartTotal();
+                        checkEmptyCart();
+                    }, 300); // matches transition time
+                });
+            }
+        });
+
+        const checkoutBtn = document.querySelector('.ul-checkout-btn');
+        if (checkoutBtn) {
+            checkoutBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                this.classList.add('loading');
+                const loader = this.querySelector('.ul-btn-loader');
+                if(loader) loader.style.display = 'block';
+                
+                setTimeout(() => {
+                    window.location.href = 'Checkout.html';
+                }, 600);
+            });
+        }
     }
 
 });

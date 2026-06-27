@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="assets/css/animate.min.css" />
     <!-- custom CSS -->
     <link rel="stylesheet" href="assets/css/style.css" />
+    <link rel="stylesheet" href="assets/css/banner.css">
   </head>
 
   <body>
@@ -229,7 +230,7 @@
                   <a href="about.html">About Us</a>
 
                   <div class="has-sub-menu has-mega-menu">
-                    <a href="shop.html" style="cursor: pointer;">Shop <i class="flaticon-down" style="font-size: 10px; margin-left: 4px;"></i></a>
+                    <a href="shop.html" style="cursor: pointer;">Shop <i class="flaticon-down"></i></a>
 
                     <div class="ul-header-submenu ul-header-megamenu">
                       <div class="single-col">
@@ -281,7 +282,7 @@
 
 
                   <div class="has-sub-menu has-mega-menu">
-                    <a role="button" style="cursor: pointer;">Pages <i class="flaticon-down" style="font-size: 10px; margin-left: 4px;"></i></a>
+                    <a role="button" style="cursor: pointer;">Pages <i class="flaticon-down"></i></a>
 
                     <div class="ul-header-submenu ul-header-megamenu">
                       <div class="single-col">
@@ -298,7 +299,7 @@
                         <span class="single-col-title">Shop Pages</span>
                         <ul>
                           <li><a href="wishlist.html">Wishlist</a></li>
-                          <li><a href="cart.html">Cart</a></li>
+                          <li><a href="#" data-bs-toggle="offcanvas" data-bs-target="#cartOffcanvas">Cart</a></li>
                           <li><a href="Checkout.html">Checkout</a></li>
                         </ul>
                       </div>
@@ -351,7 +352,7 @@
               </button>
               <a href="login.html"><i class="flaticon-user"></i></a>
               <a href="wishlist.html"><i class="flaticon-heart"></i></a>
-              <a href="cart.html"><i class="flaticon-shopping-bag"></i></a>
+              <a href="#" data-bs-toggle="offcanvas" data-bs-target="#cartOffcanvas"><i class="flaticon-shopping-bag"></i></a>
             </div>
 
             <!-- sidebar opener -->
@@ -368,123 +369,255 @@
 
     <main>
       <!-- BANNER SECTION START -->
-      <div class="overflow-hidden">
-        <div class="ul-container">
-          <section class="ul-banner">
-            <div class="ul-banner-slider-wrapper">
-              <div class="ul-banner-slider swiper">
-                <div class="swiper-wrapper">
-                  <!-- single slide -->
-                  <div
-                    class="swiper-slide ul-banner-slide"
-                    style="background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%)"
-                  >
-                    <div class="ul-banner-slide-txt">
-                      <span class="ul-banner-slide-sub-title"
-                        >Perfect for Summer Evenings</span
-                      >
-                      <h1 class="ul-banner-slide-title">
-                        Casual and Stylish for All Seasons
-                      </h1>
-                      <p class="ul-banner-slide-price">
-                        Starting From <span class="price">₹129</span>
-                      </p>
-                      <a href="shop.html" class="ul-btn"
-                        >SHOP NOW <i class="flaticon-up-right-arrow"></i
-                      ></a>
-                    </div>
-                    <div class="ul-banner-slide-img">
-                      <img
-                        src="assets/img/hero/banner-slide-1.jpg"
-                        alt="Banner Image"
-                      />
-                    </div>
-                  </div>
+    
 
-                  <!-- single slide -->
-                  <div
-                    class="swiper-slide ul-banner-slide ul-banner-slide--2"
-                    style="background: linear-gradient(135deg, #fff0ed 0%, var(--ul-secondary) 100%)"
-                  >
-                    <div class="ul-banner-slide-txt">
-                      <span class="ul-banner-slide-sub-title"
-                        >Perfect for Summer Evenings</span
-                      >
-                      <h1 class="ul-banner-slide-title">
-                        Casual and Stylish for All Seasons
-                      </h1>
-                      <p class="ul-banner-slide-price">
-                        Starting From <span class="price">₹129</span>
-                      </p>
-                      <a href="shop.html" class="ul-btn"
-                        >SHOP NOW <i class="flaticon-up-right-arrow"></i
-                      ></a>
-                    </div>
-                    <div class="ul-banner-slide-img">
-                      <img
-                        src="assets/img/hero/banner-slide-2.jpg"
-                        alt="Banner Image"
-                      />
-                    </div>
-                  </div>
-
-                  <!-- single slide -->
-                  <div
-                    class="swiper-slide ul-banner-slide ul-banner-slide--3"
-                    style="background: linear-gradient(135deg, #e0f2fe 0%, #ebf4fa 100%)"
-                  >
-                    <div class="ul-banner-slide-txt">
-                      <span class="ul-banner-slide-sub-title"
-                        >Perfect for Summer Evenings</span
-                      >
-                      <h1 class="ul-banner-slide-title">
-                        Casual and Stylish for All Seasons
-                      </h1>
-                      <p class="ul-banner-slide-price">
-                        Starting From <span class="price">₹129</span>
-                      </p>
-                      <a href="shop.html" class="ul-btn"
-                        >SHOP NOW <i class="flaticon-up-right-arrow"></i
-                      ></a>
-                    </div>
-                    <div class="ul-banner-slide-img">
-                      <img
-                        src="assets/img/hero/banner-slide-3.jpg"
-                        alt="Banner Image"
-                      />
-                    </div>
-                  </div>
-
-                  <!-- single slide -->
-                  <!-- <div class="swiper-slide ul-banner-slide">
-                                    <div class="ul-banner-slide-img">
-                                        <img src="assets/img/hero/banner-slide-1.jpg" alt="Banner Image">
-                                    </div>
-                                    <div class="ul-banner-slide-txt">
-                                        <span class="ul-banner-slide-sub-title">Perfect for Summer Evenings</span>
-                                        <h1 class="ul-banner-slide-title">Casual and Stylish for All Seasons</h1>
-                                        <p class="ul-banner-slide-price">Starting From <span class="price">₹129</span></p>
-                                        <a href="shop.html" class="ul-btn">SHOP NOW <i class="flaticon-up-right-arrow"></i></a>
-                                    </div>
-                                </div> -->
-                </div>
-
-                <!-- slider navigation -->
-                <div class="ul-banner-slider-nav-wrapper">
-                  <div class="ul-banner-slider-nav">
-                    <button class="prev">
-                      <span class="icon"><i class="flaticon-down"></i></span>
-                    </button>
-                    <button class="next">
-                      <span class="icon"><i class="flaticon-down"></i></span>
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
+      <section class="hero" id="hero">
+        <!-- BRAND OVERLAY (Phase 1 & 2) -->
+        <div class="brand-overlay" id="brandOverlay">
+          <span class="brand-name">The Boujee Bazar</span>
+          <span class="brand-sub">New Collection 2026</span>
         </div>
-      </div>
+
+        <!-- PHASE 1: 3D ROTATING RING -->
+        <div class="ring-stage">
+          <div class="ring" id="ring"><!-- ring cards injected by JS --></div>
+        </div>
+
+        <!-- PHASE 2: HORIZONTAL FLOW TRACK -->
+        <div class="flow-track" id="flowTrack"><!-- flow cards injected by JS --></div>
+
+        <!-- PHASE 3: BANNER -->
+        <div class="banner" id="banner">
+          <div class="banner-bg" id="bannerBg"></div>
+          <div class="banner-shape banner-shape--a"></div>
+          <div class="banner-shape banner-shape--b"></div>
+          <div class="particles" id="particles"></div>
+          <div class="banner-content">
+            <h1 class="banner-title" id="bannerTitle"></h1>
+            <button class="banner-cta" id="bannerCta" onclick="window.location.href='shop.html'">
+              <span id="bannerCtaText"></span>
+            </button>
+          </div>
+        </div>
+
+        <!-- PHASE INDICATOR -->
+        <div class="phase-dots" id="phaseDots"></div>
+      </section>
+
+      <script>
+        /* ================================================================
+           CONFIGURATION — edit content & image URLs here
+           ================================================================ */
+        const products = [
+          { image: "https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=600&q=80", label: "Tailored Coat" },
+          { image: "https://images.unsplash.com/photo-1485462537746-965f33f7f6a7?auto=format&fit=crop&w=600&q=80", label: "Evening Wear" },
+          { image: "https://images.unsplash.com/photo-1551232864-3f0890e580d9?auto=format&fit=crop&w=600&q=80", label: "Leather Bag" },
+          { image: "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?auto=format&fit=crop&w=600&q=80", label: "Classic Shoes" },
+          { image: "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=600&q=80", label: "Knit Cashmere" },
+          { image: "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&w=600&q=80", label: "Statement Pieces" }
+        ];
+
+        const bannerConfig = {
+          title: 'The Boujee <span>Bazar</span>',
+          buttonText: "Shop Collection",
+          backgroundImage: "https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=1600&q=80"
+        };
+
+        const timing = {
+          perProductFocus: 1000,
+          rotationTotal:   4200,
+          flowTravel:      3400,
+          flowFadeBefore:  900
+        };
+
+        const heroEl  = document.getElementById('hero');
+        const ringEl   = document.getElementById('ring');
+        const flowEl   = document.getElementById('flowTrack');
+        const dotsEl    = document.getElementById('phaseDots');
+
+        const COUNT  = products.length;
+        const STEP   = 360 / COUNT;
+
+        const fallbackGradients = [
+          "linear-gradient(160deg,#e7ddd0,#cdbfa9)",
+          "linear-gradient(160deg,#e3d9d4,#c8b3a8)",
+          "linear-gradient(160deg,#ddd6cb,#bdae97)",
+          "linear-gradient(160deg,#e1d8cf,#c4b39e)",
+          "linear-gradient(160deg,#e6ded2,#cabfa6)",
+          "linear-gradient(160deg,#ddd4cf,#c0aea3)"
+        ];
+
+        function cardInner(p, i){
+          return `<img src="${p.image}" alt="${p.label}" loading="eager"
+                    onerror="this.style.display='none';this.parentElement.style.background='${fallbackGradients[i % fallbackGradients.length]}';">
+                  <div class="tag">${p.label}</div>`;
+        }
+
+        const flowInnerEl = document.createElement('div');
+        flowInnerEl.className = 'flow-inner';
+        flowEl.appendChild(flowInnerEl);
+
+        products.forEach((p, i) => {
+          const card = document.createElement('div');
+          card.className = 'ring-card';
+          card.style.setProperty('--rot', `${i * STEP}deg`);
+          card.innerHTML = cardInner(p, i);
+          ringEl.appendChild(card);
+
+          const fcard = document.createElement('div');
+          fcard.className = 'flow-card';
+          fcard.innerHTML = cardInner(p, i);
+          flowInnerEl.appendChild(fcard);
+
+          const dot = document.createElement('span');
+          dot.className = 'phase-dot';
+          dotsEl.appendChild(dot);
+        });
+
+        products.forEach((p, i) => {
+          const fcard = document.createElement('div');
+          fcard.className = 'flow-card';
+          fcard.setAttribute('aria-hidden', 'true');
+          fcard.innerHTML = cardInner(p, i);
+          flowInnerEl.appendChild(fcard);
+        });
+
+        const ringCards = Array.from(ringEl.querySelectorAll('.ring-card'));
+        const dotEls     = Array.from(dotsEl.querySelectorAll('.phase-dot'));
+
+        function updateRingVisuals(globalAngle){
+          ringCards.forEach((card, i) => {
+            let eff = (i * STEP + globalAngle) % 360;
+            if (eff > 180) eff -= 360;
+            if (eff < -180) eff += 360;
+            const abs = Math.abs(eff);
+
+            let scale, opacity, z, brightness;
+            if (abs < STEP / 2){
+              scale = 1.0; opacity = 1; z = 10; brightness = 1;
+              card.classList.add('is-front');
+            } else if (abs < 180 - STEP){
+              const t = (abs - STEP/2) / (180 - STEP - STEP/2);
+              scale = 0.8 - 0.2 * t;
+              opacity = 0.65 - 0.45 * t;
+              z = Math.round(8 - t * 6);
+              brightness = 0.9 - 0.2 * t;
+              card.classList.remove('is-front');
+            } else {
+              scale = 0.6; opacity = 0.2; z = 1; brightness = 0.7;
+              card.classList.remove('is-front');
+            }
+            card.style.setProperty('--scale', scale.toFixed(3));
+            card.style.setProperty('--opacity', opacity.toFixed(3));
+            card.style.setProperty('--z', z);
+            card.style.setProperty('--brightness', brightness.toFixed(3));
+          });
+        }
+
+        let currentIndex = 0;
+        let angle = 0;
+        let rotateTimer = null;
+
+        function focusProduct(index){
+          currentIndex = index;
+          angle = -index * STEP;
+          ringEl.style.setProperty('--angle', `${angle}deg`);
+          updateRingVisuals(angle);
+          dotEls.forEach((d, i) => d.classList.toggle('is-active', i === index));
+        }
+
+        function startRotation(){
+          focusProduct(0);
+          let step = 1;
+          rotateTimer = setInterval(() => {
+            if (step >= COUNT){ clearInterval(rotateTimer); return; }
+            focusProduct(step % COUNT);
+            step++;
+          }, timing.perProductFocus);
+        }
+
+        const MARQUEE_SPEED = 88;
+        let marqueeX      = 0;
+        let marqueeRunning = false;
+        let marqueeLast   = null;
+        let singleSetWidth = 0;
+
+        function computeSetWidth(){
+          const cards = flowInnerEl.querySelectorAll('.flow-card');
+          if (cards.length >= 2){
+            const r0 = cards[0].getBoundingClientRect();
+            const r1 = cards[1].getBoundingClientRect();
+            singleSetWidth = Math.abs(r1.left - r0.left) * COUNT;
+          }
+        }
+
+        function marqueeStep(ts){
+          if (!marqueeRunning) return;
+          if (marqueeLast === null) marqueeLast = ts;
+          const dt = (ts - marqueeLast) / 1000;
+          marqueeLast = ts;
+          marqueeX -= MARQUEE_SPEED * dt;
+          if (marqueeX <= -singleSetWidth) marqueeX += singleSetWidth;
+          flowInnerEl.style.transform = `translateX(${marqueeX}px)`;
+          requestAnimationFrame(marqueeStep);
+        }
+
+        function startMarquee(){
+          computeSetWidth();
+          marqueeRunning = true;
+          requestAnimationFrame(marqueeStep);
+        }
+
+        function startFlow(){
+          clearInterval(rotateTimer);
+          heroEl.classList.add('is-flowing');
+          startMarquee();
+          setTimeout(startBanner, timing.flowTravel);
+        }
+
+        function startBanner(){
+          heroEl.classList.add('is-banner');
+          const nav = document.querySelector('.ul-header');
+          if(nav) nav.classList.add('is-revealed');
+          setTimeout(() => {
+            computeSetWidth();
+            marqueeX = -(Math.abs(marqueeX) % singleSetWidth);
+          }, 1600);
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+          setTimeout(() => document.getElementById('brandOverlay').classList.add('is-visible'), 350);
+          startRotation();
+          setTimeout(startFlow, timing.rotationTotal);
+        });
+
+        document.getElementById('bannerTitle').innerHTML    = bannerConfig.title;
+        document.getElementById('bannerCtaText').textContent = bannerConfig.buttonText;
+        document.getElementById('bannerBg').style.backgroundImage = `url("${bannerConfig.backgroundImage}")`;
+        (function(){
+          const probe = new Image();
+          probe.onerror = () => {
+            document.getElementById('bannerBg').style.backgroundImage =
+              'linear-gradient(120deg,#efe7da 0%,#e2d3bd 100%)';
+          };
+          probe.src = bannerConfig.backgroundImage;
+        })();
+
+        const particlesEl = document.getElementById('particles');
+        for (let i = 0; i < 16; i++){
+          const p = document.createElement('div');
+          p.className = 'particle';
+          const size = 2 + Math.random() * 4;
+          p.style.width = `${size}px`;
+          p.style.height = `${size}px`;
+          p.style.left = `${Math.random() * 100}%`;
+          p.style.top = `${60 + Math.random() * 40}%`;
+          p.style.setProperty('--driftX', `${Math.random() * 60 - 30}px`);
+          p.style.animationDuration = `${6 + Math.random() * 8}s`;
+          p.style.animationDelay = `${Math.random() * 8}s`;
+          particlesEl.appendChild(p);
+        }
+      </script>
       <!-- BANNER SECTION END -->
 
       <!-- TRUST BAR SECTION START -->
@@ -542,118 +675,138 @@
               <span class="ul-section-sub-title">Browse </span>
               <h2 class="ul-section-title" style="color: black;">Shop by Category</h2>
             </div>
-            <div
-              class="row row-cols-lg-4 row-cols-md-3 row-cols-2  ul-bs-row"
-            >
-              <!-- single category -->
-              <div class="col">
-                <a class="ul-category" href="shop.html">
-                  <div class="ul-category-img">
-                    <span class="ul-category-emoji">📿</span>
+            
+            <div class="ul-category-carousel-container">
+              <button class="ul-category-nav prev" id="cat-scroll-left"><i class="flaticon-left-arrow"></i></button>
+              
+              <div class="ul-category-circle-wrapper" id="cat-scroll-wrapper">
+                <a href="shop.html" class="ul-category-circle-item">
+                  <div class="ul-category-circle-img">
+                    <img src="assets/img/category/category-1.png" alt="Necklaces & Pendants">
                   </div>
-                  <div class="ul-category-txt">
-                    <span>Necklaces</span>
+                  <span class="ul-category-circle-txt">Necklaces & Pendants</span>
+                </a>
+                
+                <a href="shop.html" class="ul-category-circle-item">
+                  <div class="ul-category-circle-img">
+                    <img src="assets/img/category/category-2.png" alt="Earrings">
                   </div>
-                  <div class="ul-category-btn">
-                    <span><i class="flaticon-arrow-point-to-right"></i></span>
+                  <span class="ul-category-circle-txt">Earrings</span>
+                </a>
+                
+                <a href="shop.html" class="ul-category-circle-item">
+                  <div class="ul-category-circle-img">
+                    <img src="assets/img/category/category-3.png" alt="Rings">
                   </div>
+                  <span class="ul-category-circle-txt">Rings</span>
+                </a>
+                
+                <a href="shop.html" class="ul-category-circle-item">
+                  <div class="ul-category-circle-img">
+                    <img src="assets/img/category/category-4.png" alt="Bracelets & Bangles">
+                  </div>
+                  <span class="ul-category-circle-txt">Bracelets & Bangles</span>
+                </a>
+                
+                <a href="shop.html" class="ul-category-circle-item">
+                  <div class="ul-category-circle-img">
+                    <img src="assets/img/category/category-5.png" alt="Hand Chains">
+                  </div>
+                  <span class="ul-category-circle-txt">Hand Chains</span>
+                </a>
+                
+                <a href="shop.html" class="ul-category-circle-item">
+                  <div class="ul-category-circle-img">
+                    <img src="assets/img/category/category-6.png" alt="Anklets">
+                  </div>
+                  <span class="ul-category-circle-txt">Anklets</span>
+                </a>
+                
+                <a href="shop.html" class="ul-category-circle-item">
+                  <div class="ul-category-circle-img">
+                    <img src="assets/img/category/category-7.png" alt="Watches">
+                  </div>
+                  <span class="ul-category-circle-txt">Watches</span>
+                </a>
+                
+                <a href="shop.html" class="ul-category-circle-item">
+                  <div class="ul-category-circle-img">
+                    <img src="assets/img/category/category-8.png" alt="Accessories">
+                  </div>
+                  <span class="ul-category-circle-txt">Accessories</span>
+                </a>
+                
+                <a href="shop.html" class="ul-category-circle-item">
+                  <div class="ul-category-circle-img">
+                    <img src="assets/img/category/category-9.png" alt="Stationery">
+                  </div>
+                  <span class="ul-category-circle-txt">Stationery</span>
+                </a>
+                
+                <a href="shop.html" class="ul-category-circle-item">
+                  <div class="ul-category-circle-img sale-bg">
+                    <span>SALE</span>
+                  </div>
+                  <span class="ul-category-circle-txt">Sale</span>
                 </a>
               </div>
-
-              <!-- single category -->
-              <div class="col">
-                <a class="ul-category" href="shop.html">
-                  <div class="ul-category-img">
-                    <span class="ul-category-emoji">👂</span>
-                  </div>
-                  <div class="ul-category-txt">
-                    <span>Earrings</span>
-                  </div>
-                  <div class="ul-category-btn">
-                    <span><i class="flaticon-arrow-point-to-right"></i></span>
-                  </div>
-                </a>
-              </div>
-
-              <!-- single category -->
-              <div class="col">
-                <a class="ul-category" href="shop.html">
-                  <div class="ul-category-img">
-                    <span class="ul-category-emoji">💍</span>
-                  </div>
-                  <div class="ul-category-txt">
-                    <span>Rings</span>
-                  </div>
-                  <div class="ul-category-btn">
-                    <span><i class="flaticon-arrow-point-to-right"></i></span>
-                  </div>
-                </a>
-              </div>
-
-              <!-- single category -->
-              <div class="col">
-                <a class="ul-category" href="shop.html">
-                  <div class="ul-category-img">
-                    <span class="ul-category-emoji">⌚</span>
-                  </div>
-                  <div class="ul-category-txt">
-                    <span>Watches</span>
-                  </div>
-                  <div class="ul-category-btn">
-                    <span><i class="flaticon-arrow-point-to-right"></i></span>
-                  </div>
-                </a>
-              </div>
-
-              <!-- single category -->
-              <div class="col">
-                <a class="ul-category" href="shop.html">
-                  <div class="ul-category-img">
-                    <span class="ul-category-emoji">💎</span>
-                  </div>
-                  <div class="ul-category-txt">
-                    <span>Bracelets</span>
-                  </div>
-                  <div class="ul-category-btn">
-                    <span><i class="flaticon-arrow-point-to-right"></i></span>
-                  </div>
-                </a>
-              </div>
-
-              <!-- single category -->
-              <div class="col">
-                <a class="ul-category" href="shop.html">
-                  <div class="ul-category-img">
-                    <span class="ul-category-emoji">✨</span>
-                  </div>
-                  <div class="ul-category-txt">
-                    <span>Accessories</span>
-                  </div>
-                  <div class="ul-category-btn">
-                    <span><i class="flaticon-arrow-point-to-right"></i></span>
-                  </div>
-                </a>
-              </div>
-
-              <!-- single category -->
-              <div class="col">
-                <a class="ul-category" href="shop.html">
-                  <div class="ul-category-img">
-                    <span class="ul-category-emoji">🖊️</span>
-                  </div>
-                  <div class="ul-category-txt">
-                    <span>Stationery</span>
-                  </div>
-                  <div class="ul-category-btn">
-                    <span><i class="flaticon-arrow-point-to-right"></i></span>
-                  </div>
-                </a>
-              </div>
+              
+              <button class="ul-category-nav next" id="cat-scroll-right"><i class="flaticon-arrow-point-to-right"></i></button>
             </div>
           </div>
         </section>
       </div>
       <!-- CATEGORY SECTION END -->
+      
+      <script>
+        const catScrollWrapper = document.getElementById('cat-scroll-wrapper');
+        
+        // Desktop buttons
+        document.getElementById('cat-scroll-left').addEventListener('click', function() {
+          catScrollWrapper.scrollBy({ left: -250, behavior: 'smooth' });
+        });
+        document.getElementById('cat-scroll-right').addEventListener('click', function() {
+          catScrollWrapper.scrollBy({ left: 250, behavior: 'smooth' });
+        });
+
+        // Continuous smooth scroll for mobile
+        let catReqId;
+        let catPos = 0;
+        let isCatInteracting = false;
+        
+        // Duplicate items for seamless infinite loop
+        const catItems = Array.from(catScrollWrapper.children);
+        catItems.forEach(item => {
+          let clone = item.cloneNode(true);
+          clone.classList.add('mobile-clone');
+          catScrollWrapper.appendChild(clone);
+        });
+
+        function catMarqueeStep() {
+          if (window.innerWidth <= 768) {
+            if (!isCatInteracting) {
+              catPos += 1; // Smooth 1px per frame (approx 60px/s)
+              
+              // If we've scrolled past the first set of items, reset seamlessly
+              if (catPos >= catScrollWrapper.scrollWidth / 2) {
+                catPos = 0;
+              }
+              catScrollWrapper.scrollLeft = catPos;
+            } else {
+              // Keep catPos in sync with user manual scrolling
+              catPos = catScrollWrapper.scrollLeft;
+            }
+          }
+          catReqId = requestAnimationFrame(catMarqueeStep);
+        }
+
+        // Start marquee loop
+        catMarqueeStep();
+
+        // Pause on interaction
+        catScrollWrapper.addEventListener('touchstart', () => isCatInteracting = true, {passive: true});
+        catScrollWrapper.addEventListener('touchend', () => isCatInteracting = false, {passive: true});
+      </script>
 
 
       <!-- PRODUCTS SECTION START -->
@@ -1429,7 +1582,7 @@
 
             <!-- products grid -->
             <div
-              class="ul-bs-row row row-cols-xl-4 row-cols-lg-3 row-cols-sm-2 row-cols-1 ul-filter-products-wrapper"
+              class="ul-bs-row row row-cols-xl-4 row-cols-lg-3 row-cols-sm-2 row-cols-2 ul-filter-products-wrapper"
             >
               <!-- product card -->
               <div class="mix col best-selling">
@@ -2148,121 +2301,153 @@
       <div class="ul-gallery overflow-hidden mx-auto">
         <div class="ul-gallery-slider swiper">
           <div class="swiper-wrapper">
-            <!-- single gallery item -->
+            <!-- set 1 -->
             <div class="ul-gallery-item swiper-slide">
-              <img
-                src="assets/img/gallery/gallery-item-1.jpg"
-                alt="Gallery Image"
-              />
+              <img src="assets/img/gallery/gallery-item-1.jpg" alt="Gallery Image" />
               <div class="ul-gallery-item-btn-wrapper">
-                <a
-                  href="assets/img/gallery/gallery-item-1.jpg"
-                  data-fslightbox="gallery"
-                  ><i class="flaticon-instagram"></i
-                ></a>
+                <a href="assets/img/gallery/gallery-item-1.jpg" data-fslightbox="gallery"><i class="flaticon-instagram"></i></a>
+              </div>
+            </div>
+            <div class="ul-gallery-item swiper-slide">
+              <img src="assets/img/gallery/gallery-item-2.jpg" alt="Gallery Image" />
+              <div class="ul-gallery-item-btn-wrapper">
+                <a href="assets/img/gallery/gallery-item-2.jpg" data-fslightbox="gallery"><i class="flaticon-instagram"></i></a>
+              </div>
+            </div>
+            <div class="ul-gallery-item swiper-slide">
+              <img src="assets/img/gallery/gallery-item-3.jpg" alt="Gallery Image" />
+              <div class="ul-gallery-item-btn-wrapper">
+                <a href="assets/img/gallery/gallery-item-3.jpg" data-fslightbox="gallery"><i class="flaticon-instagram"></i></a>
+              </div>
+            </div>
+            <div class="ul-gallery-item swiper-slide">
+              <img src="assets/img/gallery/gallery-item-4.jpg" alt="Gallery Image" />
+              <div class="ul-gallery-item-btn-wrapper">
+                <a href="assets/img/gallery/gallery-item-4.jpg" data-fslightbox="gallery"><i class="flaticon-instagram"></i></a>
+              </div>
+            </div>
+            <div class="ul-gallery-item swiper-slide">
+              <img src="assets/img/gallery/gallery-item-5.jpg" alt="Gallery Image" />
+              <div class="ul-gallery-item-btn-wrapper">
+                <a href="assets/img/gallery/gallery-item-5.jpg" data-fslightbox="gallery"><i class="flaticon-instagram"></i></a>
+              </div>
+            </div>
+            <div class="ul-gallery-item swiper-slide">
+              <img src="assets/img/gallery/gallery-item-6.jpg" alt="Gallery Image" />
+              <div class="ul-gallery-item-btn-wrapper">
+                <a href="assets/img/gallery/gallery-item-6.jpg" data-fslightbox="gallery"><i class="flaticon-instagram"></i></a>
+              </div>
+            </div>
+            <div class="ul-gallery-item swiper-slide">
+              <img src="assets/img/gallery/gallery-item-1.jpg" alt="Gallery Image" />
+              <div class="ul-gallery-item-btn-wrapper">
+                <a href="assets/img/gallery-1.jpg" data-fslightbox="gallery"><i class="flaticon-instagram"></i></a>
+              </div>
+            </div>
+            <div class="ul-gallery-item swiper-slide">
+              <img src="assets/img/gallery/gallery-item-2.jpg" alt="Gallery Image" />
+              <div class="ul-gallery-item-btn-wrapper">
+                <a href="assets/img/gallery/gallery-item-2.jpg" data-fslightbox="gallery"><i class="flaticon-instagram"></i></a>
               </div>
             </div>
 
-            <!-- single gallery item -->
+            <!-- set 2 -->
             <div class="ul-gallery-item swiper-slide">
-              <img
-                src="assets/img/gallery/gallery-item-2.jpg"
-                alt="Gallery Image"
-              />
+              <img src="assets/img/gallery/gallery-item-1.jpg" alt="Gallery Image" />
               <div class="ul-gallery-item-btn-wrapper">
-                <a
-                  href="assets/img/gallery/gallery-item-2.jpg"
-                  data-fslightbox="gallery"
-                  ><i class="flaticon-instagram"></i
-                ></a>
+                <a href="assets/img/gallery/gallery-item-1.jpg" data-fslightbox="gallery"><i class="flaticon-instagram"></i></a>
+              </div>
+            </div>
+            <div class="ul-gallery-item swiper-slide">
+              <img src="assets/img/gallery/gallery-item-2.jpg" alt="Gallery Image" />
+              <div class="ul-gallery-item-btn-wrapper">
+                <a href="assets/img/gallery/gallery-item-2.jpg" data-fslightbox="gallery"><i class="flaticon-instagram"></i></a>
+              </div>
+            </div>
+            <div class="ul-gallery-item swiper-slide">
+              <img src="assets/img/gallery/gallery-item-3.jpg" alt="Gallery Image" />
+              <div class="ul-gallery-item-btn-wrapper">
+                <a href="assets/img/gallery/gallery-item-3.jpg" data-fslightbox="gallery"><i class="flaticon-instagram"></i></a>
+              </div>
+            </div>
+            <div class="ul-gallery-item swiper-slide">
+              <img src="assets/img/gallery/gallery-item-4.jpg" alt="Gallery Image" />
+              <div class="ul-gallery-item-btn-wrapper">
+                <a href="assets/img/gallery/gallery-item-4.jpg" data-fslightbox="gallery"><i class="flaticon-instagram"></i></a>
+              </div>
+            </div>
+            <div class="ul-gallery-item swiper-slide">
+              <img src="assets/img/gallery/gallery-item-5.jpg" alt="Gallery Image" />
+              <div class="ul-gallery-item-btn-wrapper">
+                <a href="assets/img/gallery/gallery-item-5.jpg" data-fslightbox="gallery"><i class="flaticon-instagram"></i></a>
+              </div>
+            </div>
+            <div class="ul-gallery-item swiper-slide">
+              <img src="assets/img/gallery/gallery-item-6.jpg" alt="Gallery Image" />
+              <div class="ul-gallery-item-btn-wrapper">
+                <a href="assets/img/gallery/gallery-item-6.jpg" data-fslightbox="gallery"><i class="flaticon-instagram"></i></a>
+              </div>
+            </div>
+            <div class="ul-gallery-item swiper-slide">
+              <img src="assets/img/gallery/gallery-item-1.jpg" alt="Gallery Image" />
+              <div class="ul-gallery-item-btn-wrapper">
+                <a href="assets/img/gallery-1.jpg" data-fslightbox="gallery"><i class="flaticon-instagram"></i></a>
+              </div>
+            </div>
+            <div class="ul-gallery-item swiper-slide">
+              <img src="assets/img/gallery/gallery-item-2.jpg" alt="Gallery Image" />
+              <div class="ul-gallery-item-btn-wrapper">
+                <a href="assets/img/gallery/gallery-item-2.jpg" data-fslightbox="gallery"><i class="flaticon-instagram"></i></a>
               </div>
             </div>
 
-            <!-- single gallery item -->
+            <!-- set 3 -->
             <div class="ul-gallery-item swiper-slide">
-              <img
-                src="assets/img/gallery/gallery-item-3.jpg"
-                alt="Gallery Image"
-              />
+              <img src="assets/img/gallery/gallery-item-1.jpg" alt="Gallery Image" />
               <div class="ul-gallery-item-btn-wrapper">
-                <a
-                  href="assets/img/gallery/gallery-item-3.jpg"
-                  data-fslightbox="gallery"
-                  ><i class="flaticon-instagram"></i
-                ></a>
+                <a href="assets/img/gallery/gallery-item-1.jpg" data-fslightbox="gallery"><i class="flaticon-instagram"></i></a>
               </div>
             </div>
-
-            <!-- single gallery item -->
             <div class="ul-gallery-item swiper-slide">
-              <img
-                src="assets/img/gallery/gallery-item-4.jpg"
-                alt="Gallery Image"
-              />
+              <img src="assets/img/gallery/gallery-item-2.jpg" alt="Gallery Image" />
               <div class="ul-gallery-item-btn-wrapper">
-                <a
-                  href="assets/img/gallery/gallery-item-4.jpg"
-                  data-fslightbox="gallery"
-                  ><i class="flaticon-instagram"></i
-                ></a>
+                <a href="assets/img/gallery/gallery-item-2.jpg" data-fslightbox="gallery"><i class="flaticon-instagram"></i></a>
               </div>
             </div>
-
-            <!-- single gallery item -->
             <div class="ul-gallery-item swiper-slide">
-              <img
-                src="assets/img/gallery/gallery-item-5.jpg"
-                alt="Gallery Image"
-              />
+              <img src="assets/img/gallery/gallery-item-3.jpg" alt="Gallery Image" />
               <div class="ul-gallery-item-btn-wrapper">
-                <a
-                  href="assets/img/gallery/gallery-item-5.jpg"
-                  data-fslightbox="gallery"
-                  ><i class="flaticon-instagram"></i
-                ></a>
+                <a href="assets/img/gallery/gallery-item-3.jpg" data-fslightbox="gallery"><i class="flaticon-instagram"></i></a>
               </div>
             </div>
-
-            <!-- single gallery item -->
             <div class="ul-gallery-item swiper-slide">
-              <img
-                src="assets/img/gallery/gallery-item-6.jpg"
-                alt="Gallery Image"
-              />
+              <img src="assets/img/gallery/gallery-item-4.jpg" alt="Gallery Image" />
               <div class="ul-gallery-item-btn-wrapper">
-                <a
-                  href="assets/img/gallery/gallery-item-6.jpg"
-                  data-fslightbox="gallery"
-                  ><i class="flaticon-instagram"></i
-                ></a>
+                <a href="assets/img/gallery/gallery-item-4.jpg" data-fslightbox="gallery"><i class="flaticon-instagram"></i></a>
               </div>
             </div>
-
-            <!-- single gallery item -->
             <div class="ul-gallery-item swiper-slide">
-              <img
-                src="assets/img/gallery/gallery-item-1.jpg"
-                alt="Gallery Image"
-              />
+              <img src="assets/img/gallery/gallery-item-5.jpg" alt="Gallery Image" />
               <div class="ul-gallery-item-btn-wrapper">
-                <a href="assets/img/gallery-1.jpg" data-fslightbox="gallery"
-                  ><i class="flaticon-instagram"></i
-                ></a>
+                <a href="assets/img/gallery/gallery-item-5.jpg" data-fslightbox="gallery"><i class="flaticon-instagram"></i></a>
               </div>
             </div>
-
-            <!-- single gallery item -->
             <div class="ul-gallery-item swiper-slide">
-              <img
-                src="assets/img/gallery/gallery-item-2.jpg"
-                alt="Gallery Image"
-              />
+              <img src="assets/img/gallery/gallery-item-6.jpg" alt="Gallery Image" />
               <div class="ul-gallery-item-btn-wrapper">
-                <a
-                  href="assets/img/gallery/gallery-item-2.jpg"
-                  data-fslightbox="gallery"
-                  ><i class="flaticon-instagram"></i
-                ></a>
+                <a href="assets/img/gallery/gallery-item-6.jpg" data-fslightbox="gallery"><i class="flaticon-instagram"></i></a>
+              </div>
+            </div>
+            <div class="ul-gallery-item swiper-slide">
+              <img src="assets/img/gallery/gallery-item-1.jpg" alt="Gallery Image" />
+              <div class="ul-gallery-item-btn-wrapper">
+                <a href="assets/img/gallery-1.jpg" data-fslightbox="gallery"><i class="flaticon-instagram"></i></a>
+              </div>
+            </div>
+            <div class="ul-gallery-item swiper-slide">
+              <img src="assets/img/gallery/gallery-item-2.jpg" alt="Gallery Image" />
+              <div class="ul-gallery-item-btn-wrapper">
+                <a href="assets/img/gallery/gallery-item-2.jpg" data-fslightbox="gallery"><i class="flaticon-instagram"></i></a>
               </div>
             </div>
           </div>
@@ -2427,6 +2612,75 @@
     </footer>
     <!-- FOOTER SECTION END -->
 
+    <!-- PRODUCT QUICK VIEW OFFCANVAS START -->
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="productQuickView" aria-labelledby="productQuickViewLabel">
+      <div class="offcanvas-header border-bottom">
+        <h5 class="offcanvas-title" id="productQuickViewLabel">Product Details</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      </div>
+      <div class="offcanvas-body">
+        <div class="quick-view-content">
+           <div class="quick-view-img mb-3 text-center">
+             <img src="" alt="Product Image" id="qv-image" class="img-fluid rounded" style="max-height: 300px; object-fit: cover;">
+           </div>
+           <h3 id="qv-title" class="mb-2 fs-4">Product Title</h3>
+           <div class="d-flex align-items-center mb-3">
+             <span id="qv-price" class="fs-4 fw-bold text-dark me-2">₹0.00</span>
+             <span id="qv-discount" class="badge bg-danger" style="display: none;">0% Off</span>
+           </div>
+           <p id="qv-category" class="text-muted mb-4">Category</p>
+           
+           <div class="quick-view-actions d-grid gap-2 mt-4">
+             <button class="ul-btn w-100 mb-2">Add to Cart <i class="flaticon-shopping-bag ms-2"></i></button>
+             <a href="shop-details.html" class="ul-btn ul-btn-outline w-100" style="background: transparent; color: var(--color-black); border: 1px solid var(--color-black);">View Full Details</a>
+           </div>
+        </div>
+      </div>
+    </div>
+    <!-- CART OFFCANVAS START -->
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="cartOffcanvas" aria-labelledby="cartOffcanvasLabel">
+      <div class="offcanvas-header border-bottom">
+        <h5 class="offcanvas-title" id="cartOffcanvasLabel">Shopping Cart</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      </div>
+      <div class="offcanvas-body d-flex flex-column">
+        <!-- Cart Items List -->
+        <div class="cart-items flex-grow-1 overflow-auto">
+          <!-- Item 1 -->
+          <div class="d-flex align-items-center mb-3 pb-3 border-bottom">
+            <img src="assets/img/products/product-img-1.jpg" alt="Product" class="img-fluid rounded" style="width: 70px; height: 70px; object-fit: cover;">
+            <div class="ms-3 flex-grow-1">
+              <h6 class="mb-0">Orange Airsuit</h6>
+              <span class="text-muted small">1 × ₹99.00</span>
+            </div>
+            <button class="btn btn-sm btn-link text-danger"><i class="flaticon-close"></i></button>
+          </div>
+          <!-- Item 2 -->
+          <div class="d-flex align-items-center mb-3 pb-3 border-bottom">
+            <img src="assets/img/products/product-img-2.jpg" alt="Product" class="img-fluid rounded" style="width: 70px; height: 70px; object-fit: cover;">
+            <div class="ms-3 flex-grow-1">
+              <h6 class="mb-0">Leather Bag</h6>
+              <span class="text-muted small">1 × ₹120.00</span>
+            </div>
+            <button class="btn btn-sm btn-link text-danger"><i class="flaticon-close"></i></button>
+          </div>
+        </div>
+
+        <!-- Cart Footer / Actions -->
+        <div class="cart-sidebar-footer pt-3 mt-auto">
+          <div class="d-flex justify-content-between fw-bold mb-3">
+            <span>Subtotal:</span>
+            <span>₹219.00</span>
+          </div>
+          <div class="d-grid gap-2">
+            <a href="cart.html" class="ul-btn ul-btn-outline w-100" style="background: transparent; color: var(--color-black); border: 1px solid var(--color-black);">View Cart</a>
+            <a href="Checkout.html" class="ul-btn w-100">Checkout</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- CART OFFCANVAS END -->
+
     <!-- libraries JS -->
     <script src="assets/js/bootstrap.bundle.min.js"></script>
     <script src="assets/js/splide.min.js"></script>
@@ -2441,5 +2695,70 @@
     <!-- custom JS -->
     <script src="assets/js/main.js"></script>
     <script src="assets/js/countdown.js"></script>
+    <!-- CART OFFCANVAS START -->
+    <div class="offcanvas offcanvas-end ul-cart-offcanvas" tabindex="-1" id="cartOffcanvas" aria-labelledby="cartOffcanvasLabel">
+        <div class="offcanvas-header ul-cart-header">
+            <h5 class="offcanvas-title" id="cartOffcanvasLabel">Shopping Cart (2)</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body ul-cart-body">
+            <!-- Cart Item -->
+            <div class="ul-cart-item">
+                <div class="ul-cart-img">
+                    <img src="images/product-img-1.jpg" alt="Product">
+                </div>
+                <div class="ul-cart-info">
+                    <div class="ul-cart-top">
+                        <h6 class="ul-cart-title">Tailored Coat</h6>
+                        <button class="ul-cart-remove"><i class="flaticon-close"></i></button>
+                    </div>
+                    <span class="ul-cart-variant">Size: M | Color: Black</span>
+                    <div class="ul-cart-bottom">
+                        <div class="ul-cart-quantity">
+                            <button class="minus">-</button>
+                            <input type="number" value="1" min="1">
+                            <button class="plus">+</button>
+                        </div>
+                        <span class="ul-cart-price">$120.00</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Cart Item -->
+            <div class="ul-cart-item">
+                <div class="ul-cart-img">
+                    <img src="images/product-img-2.jpg" alt="Product">
+                </div>
+                <div class="ul-cart-info">
+                    <div class="ul-cart-top">
+                        <h6 class="ul-cart-title">Classic Shoes</h6>
+                        <button class="ul-cart-remove"><i class="flaticon-close"></i></button>
+                    </div>
+                    <span class="ul-cart-variant">Size: 42 | Color: Brown</span>
+                    <div class="ul-cart-bottom">
+                        <div class="ul-cart-quantity">
+                            <button class="minus">-</button>
+                            <input type="number" value="1" min="1">
+                            <button class="plus">+</button>
+                        </div>
+                        <span class="ul-cart-price">$90.00</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="ul-cart-footer">
+            <div class="ul-cart-subtotal">
+                <span>Subtotal</span>
+                <span class="amount">$210.00</span>
+            </div>
+            <p class="ul-cart-shipping-msg">Taxes and shipping calculated at checkout</p>
+            <div class="ul-cart-buttons">
+                <a href="Checkout.html" class="ul-cart-btn ul-cart-btn-primary">Checkout</a>
+                <a href="shop.html" class="ul-cart-btn ul-cart-btn-secondary" data-bs-dismiss="offcanvas">Continue Shopping</a>
+            </div>
+        </div>
+    </div>
+    <!-- CART OFFCANVAS END -->
+
   </body>
 </html>
