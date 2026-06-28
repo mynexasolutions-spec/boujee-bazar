@@ -68,23 +68,6 @@ export default function Contact() {
         </div>
       </div>
 
-      {/* COVER BANNER */}
-      <div className="ul-about-cover-img" style={{ marginBottom: 0 }}>
-        <img
-          src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=1800&q=80"
-          alt="Contact Boujee Bazar"
-        />
-        <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.42)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', padding: '0 20px' }}>
-          <span className="ul-section-sub-title" style={{ color: '#f5d97e' }}>We're Here for You</span>
-          <h2 style={{ color: '#fff', fontSize: 'clamp(28px, 4vw, 52px)', fontWeight: 900, margin: '8px 0 16px', letterSpacing: '-0.02em' }}>
-            Let's Start a Conversation
-          </h2>
-          <p style={{ color: 'rgba(255,255,255,0.82)', fontSize: 'clamp(14px, 1vw, 17px)', maxWidth: '520px', lineHeight: 1.7 }}>
-            Have a question about your order, our products, or anything else? Our team is ready to help.
-          </p>
-        </div>
-      </div>
-
       {/* INFO CARDS */}
       <div className="ul-container">
         <div className="ul-inner-container" style={{ paddingTop: 'clamp(40px, 4vw, 70px)', paddingBottom: 0 }}>
