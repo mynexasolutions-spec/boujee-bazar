@@ -318,30 +318,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
         }
     });
 
-    // product page price filter
-    var priceFilterSlider = document.getElementById('ul-products-price-filter-slider');
 
-    if (priceFilterSlider) {
-        noUiSlider.create(priceFilterSlider, {
-            start: [19, 69],
-            connect: true,
-            range: {
-                'min': 0,
-                'max': 100
-            }
-        });
-
-        priceFilterSlider.noUiSlider.on('update', function (values, handle) {
-            var value = Math.round(values[handle]);
-            if (handle) {
-                var maxEl = document.querySelector('.filtered-price.increasing');
-                if (maxEl) maxEl.textContent = '₹' + value;
-            } else {
-                var minEl = document.querySelector('.filtered-price.decreasing');
-                if (minEl) minEl.textContent = '₹' + value;
-            }
-        });
-    }
 
     // product details slider
     new Swiper(".ul-product-details-img-slider", {

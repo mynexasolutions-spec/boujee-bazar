@@ -8,6 +8,7 @@ import { AuthProvider } from './context/AuthContext'
 import { CartProvider } from './context/CartContext'
 import { WishlistProvider } from './context/WishlistContext'
 import './index.css'
+import './quick-view.css'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
@@ -23,28 +24,28 @@ ReactDOM.createRoot(document.getElementById('root')).render(
                   duration: 3000,
                   style: {
                     borderRadius: '12px',
-                    background: '#161616',
-                    color: '#FAF9F6',
-                    border: '1px solid #222222',
+                    background: '#000000',
+                    color: '#ffffff',
+                    border: '1px solid #D7994E',
                     fontFamily: "'Space Grotesk', sans-serif",
                     fontSize: '0.88rem',
                   },
                   success: {
                     style: {
-                      borderColor: '#E2F952',
+                      borderColor: '#D7994E',
                     },
                     iconTheme: {
-                      primary: '#E2F952',
-                      secondary: '#0B0B0B',
+                      primary: '#ffffff',
+                      secondary: '#D7994E',
                     },
                   },
                   error: {
                     style: {
-                      borderColor: '#FF4E20',
+                      borderColor: '#D7994E',
                     },
                     iconTheme: {
-                      primary: '#FF4E20',
-                      secondary: '#FAF9F6',
+                      primary: '#ffffff',
+                      secondary: '#D7994E',
                     },
                   },
                 }}

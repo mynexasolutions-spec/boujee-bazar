@@ -53,7 +53,7 @@ export default function ProductFormModal({
         animate={{ opacity: 1, y: 0, scale: 1 }}
         exit={{ opacity: 0, y: 30, scale: 0.96 }}
         transition={{ duration: 0.3, ease: 'easeOut' }}
-        className="bg-[#FAFAF7] border-2 border-cream3 w-full max-w-5xl p-4 sm:p-8 rounded-2xl sm:rounded-[32px] shadow-2xl relative z-10 text-sm font-sans max-h-[92vh] overflow-y-auto"
+        className="bg-[#FAFAF7] border-2 border-cream3 w-full max-w-5xl p-4 sm:p-8 rounded-xl sm:rounded-[10px] shadow-2xl relative z-10 text-sm font-sans max-h-[92vh] overflow-y-auto"
       >
         {/* Header Title Bar */}
         <div className="flex justify-between items-center border-b border-cream3 pb-4 mb-6 select-none">
@@ -546,19 +546,43 @@ export default function ProductFormModal({
                         }
 
                         return (
-                          <div key={col} className="group inline-flex items-center gap-2.5 pl-2.5 pr-1.5 py-1.5 bg-white border border-cream3 rounded-2xl text-[10px] font-black font-sans shadow-xs hover:border-dark/25 transition-all">
-                            <span className="w-4 h-4 rounded-full border border-cream3 shrink-0 shadow-inner" style={{ backgroundColor: hexValue }} />
-                            <span className="text-dark tracking-tight">{col}</span>
-                            <button
-                              type="button"
-                              onClick={() => {
-                                setProductForm({ ...productForm, colors: productForm.colors.filter(c => c !== col) })
-                              }}
-                              className="text-dark/40 hover:text-red-500 font-bold border-none bg-cream2 hover:bg-red-50 rounded-lg cursor-pointer flex items-center justify-center p-1.5 transition-all"
-                              title="Delete variant color"
-                            >
-                              <Trash2 className="w-3.5 h-3.5" />
-                            </button>
+                          <div key={col} className="flex flex-col gap-1.5">
+                            <div className="group inline-flex items-center gap-2.5 pl-2.5 pr-1.5 py-1.5 bg-white border border-cream3 rounded-2xl text-[10px] font-black font-sans shadow-xs hover:border-dark/25 transition-all">
+                              <span className="w-4 h-4 rounded-full border border-cream3 shrink-0 shadow-inner" style={{ backgroundColor: hexValue }} />
+                              <span className="text-dark tracking-tight">{col}</span>
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  const newColorImages = { ...(productForm.color_images || {}) }
+                                  delete newColorImages[col]
+                                  setProductForm({ ...productForm, colors: productForm.colors.filter(c => c !== col), color_images: newColorImages })
+                                }}
+                                className="text-dark/40 hover:text-red-500 font-bold border-none bg-cream2 hover:bg-red-50 rounded-lg cursor-pointer flex items-center justify-center p-1.5 transition-all"
+                                title="Delete variant color"
+                              >
+                                <Trash2 className="w-3.5 h-3.5" />
+                              </button>
+                            </div>
+                            {productForm.images && productForm.images.length > 0 && (
+                              <select 
+                                value={(productForm.color_images && productForm.color_images[col]) || ''}
+                                onChange={(e) => {
+                                  setProductForm({
+                                    ...productForm,
+                                    color_images: {
+                                      ...(productForm.color_images || {}),
+                                      [col]: e.target.value
+                                    }
+                                  })
+                                }}
+                                className="text-[9px] p-1 border border-cream3 rounded bg-white text-dark/70 w-full focus:outline-none"
+                              >
+                                <option value="">Default Image</option>
+                                {productForm.images.map((img, i) => (
+                                  <option key={i} value={img}>Image {i + 1}</option>
+                                ))}
+                              </select>
+                            )}
                           </div>
                         )
                       })}

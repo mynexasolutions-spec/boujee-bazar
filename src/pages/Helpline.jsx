@@ -98,11 +98,11 @@ export default function Helpline() {
           transition={{ duration: 0.8 }}
           className="mb-10 sm:mb-16 border-l-4 border-[#161616] pl-4 sm:pl-6"
         >
-          <span className="text-[#FF4E20] font-mono uppercase tracking-[0.25em] text-xs font-bold block mb-2">
+          <span className="text-[#D9984E] font-mono uppercase tracking-[0.25em] text-xs font-bold block mb-2">
             HELP & SUPPORT
           </span>
           <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-black uppercase tracking-tight text-[#161616] leading-none">
-            SUPPORT <span className="text-[#FF4E20] italic transform skew-x-3 inline-block">HELPLINE</span>
+            SUPPORT <span className="text-[#D9984E] italic transform skew-x-3 inline-block">HELPLINE</span>
           </h1>
         </motion.div>
 
@@ -119,7 +119,7 @@ export default function Helpline() {
             className="lg:col-span-7 bg-white border border-neutral-200/80 p-5 sm:p-10 rounded-2xl sm:rounded-[32px] shadow-[0_8px_30px_rgba(0,0,0,0.02)] relative overflow-hidden group hover:border-[#161616]/30 transition-all duration-500"
           >
             {/* Glowing Accent Top Border */}
-            <div className="absolute top-0 left-0 w-full h-[3px] bg-gradient-to-r from-transparent via-[#FF4E20] to-transparent opacity-80" />
+            <div className="absolute top-0 left-0 w-full h-[3px] bg-gradient-to-r from-transparent via-[#D9984E] to-transparent opacity-80" />
             
             <div className="mb-8">
               <span className="text-orange-600 font-mono uppercase tracking-widest text-[10px] font-bold block mb-2">CONTACT US</span>
@@ -203,7 +203,7 @@ export default function Helpline() {
                 whileTap={{ scale: 0.98 }}
                 type="submit"
                 disabled={loading}
-                className="w-full sm:w-fit px-8 py-4 bg-[#161616] text-white hover:bg-[#FF4E20] transition-all duration-300 font-mono font-black text-xs uppercase tracking-widest rounded-xl flex items-center justify-center gap-2 cursor-pointer disabled:opacity-75 disabled:cursor-not-allowed shadow-md border-none"
+                className="w-full sm:w-fit px-8 py-4 bg-[#161616] text-white hover:bg-[#D9984E] transition-all duration-300 font-mono font-black text-xs uppercase tracking-widest rounded-xl flex items-center justify-center gap-2 cursor-pointer disabled:opacity-75 disabled:cursor-not-allowed shadow-md border-none"
               >
                 {loading ? (
                   <>
@@ -226,12 +226,12 @@ export default function Helpline() {
             {/* Direct Channels */}
             <motion.div 
               variants={cardVariants}
-              className="bg-white border border-neutral-200/80 p-5 sm:p-8 rounded-2xl sm:rounded-[32px] shadow-[0_8px_30px_rgba(0,0,0,0.02)] relative overflow-hidden group hover:border-[#FF4E20]/25 transition-all duration-500"
+              className="bg-white border border-neutral-200/80 p-5 sm:p-8 rounded-2xl sm:rounded-[32px] shadow-[0_8px_30px_rgba(0,0,0,0.02)] relative overflow-hidden group hover:border-[#D9984E]/25 transition-all duration-500"
             >
-              <div className="absolute top-0 left-0 w-full h-[3px] bg-gradient-to-r from-transparent via-[#FF4E20] to-transparent opacity-80" />
+              <div className="absolute top-0 left-0 w-full h-[3px] bg-gradient-to-r from-transparent via-[#D9984E] to-transparent opacity-80" />
               
               <div className="mb-6">
-                <span className="text-[#FF4E20] font-mono uppercase tracking-widest text-[10px] font-bold block mb-2">DIRECT CONTACT</span>
+                <span className="text-[#D9984E] font-mono uppercase tracking-widest text-[10px] font-bold block mb-2">DIRECT CONTACT</span>
                 <h3 className="font-display text-xl sm:text-2xl font-black uppercase text-dark tracking-tight">Other ways to reach us</h3>
               </div>
 
@@ -241,7 +241,7 @@ export default function Helpline() {
                   href="mailto:forthewinmail8@gmail.com" 
                   className="flex items-center gap-4 p-4 border border-neutral-100 hover:border-[#161616] hover:bg-[#FAF9F6] rounded-2xl transition-all duration-300 group/item decoration-none"
                 >
-                  <div className="p-3 bg-[#FAF9F6] text-[#FF4E20] rounded-xl group-hover/item:bg-[#FF4E20] group-hover/item:text-white transition-colors duration-300">
+                  <div className="p-3 bg-[#FAF9F6] text-[#D9984E] rounded-xl group-hover/item:bg-[#D9984E] group-hover/item:text-white transition-colors duration-300">
                     <Mail className="w-5 h-5" />
                   </div>
                   <div className="min-w-0 flex-1">
@@ -271,7 +271,7 @@ export default function Helpline() {
                   href="tel:+91XXXXXXXXXX" 
                   className="flex items-center gap-4 p-4 border border-neutral-100 hover:border-[#161616] hover:bg-[#FAF9F6] rounded-2xl transition-all duration-300 group/item decoration-none"
                 >
-                  <div className="p-3 bg-[#FAF9F6] text-[#FF4E20] rounded-xl group-hover/item:bg-[#FF4E20] group-hover/item:text-white transition-colors duration-300">
+                  <div className="p-3 bg-[#FAF9F6] text-[#D9984E] rounded-xl group-hover/item:bg-[#D9984E] group-hover/item:text-white transition-colors duration-300">
                     <Phone className="w-5 h-5" />
                   </div>
                   <div>
@@ -304,7 +304,7 @@ export default function Helpline() {
               className="bg-white border border-neutral-200/80 p-5 rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.01)] space-y-5"
             >
               <div className="flex gap-4 items-start">
-                <div className="p-2.5 bg-[#FAF9F6] text-[#FF4E20] rounded-lg border border-neutral-100">
+                <div className="p-2.5 bg-[#FAF9F6] text-[#D9984E] rounded-lg border border-neutral-100">
                   <Clock className="w-4 h-4" />
                 </div>
                 <div>
@@ -337,16 +337,16 @@ export default function Helpline() {
           viewport={{ once: true }}
           className="bg-white border border-neutral-200/80 p-5 sm:p-10 rounded-2xl sm:rounded-[32px] shadow-[0_8px_30px_rgba(0,0,0,0.02)] relative overflow-hidden"
         >
-          <div className="absolute top-0 left-0 w-full h-[3px] bg-gradient-to-r from-transparent via-[#FF4E20] to-transparent opacity-80" />
+          <div className="absolute top-0 left-0 w-full h-[3px] bg-gradient-to-r from-transparent via-[#D9984E] to-transparent opacity-80" />
           
           <div className="mb-8 border-b border-neutral-100 pb-4 flex items-center justify-between gap-4">
             <div>
-              <span className="text-[#FF4E20] font-mono uppercase tracking-widest text-[10px] font-bold block mb-2">FAQ</span>
+              <span className="text-[#D9984E] font-mono uppercase tracking-widest text-[10px] font-bold block mb-2">FAQ</span>
               <h2 className="font-display text-2xl sm:text-3xl font-black uppercase text-dark tracking-tight">
                 Frequently Asked Questions
               </h2>
             </div>
-            <HelpCircle className="w-7 h-7 text-[#FF4E20] animate-pulse shrink-0" />
+            <HelpCircle className="w-7 h-7 text-[#D9984E] animate-pulse shrink-0" />
           </div>
 
           <div className="space-y-4">
@@ -356,11 +356,11 @@ export default function Helpline() {
                 <div key={idx} className="border-b border-neutral-100 last:border-0 pb-4">
                   <button
                     onClick={() => setOpenFaqIndex(isOpen ? null : idx)}
-                    className="w-full flex justify-between items-center py-3 text-left font-bold uppercase tracking-tight text-[#161616] hover:text-[#FF4E20] transition-colors font-sans text-xs sm:text-sm cursor-pointer border-none bg-transparent"
+                    className="w-full flex justify-between items-center py-3 text-left font-bold uppercase tracking-tight text-[#161616] hover:text-[#D9984E] transition-colors font-sans text-xs sm:text-sm cursor-pointer border-none bg-transparent"
                   >
                     <span>{faq.q}</span>
                     <span className="text-base font-mono shrink-0 ml-4">
-                      <ChevronDown className={`w-4 h-4 transition-transform duration-300 ${isOpen ? 'rotate-180 text-[#FF4E20]' : 'text-neutral-400'}`} />
+                      <ChevronDown className={`w-4 h-4 transition-transform duration-300 ${isOpen ? 'rotate-180 text-[#D9984E]' : 'text-neutral-400'}`} />
                     </span>
                   </button>
                   <AnimatePresence initial={false}>
@@ -397,7 +397,7 @@ export default function Helpline() {
           <div className="absolute top-0 right-0 p-8 opacity-[0.03] pointer-events-none">
             <Compass className="w-48 h-48 animate-spin-slow text-white" />
           </div>
-          <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-[#FF4E20] font-black mb-4 block">ABOUT US</span>
+          <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-[#D9984E] font-black mb-4 block">ABOUT US</span>
           <blockquote className="font-display text-lg sm:text-3xl font-black uppercase leading-tight tracking-tight max-w-3xl mx-auto mb-6 text-white">
             "We make clothes that help you express yourself and your unique style."
           </blockquote>

@@ -4,6 +4,7 @@ import { getProducts, getCategories, getApprovedReviews } from '../lib/supabase'
 import { useCart } from '../context/CartContext'
 import { useWishlist } from '../context/WishlistContext'
 import { toast } from 'react-hot-toast'
+import QuickViewModal from '../components/QuickViewModal'
 
 // ── Product card (vertical layout — used in New Arrivals + Flash Sale) ──────────
 function ProductCard({ product }) {
@@ -29,10 +30,12 @@ function ProductCard({ product }) {
         {discount > 0 && <span className="ul-product-discount-tag">{discount}% Off</span>}
       </div>
       <div className="ul-product-img">
-        <img src={product.image} alt={product.name} />
+        <Link to={`/product/${product.id}`} style={{ display: 'block' }}>
+          <img src={product.image} alt={product.name} />
+        </Link>
         <div className="ul-product-actions">
           <button onClick={handleAddToCart}><i className="flaticon-shopping-bag"></i></button>
-          <Link to={`/product/${product.id}`}><i className="flaticon-hide"></i></Link>
+          <button onClick={() => product.onQuickView(product)}><i className="flaticon-hide"></i></button>
           <button
             onClick={() => inWish ? removeFromWishlist(product.id) : addToWishlist(product)}
             style={{ color: inWish ? '#e74c3c' : '' }}
@@ -53,9 +56,9 @@ function ProductCardHorizontal({ product }) {
   return (
     <div className="ul-product-horizontal">
       <div className="ul-product-horizontal-img">
-        <Link to={`/product/${product.id}`}>
+        <div>
           <img src={product.image} alt={product.name} />
-        </Link>
+        </div>
       </div>
       <div className="ul-product-horizontal-txt">
         <span className="ul-product-price">₹{product.price}</span>
@@ -112,6 +115,7 @@ export default function Home() {
   const [faqOpen, setFaqOpen]       = useState(null)
   const [countdown, setCountdown]   = useState({ days: '00', hours: '00', minutes: '00', seconds: '00' })
   const [email, setEmail]           = useState('')
+  const [quickViewProduct, setQuickViewProduct] = useState(null)
   const heroInitRef                 = useRef(false)
 
   // Load data
@@ -391,6 +395,11 @@ export default function Home() {
 
   return (
     <>
+      <QuickViewModal 
+        product={quickViewProduct} 
+        isOpen={!!quickViewProduct} 
+        onClose={() => setQuickViewProduct(null)} 
+      />
       {/* ── HERO SECTION ─────────────────────────────────────────────────── */}
       <section className="hero" id="hero">
         <div className="brand-overlay" id="brandOverlay">
@@ -496,8 +505,10 @@ export default function Home() {
               <div className="col-lg-9 col-md-8 col-12">
                 <div className="swiper ul-products-slider-1">
                   <div className="swiper-wrapper">
-                    {(largeProducts.length ? largeProducts.slice(0, 4) : newArrivals.slice(0, 4)).map(p => (
-                      <div key={p.id} className="swiper-slide"><ProductCard product={p} /></div>
+                    {(largeProducts.length ? largeProducts : newArrivals).map(p => (
+                      <div key={p.id} className="swiper-slide">
+                        <ProductCard product={{ ...p, onQuickView: setQuickViewProduct }} />
+                      </div>
                     ))}
                   </div>
                 </div>
@@ -522,8 +533,11 @@ export default function Home() {
               <div className="col-lg-9 col-md-8 col-12">
                 <div className="swiper ul-products-slider-2">
                   <div className="swiper-wrapper">
-                    {(largeProducts.length ? largeProducts.slice(2, 6) : newArrivals.slice(2, 6)).map(p => (
-                      <div key={p.id} className="swiper-slide"><ProductCard product={p} /></div>
+                    {/* Reverse or offset the second slider slightly so it doesn't look identical to the first if there are many products */}
+                    {(largeProducts.length ? largeProducts.slice(2).concat(largeProducts.slice(0, 2)) : newArrivals.slice(2).concat(newArrivals.slice(0, 2))).map(p => (
+                      <div key={`row2-${p.id}`} className="swiper-slide">
+                        <ProductCard product={{ ...p, onQuickView: setQuickViewProduct }} />
+                      </div>
                     ))}
                   </div>
                 </div>
@@ -636,7 +650,9 @@ export default function Home() {
               <div className="ul-flash-sale-slider swiper">
                 <div className="swiper-wrapper">
                   {(saleProducts.length ? saleProducts : largeProducts).map(p => (
-                    <div key={p.id} className="swiper-slide"><ProductCard product={p} /></div>
+                    <div key={p.id} className="swiper-slide">
+                      <ProductCard product={{ ...p, onQuickView: setQuickViewProduct }} />
+                    </div>
                   ))}
                 </div>
               </div>

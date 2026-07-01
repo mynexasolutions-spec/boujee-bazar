@@ -3,10 +3,10 @@ import { ShieldCheck, Truck, RotateCcw, CreditCard, FileText, ArrowRight, CheckC
 import { motion, AnimatePresence } from 'framer-motion'
 
 const TABS = [
-  { key: 'return',   label: 'Returns',   icon: RotateCcw,    color: '#FF4E20' },
+  { key: 'return',   label: 'Returns',   icon: RotateCcw,    color: '#D9984E' },
   { key: 'exchange', label: 'Exchanges', icon: ShieldCheck,  color: '#CCFF00' },
   { key: 'shipping', label: 'Shipping',  icon: Truck,        color: '#CCFF00' },
-  { key: 'payment',  label: 'Payment',   icon: CreditCard,   color: '#FF4E20' },
+  { key: 'payment',  label: 'Payment',   icon: CreditCard,   color: '#D9984E' },
   { key: 'terms',    label: 'Terms',     icon: FileText,     color: '#CCFF00' },
 ]
 
@@ -21,7 +21,7 @@ function Tag({ children, green }) {
     <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border ${
       green
         ? 'bg-[#CCFF00]/10 text-[#4a5a00] border-[#CCFF00]/30'
-        : 'bg-[#FF4E20]/10 text-[#c43010] border-[#FF4E20]/20'
+        : 'bg-[#D9984E]/10 text-[#c43010] border-[#D9984E]/20'
     }`}>
       {children}
     </span>
@@ -32,7 +32,7 @@ function InfoCard({ icon: Icon, label, value }) {
   return (
     <div className="bg-white border border-cream3 rounded-2xl p-5 flex flex-col gap-2 shadow-card hover:shadow-card-hover transition-all duration-300 hover:-translate-y-0.5">
       <div className="w-9 h-9 rounded-xl bg-cream2 flex items-center justify-center mb-1">
-        <Icon className="w-4 h-4 text-[#FF4E20]" />
+        <Icon className="w-4 h-4 text-[#D9984E]" />
       </div>
       <span className="text-[9px] font-black uppercase tracking-widest text-dark/40">{label}</span>
       <span className="text-sm font-black text-dark leading-snug">{value}</span>
@@ -44,7 +44,7 @@ function Section({ title, children }) {
   return (
     <div className="space-y-3">
       <h3 className="text-[10px] font-black uppercase tracking-[0.22em] text-dark/40 flex items-center gap-2">
-        <span className="w-4 h-px bg-[#FF4E20]" />
+        <span className="w-4 h-px bg-[#D9984E]" />
         {title}
       </h3>
       <div className="text-sm text-dark2/75 leading-relaxed">
@@ -99,7 +99,7 @@ export default function Policies() {
             transition={{ duration: 0.5, ease: [0.25, 1, 0.5, 1] }}
           >
             <div className="inline-flex items-center gap-2 bg-cream2 border border-cream3 rounded-full px-4 py-1.5 mb-5">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#FF4E20]" />
+              <span className="w-1.5 h-1.5 rounded-full bg-[#D9984E]" />
               <span className="text-[10px] font-black uppercase tracking-[0.25em] text-dark/50">Store Documentation</span>
             </div>
             <h1 className="font-display text-4xl sm:text-5xl font-black uppercase tracking-tight text-dark leading-none mb-3">

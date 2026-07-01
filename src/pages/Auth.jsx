@@ -63,12 +63,19 @@ export default function Auth() {
         }
       } else {
         // Sign In Flow
-        await signIn(email, password)
+        const authData = await signIn(email, password)
+        const loggedInUser = authData?.user
+        let adminRedirect = false
+        if (loggedInUser) {
+          const { data: userData } = await supabase.from('users').select('is_admin').eq('id', loggedInUser.id).maybeSingle()
+          adminRedirect = userData?.is_admin === true
+        }
+        
         toast.success('Successfully logged in!', {
           icon: '⚡',
           style: { background: '#0B0B0B', color: '#FFFFFF', fontFamily: "'Plus Jakarta Sans', sans-serif" }
         })
-        navigate('/')
+        navigate(adminRedirect ? '/admin' : '/')
       }
     } catch (err) {
       toast.error(err.message || 'Authentication error', {
@@ -92,8 +99,8 @@ export default function Auth() {
         className="w-full max-w-md bg-white/70 backdrop-blur-lg border border-cream3 rounded-2xl p-6 sm:p-10 shadow-2xl relative z-10"
       >
         <div className="text-center mb-6 sm:mb-8">
-          <div className="inline-flex items-center gap-1.5 bg-dark text-primary px-2.5 py-1.5 rounded-full text-[9px] sm:text-[10px] font-mono uppercase tracking-widest mb-3 sm:mb-4 shadow-neon">
-            <Sparkles className="w-3 h-3 text-primary animate-pulse" />
+          <div className="inline-flex items-center gap-1.5 bg-primary2 text-white px-2.5 py-1.5 rounded-full text-[9px] sm:text-[10px] font-mono uppercase tracking-widest mb-3 sm:mb-4 shadow-neon">
+            <Sparkles className="w-3 h-3  animate-pulse" />
             THE BOUJEE BAZAR
           </div>
           <h2 className="font-display text-xl sm:text-3xl font-black uppercase text-dark">
@@ -116,14 +123,14 @@ export default function Auth() {
               >
                 <label className="text-[9px] sm:text-[10px] font-mono uppercase text-dark2/50 font-bold block">Full Name</label>
                 <div className="relative">
-                  <User className="absolute left-4 top-3 w-4 h-4 text-dark2/45" />
+                  <User className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-dark2/45" />
                   <input
                     type="text"
                     required={isSignUp}
                     placeholder="Enter name"
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
-                    className="w-full pl-11 pr-4 py-3 bg-cream/50 border border-cream3 rounded-xl focus:border-dark focus:outline-none text-xs sm:text-sm transition-all"
+                    className="w-full pl-11 pr-4 py-3 bg-cream/50 border border-cream3 rounded-xl focus:border-dark focus:ring-1 focus:ring-dark focus:outline-none text-xs sm:text-sm transition-all"
                   />
                 </div>
               </motion.div>
@@ -133,14 +140,14 @@ export default function Auth() {
           <div className="space-y-1.5">
             <label className="text-[9px] sm:text-[10px] font-mono uppercase text-dark2/50 font-bold block">Email Address</label>
             <div className="relative">
-              <Mail className="absolute left-4 top-3 w-4 h-4 text-dark2/45" />
+              <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-dark2/45" />
               <input
                 type="email"
                 required
                 placeholder="Enter email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full pl-11 pr-4 py-3 bg-cream/50 border border-cream3 rounded-xl focus:border-dark focus:outline-none text-xs sm:text-sm transition-all"
+                className="w-full pl-11 pr-4 py-3 bg-cream/50 border border-cream3 rounded-xl focus:border-dark focus:ring-1 focus:ring-dark focus:outline-none text-xs sm:text-sm transition-all"
               />
             </div>
           </div>
@@ -153,26 +160,26 @@ export default function Auth() {
                   <button
                     type="button"
                     onClick={() => setIsForgotPassword(true)}
-                    className="text-[9px] sm:text-[10px] font-mono text-accent hover:underline border-none bg-transparent cursor-pointer"
+                    className="text-[9px] sm:text-[10px] font-mono text-primary2 hover:underline border-none bg-transparent cursor-pointer font-semibold"
                   >
                     Forgot Password?
                   </button>
                 )}
               </div>
               <div className="relative">
-                <Lock className="absolute left-4 top-3 w-4 h-4 text-dark2/45" />
+                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-dark2/45" />
                 <input
                   type={showPassword ? 'text' : 'password'}
                   required={!isForgotPassword}
                   placeholder="Enter password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full pl-11 pr-11 py-3 bg-cream/50 border border-cream3 rounded-xl focus:border-dark focus:outline-none text-xs sm:text-sm transition-all"
+                  className="w-full pl-11 pr-11 py-3 bg-cream/50 border border-cream3 rounded-xl focus:border-dark focus:ring-1 focus:ring-dark focus:outline-none text-xs sm:text-sm transition-all"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-4 top-3 text-dark2/45 hover:text-dark border-none bg-transparent cursor-pointer flex items-center justify-center"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-dark2/45 hover:text-dark border-none bg-transparent cursor-pointer flex items-center justify-center"
                   title={showPassword ? "Hide Password" : "Show Password"}
                 >
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -192,19 +199,19 @@ export default function Auth() {
               >
                 <label className="text-[9px] sm:text-[10px] font-mono uppercase text-dark2/50 font-bold block">Confirm Password</label>
                 <div className="relative">
-                  <Lock className="absolute left-4 top-3 w-4 h-4 text-dark2/45" />
+                  <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-dark2/45" />
                   <input
                     type={showConfirmPassword ? 'text' : 'password'}
                     required={isSignUp}
                     placeholder="Confirm password"
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
-                    className="w-full pl-11 pr-11 py-3 bg-cream/50 border border-cream3 rounded-xl focus:border-dark focus:outline-none text-xs sm:text-sm transition-all"
+                    className="w-full pl-11 pr-11 py-3 bg-cream/50 border border-cream3 rounded-xl focus:border-dark focus:ring-1 focus:ring-dark focus:outline-none text-xs sm:text-sm transition-all"
                   />
                   <button
                     type="button"
                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    className="absolute right-4 top-3 text-dark2/45 hover:text-dark border-none bg-transparent cursor-pointer flex items-center justify-center"
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-dark2/45 hover:text-dark border-none bg-transparent cursor-pointer flex items-center justify-center"
                     title={showConfirmPassword ? "Hide Password" : "Show Password"}
                   >
                     {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -218,25 +225,25 @@ export default function Auth() {
             whileTap={{ scale: 0.98 }}
             type="submit"
             disabled={loading}
-            className="w-full py-3.5 bg-dark text-cream hover:bg-primary hover:text-dark transition-all duration-300 font-bold uppercase tracking-widest text-[11px] sm:text-xs rounded-xl shadow-lg flex items-center justify-center gap-2 mt-6 sm:mt-8 border-none cursor-pointer"
+            className="w-full py-3.5 bg-dark text-cream hover:text-primary2 transition-all duration-300 font-bold uppercase tracking-widest text-[11px] sm:text-xs rounded-xl shadow-lg flex items-center justify-center gap-2 mt-6 sm:mt-8 border-none cursor-pointer"
           >
             {loading ? 'Please wait...' : isForgotPassword ? 'Send Reset Link' : isSignUp ? 'Sign Up' : 'Log In'}
             {!loading && <ArrowRight className="w-4 h-4" />}
           </motion.button>
         </form>
 
-        <div className="mt-6 sm:mt-8 pt-4 sm:pt-6 border-t border-cream3 text-center">
+        <div className="mt-3 sm:mt-3 pt-2 sm:pt-2 border-t border-cream3 text-center">
           {isForgotPassword ? (
             <button
               onClick={() => setIsForgotPassword(false)}
-              className="text-[10px] sm:text-xs font-mono text-accent hover:underline border-none bg-transparent cursor-pointer"
+              className="text-[12px] sm:text-md font-mono text-primary2 hover:underline border-none bg-transparent cursor-pointer font-semibold"
             >
               Back to Login
             </button>
           ) : (
             <button
               onClick={() => setIsSignUp(!isSignUp)}
-              className="text-[10px] sm:text-xs font-mono text-accent hover:underline border-none bg-transparent cursor-pointer"
+              className="text-[12px] sm:text-md font-mono text-primary2 hover:underline border-none bg-transparent cursor-pointer font-semibold"
             >
               {isSignUp ? 'Already registered? Login here' : 'New to Boujee Bazar? Register here'}
             </button>

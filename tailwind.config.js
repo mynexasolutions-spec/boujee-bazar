@@ -8,13 +8,14 @@ export default {
     extend: {
       colors: {
         primary: '#CCFF00', /* High-contrast neon green accent */
-        accent: '#FF4E20',  /* High-energy streetwear orange */
+        accent: '#D9984E',  /* High-energy streetwear orange */
         dark: '#0B0B0B',    /* Deep rich black for dark text & heavy buttons */
         dark2: '#1C1C1C',   /* Dark charcoal text */
         dark3: '#2D2D2D',   /* Muted text/borders */
         cream: '#FFFFFF',   /* Clean white background */
         cream2: '#FAF9F6',  /* Warm off-white */
         cream3: '#F3F2EE',  /* Light grey-cream border/background elements */
+        primary2: '#D7994E'
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],

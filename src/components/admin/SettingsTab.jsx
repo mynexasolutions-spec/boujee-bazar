@@ -165,7 +165,7 @@ export default function SettingsTab({
           <motion.button
             whileTap={{ scale: 0.98 }}
             type="submit"
-            className="w-full sm:w-auto px-8 py-3.5 bg-dark text-cream hover:bg-accent hover:text-dark font-sans font-bold uppercase tracking-widest text-[10px] rounded-xl shadow-md cursor-pointer transition-all hover:scale-[1.02] flex items-center justify-center gap-2 border-none"
+            className="w-full sm:w-auto px-8 py-3.5 bg-dark text-cream hover:text-primary2 font-sans font-bold uppercase tracking-widest text-[10px] rounded-xl shadow-md cursor-pointer transition-all hover:scale-[1.02] flex items-center justify-center gap-2 border-none"
           >
             <Save className="w-3.5 h-3.5" /> Save Store Settings
           </motion.button>

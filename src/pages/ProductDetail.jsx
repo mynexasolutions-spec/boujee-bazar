@@ -1,10 +1,50 @@
-﻿import { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { useParams, Link, useNavigate } from 'react-router-dom'
 import { getProducts, getApprovedReviews, insertReview } from '../lib/supabase'
 import { useCart } from '../context/CartContext'
 import { useWishlist } from '../context/WishlistContext'
 import { useAuth } from '../context/AuthContext'
 import { toast } from 'react-hot-toast'
+import QuickViewModal from '../components/QuickViewModal'
+
+function ProductCard({ product }) {
+  const { addToCart } = useCart()
+  const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist()
+  const inWish = isInWishlist(product.id)
+  const discount = product.originalPrice && product.price
+    ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100) : null
+
+  const handleAddToCart = () => {
+    const sizes = Array.isArray(product.sizes) ? product.sizes : (product.sizes ? String(product.sizes).split(',').map(s => s.trim()) : ['Free Size'])
+    addToCart(product, sizes[0] || 'Free Size', null, true)
+    toast.success(`${product.name} added to cart!`)
+  }
+
+  return (
+    <div className="ul-product">
+      <div className="ul-product-heading">
+        <span className="ul-product-price">&#8377;{product.price}</span>
+        {discount > 0 && <span className="ul-product-discount-tag">{discount}% Off</span>}
+      </div>
+      <div className="ul-product-img">
+        <Link to={`/product/${product.id}`} style={{ display: 'block' }}>
+          <img src={product.image} alt={product.name} />
+        </Link>
+        <div className="ul-product-actions">
+          <button onClick={handleAddToCart}><i className="flaticon-shopping-bag"></i></button>
+          <button onClick={() => product.onQuickView(product)}><i className="flaticon-hide"></i></button>
+          <button onClick={() => inWish ? removeFromWishlist(product.id) : addToWishlist(product)} style={inWish ? { color: '#e74c3c' } : {}}>
+            <i className="flaticon-heart"></i>
+          </button>
+        </div>
+      </div>
+      <div className="ul-product-txt">
+        <h4 className="ul-product-title"><Link to={`/product/${product.id}`}>{product.name}</Link></h4>
+        <h5 className="ul-product-category"><Link to={`/shop?category=${product.category}`}>{product.category}</Link></h5>
+      </div>
+    </div>
+  )
+}
 
 export default function ProductDetail() {
   const { id } = useParams()
@@ -26,6 +66,7 @@ export default function ProductDetail() {
   const [reviewEmail, setReviewEmail] = useState('')
   const [reviewText, setReviewText] = useState('')
   const [submittingReview, setSubmittingReview] = useState(false)
+  const [quickViewProduct, setQuickViewProduct] = useState(null)
 
   const inWish = product ? isInWishlist(product.id) : false
 
@@ -94,7 +135,11 @@ export default function ProductDetail() {
     </div>
   )
 
-  const images = product.images && Array.isArray(product.images) && product.images.length > 0 ? product.images : [product.image].filter(Boolean)
+  let images = product.images && Array.isArray(product.images) && product.images.length > 0 ? [...product.images] : [product.image].filter(Boolean)
+  if (selectedColor && product.color_images && product.color_images[selectedColor]) {
+    const colorImg = product.color_images[selectedColor]
+    images = [colorImg, ...images.filter(img => img !== colorImg)]
+  }
   const sizes = Array.isArray(product.sizes) ? product.sizes.filter(Boolean) : (product.sizes ? String(product.sizes).split(',').map(s => s.trim()).filter(Boolean) : [])
   const colors = Array.isArray(product.colors) ? product.colors.filter(Boolean) : (product.colors ? String(product.colors).split(',').map(c => c.trim()).filter(Boolean) : [])
   const discount = product.originalPrice && product.price ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100) : null
@@ -110,6 +155,11 @@ export default function ProductDetail() {
 
   return (
     <>
+      <QuickViewModal 
+        product={quickViewProduct} 
+        isOpen={!!quickViewProduct} 
+        onClose={() => setQuickViewProduct(null)} 
+      />
       {/* BREADCRUMB */}
       <div className="ul-container">
         <div className="ul-breadcrumb">
@@ -147,8 +197,8 @@ export default function ProductDetail() {
                       )}
                     </div>
                     <div className="ul-product-details-img-slider-nav" id="ul-product-details-img-slider-nav">
-                      <button className="prev"><i className="flaticon-left-arrow"></i></button>
-                      <button className="next"><i className="flaticon-arrow-point-to-right"></i></button>
+                      <button className="prev" style={{ left: 'clamp(0px, 1vw, 10px)' }}><i className="flaticon-left-arrow"></i></button>
+                      <button className="next" style={{ right: 'clamp(0px, 1vw, 10px)' }}><i className="flaticon-arrow-point-to-right"></i></button>
                     </div>
                   </div>
                 </div>
@@ -317,37 +367,18 @@ export default function ProductDetail() {
 
       {/* RELATED PRODUCTS */}
       {related.length > 0 && (
+
         <div className="ul-inner-page-container" style={{ paddingTop: 0 }}>
           <div style={{ marginBottom: '32px' }}>
             <span className="ul-section-sub-title">You may also like</span>
             <h2 className="ul-section-title">Related Products</h2>
           </div>
-          <div className="row ul-bs-row row-cols-lg-4 row-cols-sm-2 row-cols-2">
-            {related.map(p => {
-              const relDiscount = p.originalPrice ? Math.round(((p.originalPrice - p.price) / p.originalPrice) * 100) : null
-              return (
-                <div key={p.id} className="col">
-                  <div className="ul-product">
-                    <div className="ul-product-heading">
-                      <span className="ul-product-price">{String.fromCharCode(0x20B9)}{p.price}</span>
-                      {relDiscount > 0 && <span className="ul-product-discount-tag">{relDiscount}% Off</span>}
-                    </div>
-                    <div className="ul-product-img">
-                      <img src={p.image} alt={p.name} style={{ width: '100%', aspectRatio: '3/4', objectFit: 'cover' }} />
-                      <div className="ul-product-actions">
-                        <button onClick={() => { addToCart(p, 'Free Size', 'Standard', true); toast.success('Added to cart!') }}><i className="flaticon-shopping-bag"></i></button>
-                        <Link to={`/product/${p.id}`}><i className="flaticon-eye"></i></Link>
-                        <button onClick={() => addToWishlist(p)}><i className="flaticon-heart"></i></button>
-                      </div>
-                    </div>
-                    <div className="ul-product-txt">
-                      <h4 className="ul-product-title"><Link to={`/product/${p.id}`}>{p.name}</Link></h4>
-                      <h5 className="ul-product-category">{p.category}</h5>
-                    </div>
-                  </div>
-                </div>
-              )
-            })}
+          <div className="row ul-bs-row row-cols-lg-5 row-cols-sm-3 row-cols-2 gap-2 product-related">
+            {related.map(p => (
+              <div key={p.id} className="col">
+                <ProductCard product={{ ...p, onQuickView: setQuickViewProduct }} />
+              </div>
+            ))}
           </div>
         </div>
       )}

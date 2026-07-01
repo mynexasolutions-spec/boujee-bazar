@@ -14,11 +14,12 @@ import ContactsTab from '../components/admin/ContactsTab'
 import SettingsTab from '../components/admin/SettingsTab'
 import CustomizerTab from '../components/admin/CustomizerTab'
 import HomepageTab from '../components/admin/HomepageTab'
+import CustomDesignsTab from '../components/admin/CustomDesignsTab'
 import {
   TrendingUp, Package, ShoppingBag, Star, Users, Tag, Mail, Settings, Palette,
   LogOut, Globe, Plus, Trash2, Edit, CreditCard, CheckCircle, Clock,
   XCircle, Search, Percent, ChevronRight, Eye, IndianRupee, Check, X, ShieldAlert, ArrowRight, Layers, Sparkles, Truck, MapPin, Menu,
-  Type, Image as ImageIcon, Download, Printer
+  Type, Image as ImageIcon, Download, Printer, PenTool
 } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
@@ -230,6 +231,11 @@ export default function Admin() {
           setInquiries(inqs || [])
           break
         }
+        case 'custom-designs': {
+          const designs = await getAdminCustomDesigns()
+          setCustomDesigns(designs || [])
+          break
+        }
         case 'customizer': {
           const dbCust = await getCustomizerConfig()
           if (dbCust) setCustomizerConfig(dbCust)
@@ -263,8 +269,7 @@ export default function Admin() {
   const handleLogout = async () => {
     try {
       await signOut()
-      toast.success("Logged out successfully.")
-      navigate('/auth')
+      window.location.href = '/auth'
     } catch (err) {
       toast.error("Logout failed: " + err.message)
     }
@@ -295,7 +300,8 @@ export default function Admin() {
       fabric_info: '',
       washing_instructions: '',
       size_guide: '',
-      size_chart: {}
+      size_chart: {},
+      color_images: {}
     })
     setShowProductModal(true)
   }
@@ -326,7 +332,8 @@ export default function Admin() {
       fabric_info: prod.fabric_info || prod.fabric || '',
       washing_instructions: prod.washing_instructions || prod.washing || '',
       size_guide: prod.size_guide || '',
-      size_chart: prod.size_chart || {}
+      size_chart: prod.size_chart || {},
+      color_images: prod.color_images || {}
     })
     setShowProductModal(true)
   }
@@ -342,7 +349,8 @@ export default function Admin() {
       fabric_info: productForm.fabric_info,
       washing_instructions: productForm.washing_instructions,
       size_guide: productForm.size_guide,
-      size_chart: productForm.size_chart || {}
+      size_chart: productForm.size_chart || {},
+      color_images: productForm.color_images || {}
     }
 
     try {
@@ -546,7 +554,7 @@ export default function Admin() {
     const printWindow = window.open('', '_blank', 'width=900,height=1100')
     const dateStr = new Date(design.created_at || Date.now()).toLocaleDateString('en-IN', { day: '2-digit', month: 'long', year: 'numeric' })
     const zoneLabels = { front: 'F', back: 'B', left_sleeve: 'LS', right_sleeve: 'RS' }
-    const zoneColors = { front: '#FF4E20', back: '#161616', left_sleeve: '#3b82f6', right_sleeve: '#8b5cf6' }
+    const zoneColors = { front: '#D9984E', back: '#161616', left_sleeve: '#3b82f6', right_sleeve: '#8b5cf6' }
     const zoneNames = { front: 'Front Zone', back: 'Back Zone', left_sleeve: 'Left Sleeve Zone', right_sleeve: 'Right Sleeve Zone' }
 
     const zonesHTML = ['front', 'back', 'left_sleeve', 'right_sleeve'].map(zone => {
@@ -647,19 +655,19 @@ export default function Admin() {
       <div style="display:flex;align-items:center;gap:14px;">
         <img src="${origin}/images/ftw-logo.webp" style="height:40px;width:auto;" onerror="this.style.display='none'" />
         <div>
-          <div style="color:#FF4E20;font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:0.15em;font-family:monospace;">For The Win</div>
+          <div style="color:#D9984E;font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:0.15em;font-family:monospace;">For The Win</div>
           <div style="color:#fff;font-size:18px;font-weight:900;text-transform:uppercase;letter-spacing:0.08em;margin-top:1px;">Custom Print Job Sheet</div>
         </div>
       </div>
       <div style="text-align:right;">
         <div style="color:#888;font-size:10px;font-family:monospace;text-transform:uppercase;letter-spacing:0.1em;">Generated</div>
         <div style="color:#fff;font-size:12px;font-weight:700;margin-top:2px;">${dateStr}</div>
-        <button onclick="window.print()" class="no-print" style="margin-top:10px;padding:8px 16px;background:#FF4E20;color:#fff;border:none;border-radius:8px;cursor:pointer;font-weight:900;font-size:11px;font-family:monospace;text-transform:uppercase;letter-spacing:0.05em;">🖨 Print</button>
+        <button onclick="window.print()" class="no-print" style="margin-top:10px;padding:8px 16px;background:#D9984E;color:#fff;border:none;border-radius:8px;cursor:pointer;font-weight:900;font-size:11px;font-family:monospace;text-transform:uppercase;letter-spacing:0.05em;">🖨 Print</button>
       </div>
     </div>
 
     <!-- Accent Bar -->
-    <div style="height:4px;background:linear-gradient(90deg,#FF4E20,#ff8c00,#FF4E20);"></div>
+    <div style="height:4px;background:linear-gradient(90deg,#D9984E,#ff8c00,#D9984E);"></div>
 
     <!-- Metadata Grid -->
     <div style="padding:24px 32px;border-bottom:1px solid #e5e5e5;">
@@ -682,7 +690,7 @@ export default function Admin() {
         </div>
         <div style="background:#f9f9f7;border:1px solid #e5e5e5;border-radius:12px;padding:14px 16px;">
           <div style="font-size:9px;font-weight:900;text-transform:uppercase;letter-spacing:0.1em;color:#999;margin-bottom:6px;">Quoted Value</div>
-          <div style="font-size:16px;font-weight:900;font-family:monospace;color:#FF4E20;">&#8377;${(design.total_price || 0).toLocaleString('en-IN')}</div>
+          <div style="font-size:16px;font-weight:900;font-family:monospace;color:#D9984E;">&#8377;${(design.total_price || 0).toLocaleString('en-IN')}</div>
         </div>
       </div>
     </div>
@@ -832,10 +840,12 @@ export default function Admin() {
     { id: 'products', label: 'Products & Stock', icon: Package },
     { id: 'categories', label: 'Categories', icon: Layers },
     { id: 'orders', label: 'Orders', icon: ShoppingBag },
+    { id: 'custom-designs', label: 'Custom Designs', icon: PenTool },
     { id: 'reviews', label: 'Reviews', icon: Star },
     { id: 'users', label: 'Accounts', icon: Users },
     { id: 'coupons', label: 'Coupons', icon: Tag },
     { id: 'contacts', label: 'Inquiries', icon: Mail },
+    { id: 'customizer', label: 'Product Customizer', icon: Palette },
     { id: 'settings', label: 'Store Settings', icon: Settings },
   ]
 
@@ -848,9 +858,6 @@ export default function Admin() {
           <div className="flex items-center gap-4">
             <Link to="/admin" className="flex items-center gap-1 sm:gap-3 group select-none h-10">
               <img src="/boujee-bazaar-logo.png" alt="Boujee Bazar Logo" className="h-[40px] sm:h-[50px] w-auto object-contain transition-all duration-300 group-hover:scale-105 shrink-0" />
-              <span className="font-display text-[10px] sm:text-[12px] leading-none tracking-[0.22em] font-black uppercase text-dark flex items-center gap-1 shrink-0">
-                The Boujee Bazar
-              </span>
             </Link>
             <span className="h-5 w-px bg-cream3 hidden xs:inline-block" />
             <span className="text-[10px] sm:text-xs font-mono font-bold text-dark2/60 uppercase tracking-widest hidden md:inline-block">Management Dashboard</span>
@@ -858,6 +865,8 @@ export default function Admin() {
           <div className="flex items-center gap-2 sm:gap-3">
             <Link
               to="/"
+              target="_blank"
+              rel="noopener noreferrer"
               title="View Site"
               className="p-2.5 sm:px-4 sm:py-2 bg-white sm:bg-dark text-dark sm:text-cream hover:bg-cream/40 hover:sm:bg-accent hover:sm:text-dark border border-cream3 sm:border-none transition-all duration-300 font-sans font-bold uppercase tracking-wider text-[10px] rounded-xl flex items-center justify-center gap-1.5 shadow-xs sm:shadow-md hover:scale-105 active:scale-95"
             >
@@ -867,7 +876,7 @@ export default function Admin() {
             <button
               onClick={handleLogout}
               title="Sign Out"
-              className="p-2.5 text-red-500 hover:text-white hover:bg-red-600 bg-white border border-cream3 hover:border-red-600 transition-all duration-300 cursor-pointer rounded-xl flex items-center justify-center gap-1.5 shadow-xs hover:scale-105 active:scale-95"
+              className="p-2.5 text-dark-500 hover:text-primary2 bg-white border border-cream3 hover:border-red-600 transition-all duration-300 cursor-pointer rounded-xl flex items-center justify-center gap-1.5 shadow-xs hover:scale-105 active:scale-95"
             >
               <LogOut className="w-4 h-4" />
               <span className="hidden sm:inline text-xs font-bold uppercase tracking-wider">Sign Out</span>
@@ -890,7 +899,7 @@ export default function Admin() {
             {/* Backdrop */}
             <motion.div
               initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
+              animate={{ opacity : 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsMobileMenuOpen(false)}
               className="fixed inset-0 bg-dark/40 backdrop-blur-sm z-50 lg:hidden"
@@ -929,25 +938,23 @@ export default function Admin() {
                           setSearchQuery('');
                           setIsMobileMenuOpen(false);
                         }}
-                        className={`w-full flex items-center justify-between px-4 py-3 rounded-2xl border-none text-left transition-all duration-200 cursor-pointer relative overflow-hidden group outline-none bg-transparent ${isTabActive
-                          ? 'text-white font-bold'
-                          : 'text-dark2 hover:text-dark hover:bg-cream2/60'
+                        className={`w-full flex items-center justify-between p-2 pr-4 rounded-xl border-none text-left transition-all duration-200 cursor-pointer relative group outline-none bg-transparent ${isTabActive
+                          ? ''
+                          : 'hover:bg-cream2/80'
                           }`}
                       >
                         {isTabActive && (
-                          <div className="absolute inset-0 bg-dark z-0 rounded-2xl shadow-md" />
+                          <div className="absolute inset-0 bg-accent z-0 rounded-xl shadow-md shadow-accent/20" />
                         )}
-                        {isTabActive && (
-                          <div className="absolute left-0 top-3 bottom-3 w-1 bg-accent rounded-r-full z-10" />
-                        )}
-                        <div className="relative z-10 flex items-center gap-3">
-                          <Icon className={`w-[18px] h-[18px] shrink-0 ${isTabActive ? 'text-accent' : 'text-dark2/50'
-                            }`} />
-                          <span className="text-[12px] font-bold uppercase tracking-wider font-sans">{tab.label}</span>
+                        <div className="relative z-10 flex items-center gap-3.5">
+                          <div className={`w-[36px] h-[36px] rounded-full flex items-center justify-center border transition-all duration-300 ${isTabActive ? 'border-white/30 bg-white/10 text-white shadow-sm' : 'border-dark2/20 text-dark2 group-hover:border-dark2/50 group-hover:text-dark bg-transparent'}`}>
+                            <Icon className="w-[16px] h-[16px] shrink-0" />
+                          </div>
+                          <span className={`text-[14px] font-medium tracking-wide font-sans ${isTabActive ? 'text-white' : 'text-dark group-hover:text-dark'}`}>{tab.label}</span>
                         </div>
                         {tab.badge !== undefined && tab.badge > 0 && (
-                          <span className={`relative z-10 px-2 py-0.5 rounded-full text-[9px] font-bold font-mono ${isTabActive
-                            ? 'bg-accent text-white'
+                          <span className={`relative z-10 px-2.5 py-0.5 rounded-full text-[10px] font-bold font-mono ${isTabActive
+                            ? 'bg-white text-accent'
                             : tab.badgeType === 'alert' ? 'bg-red-500 text-white' : tab.badgeType === 'info' ? 'bg-blue-550 text-white' : 'bg-cream3 text-dark2'
                             }`}>
                             {tab.badge}
@@ -963,8 +970,10 @@ export default function Admin() {
               <div className="pt-4 border-t border-cream3 flex flex-col gap-2">
                 <Link
                   to="/"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="w-full px-4 py-2.5 bg-dark text-cream hover:bg-accent hover:text-dark transition-all duration-300 font-sans font-bold uppercase tracking-wider text-[10px] rounded-xl flex items-center justify-center gap-1.5 shadow-md"
+                  className="w-full px-4 py-2.5 bg-dark text-cream hover:text-primary2 transition-all duration-300 font-sans font-bold uppercase tracking-wider text-[10px] rounded-xl flex items-center justify-center gap-1.5 shadow-md"
                 >
                   <Globe className="w-3.5 h-3.5" /> View Site
                 </Link>
@@ -973,7 +982,7 @@ export default function Admin() {
                     setIsMobileMenuOpen(false);
                     handleLogout();
                   }}
-                  className="w-full py-2.5 border border-red-200 text-red-500 hover:bg-red-550 hover:text-white transition-all duration-300 font-sans font-bold uppercase tracking-wider text-[10px] rounded-xl flex items-center justify-center gap-1.5 bg-transparent cursor-pointer"
+                  className="w-full py-2.5 border border-red-200 text-dark-500 hover:bg-red-550 hover:text-primary2 transition-all duration-300 font-sans font-bold uppercase tracking-wider text-[10px] rounded-xl flex items-center justify-center gap-1.5 bg-transparent cursor-pointer"
                 >
                   <LogOut className="w-4 h-4" /> Sign Out
                 </button>
@@ -986,7 +995,7 @@ export default function Admin() {
       <div className="flex flex-col lg:flex-row gap-12 items-start">
 
         {/* Navigation Sidebar Panel */}
-        <aside className="hidden lg:flex w-full lg:w-[290px] shrink-0 lg:sticky lg:top-24 bg-white/90 backdrop-blur-md border border-cream3 p-5 rounded-3xl shadow-sm flex-col gap-1.5 font-sans">
+        <aside className="hidden lg:flex w-full lg:w-[350px] shrink-0 lg:sticky lg:top-24 bg-white/90 backdrop-blur-md border border-cream3 py-2 px-4 rounded-xl shadow-sm flex-col gap-1.5 font-sans">
           {/* Header Console Badge */}
           <div className="px-3.5 py-3 mb-3 border-b border-cream3/80 flex items-center select-none">
             <span className="text-[13px] font-mono uppercase tracking-[0.2em] text-accent font-black">Admin Panel</span>
@@ -1001,33 +1010,30 @@ export default function Admin() {
               <button
                 key={tab.id}
                 onClick={() => { setActiveTab(tab.id); setSearchQuery(''); }}
-                className={`w-full flex items-center justify-between px-4 py-3 rounded-2xl border-none text-left transition-all duration-200 cursor-pointer relative overflow-hidden group outline-none bg-transparent ${isTabActive
-                  ? 'text-white font-bold'
-                  : 'text-dark2 hover:text-dark hover:bg-cream2/60'
+                className={`w-full flex items-center justify-between p-2 pr-4 rounded-xl border-none text-left transition-all duration-200 cursor-pointer relative group outline-none bg-transparent ${isTabActive
+                  ? ''
+                  : 'hover:bg-cream2/80'
                   }`}
               >
                 {/* Sliding active background tab */}
                 {isTabActive && (
                   <motion.div
                     layoutId="activeAdminTabBg"
-                    className="absolute inset-0 bg-dark z-0 rounded-2xl shadow-md shadow-dark/10"
+                    className="absolute inset-0 bg-accent z-0 rounded-xl shadow-md shadow-accent/20"
                     transition={{ type: "spring", stiffness: 380, damping: 30 }}
                   />
                 )}
-                {/* Active edge highlight */}
-                {isTabActive && (
-                  <div className="absolute left-0 top-3 bottom-3 w-1 bg-accent rounded-r-full z-10" />
-                )}
 
-                <div className="relative z-10 flex items-center gap-3">
-                  <Icon className={`w-[18px] h-[18px] shrink-0 transition-transform group-hover:scale-105 duration-200 ${isTabActive ? 'text-accent' : 'text-dark2/50 group-hover:text-dark'
-                    }`} />
-                  <span className="text-[13px] font-bold uppercase tracking-wider font-sans">{tab.label}</span>
+                <div className="relative z-10 flex items-center gap-3.5">
+                  <div className={`w-[36px] h-[36px] rounded-full flex items-center justify-center border transition-all duration-300 ${isTabActive ? 'border-white/30 bg-white/10 text-white shadow-sm' : 'border-dark2/20 text-dark2 group-hover:border-dark2/50 group-hover:text-dark bg-transparent'}`}>
+                    <Icon className="w-[16px] h-[16px] shrink-0 transition-transform group-hover:scale-105 duration-200" />
+                  </div>
+                  <span className={`text-[14px] font-medium tracking-wide font-sans ${isTabActive ? 'text-white' : 'text-dark group-hover:text-dark'}`}>{tab.label}</span>
                 </div>
 
                 {tab.badge !== undefined && tab.badge > 0 && (
-                  <span className={`relative z-10 px-2 py-0.5 rounded-full text-[9px] font-bold font-mono ${isTabActive
-                    ? 'bg-accent text-white'
+                  <span className={`relative z-10 px-2.5 py-0.5 rounded-full text-[10px] font-bold font-mono ${isTabActive
+                    ? 'bg-white text-accent'
                     : tab.badgeType === 'alert' ? 'bg-red-500 text-white' : tab.badgeType === 'info' ? 'bg-blue-550 text-white' : 'bg-cream3 text-dark2'
                     }`}>
                     {tab.badge}
@@ -1039,7 +1045,7 @@ export default function Admin() {
         </aside>
 
         {/* Dynamic Display Panel */}
-        <main className="flex-1 w-full bg-white border border-cream3 p-4 sm:p-8 lg:p-10 rounded-3xl shadow-sm min-h-[500px]">
+        <main className="flex-1 w-full bg-white border border-cream3 p-4 sm:p-8 lg:p-10 rounded-xl shadow-sm min-h-[500px]">
 
           {loading ? (
             <div className="text-center py-24 font-sans text-dark2/60 text-sm">
@@ -1097,6 +1103,14 @@ export default function Admin() {
                 />
               )}
 
+              {activeTab === 'custom-designs' && (
+                <CustomDesignsTab
+                  customDesigns={customDesigns}
+                  setSelectedDesignForPreview={setSelectedDesignForPreview}
+                  setPreviewZone={setPreviewZone}
+                  handleDeleteDesign={handleDeleteDesign}
+                />
+              )}
 
               {activeTab === 'reviews' && (
                 <ReviewsTab
@@ -1229,7 +1243,7 @@ export default function Admin() {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 20, scale: 0.96 }}
               transition={{ duration: 0.25, ease: 'easeOut' }}
-              className="bg-[#FAFAF7] border-2 border-cream3 w-full max-w-md p-6 sm:p-8 rounded-[32px] shadow-2xl relative z-10 text-sm font-sans max-h-[90vh] overflow-y-auto"
+              className="bg-[#FAFAF7] border-2 border-cream3 w-full max-w-md p-6 sm:p-8 rounded-[10px] shadow-2xl relative z-10 text-sm font-sans max-h-[90vh] overflow-y-auto"
             >
               <button
                 type="button"
@@ -1330,7 +1344,7 @@ export default function Admin() {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 15, scale: 0.97 }}
               transition={{ duration: 0.25, ease: 'easeOut' }}
-              className="bg-[#FAFAF7] border-2 border-cream3 w-full max-w-5xl p-6 sm:p-8 rounded-[32px] shadow-2xl relative z-10 text-sm font-sans flex flex-col md:flex-row gap-8 max-h-[90vh] overflow-y-auto"
+              className="bg-[#FAFAF7] border-2 border-cream3 w-full max-w-5xl p-6 sm:p-8 rounded-[10px] shadow-2xl relative z-10 text-sm font-sans flex flex-col md:flex-row gap-8 max-h-[90vh] overflow-y-auto"
             >
               {/* Close Button */}
               <button

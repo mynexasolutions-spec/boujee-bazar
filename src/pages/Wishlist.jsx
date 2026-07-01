@@ -2,10 +2,13 @@ import { Link } from 'react-router-dom'
 import { useWishlist } from '../context/WishlistContext'
 import { useCart } from '../context/CartContext'
 import { toast } from 'react-hot-toast'
+import { useState } from 'react'
+import QuickViewModal from '../components/QuickViewModal'
 
 export default function Wishlist() {
   const { wishlistItems, removeFromWishlist } = useWishlist()
   const { addToCart } = useCart()
+  const [quickViewProduct, setQuickViewProduct] = useState(null)
 
   const handleMoveToCart = (item) => {
     const sizes = Array.isArray(item.sizes) ? item.sizes : (item.sizes ? String(item.sizes).split(',').map(s => s.trim()) : ['Free Size'])
@@ -16,6 +19,11 @@ export default function Wishlist() {
 
   return (
     <main>
+      <QuickViewModal 
+        product={quickViewProduct} 
+        isOpen={!!quickViewProduct} 
+        onClose={() => setQuickViewProduct(null)} 
+      />
       <div className="ul-container">
         <div className="ul-breadcrumb">
           <h2 className="ul-breadcrumb-title">Wishlist</h2>
@@ -41,7 +49,7 @@ export default function Wishlist() {
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '32px' }}>
                 <h3 style={{ fontWeight: 800 }}>My Wishlist ({wishlistItems.length} {wishlistItems.length === 1 ? 'item' : 'items'})</h3>
               </div>
-              <div className="row ul-bs-row row-cols-xl-4 row-cols-lg-3 row-cols-sm-2 row-cols-2">
+              <div className="row ul-bs-row row-cols-xl-4 row-cols-lg-3 row-cols-sm-2 row-cols-2 gap-1 wishlist-row">
                 {wishlistItems.map(item => {
                   const discount = item.originalPrice ? Math.round(((item.originalPrice - item.price) / item.originalPrice) * 100) : null
                   return (
@@ -52,19 +60,20 @@ export default function Wishlist() {
                           {discount > 0 && <span className="ul-product-discount-tag">{discount}% Off</span>}
                         </div>
                         <div className="ul-product-img">
-                          <img src={item.image} alt={item.name} style={{ width: '100%', aspectRatio: '3/4', objectFit: 'cover' }} />
+                          <Link to={`/product/${item.id}`} style={{ display: 'block' }}>
+                            <img src={item.image} alt={item.name} style={{ width: '100%', aspectRatio: '3/4', objectFit: 'cover' }} />
+                          </Link>
                           <div className="ul-product-actions">
                             <button onClick={() => handleMoveToCart(item)}><i className="flaticon-shopping-bag"></i></button>
-                            <Link to={`/product/${item.id}`}><i className="flaticon-eye"></i></Link>
+                            <button onClick={() => setQuickViewProduct(item)}><i className="flaticon-hide"></i></button>
                           </div>
                         </div>
                         <div className="ul-product-txt">
                           <h4 className="ul-product-title"><Link to={`/product/${item.id}`}>{item.name}</Link></h4>
                           <h5 className="ul-product-category">{item.category}</h5>
                         </div>
-                        <button onClick={() => removeFromWishlist(item.id)}
-                          style={{ position: 'absolute', top: '40px', right: '8px', background: '#fff', border: '1px solid #eee', borderRadius: '50%', width: '32px', height: '32px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#e74c3c', fontSize: '14px', zIndex: 2 }}>
-                          ×
+                        <button onClick={() => removeFromWishlist(item.id)} className='flat-close'>
+                          <i className="flaticon-close" style={{ lineHeight: 1, marginTop: '2px' }}></i>
                         </button>
                       </div>
                     </div>

@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { getOrders, insertReview, getReviews, getCustomDesign, getCustomizerConfig } from '../lib/supabase'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ShoppingBag, ChevronDown, ChevronUp, Loader2, MapPin, CreditCard, Download, Star, X, CheckCircle, Eye, Tag, Edit, Type, Image as ImageIcon, Sparkles, Layers } from 'lucide-react'
+import { ShoppingBag, ChevronDown, ChevronUp, Loader2, MapPin, CreditCard, Download, Star, X, CheckCircle, Eye, Tag, Edit, Type, Image as ImageIcon, Sparkles, Layers, Clock, RefreshCcw, Truck, XCircle, Filter } from 'lucide-react'
 import { toast } from 'react-hot-toast'
 
 const MOCKUPS = {
@@ -46,6 +46,7 @@ export default function MyOrders() {
   const [expandedOrderId, setExpandedOrderId] = useState(null)
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedStatus, setSelectedStatus] = useState('All')
+  const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false)
 
   // Rating modal state
   const [ratingModal, setRatingModal] = useState(null) // { order, item }
@@ -186,7 +187,7 @@ export default function MyOrders() {
       const doc = new jsPDF('p', 'mm', 'a4')
 
       // Colors
-      const primaryColor = [255, 78, 32] // #FF4E20
+      const primaryColor = [255, 78, 32] // #D9984E
       const darkColor = [17, 17, 17] // #111
       const lightBg = [249, 249, 247] // #f9f9f7
       const borderColor = [238, 238, 238] // #eee
@@ -552,59 +553,119 @@ export default function MyOrders() {
 
   return (
     <div className="bg-[#FAF9F6] text-[#161616] min-h-screen relative overflow-hidden font-sans bg-grid-dots bg-grain">
-      <div className="min-h-screen pt-16 pb-24 px-6 md:px-12 max-w-5xl mx-auto text-dark relative selection:bg-accent selection:text-cream">
-        {/* Title Header: Matches Shop/Helpline/About page titles */}
-        <motion.div 
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="mb-10 sm:mb-16 border-l-4 border-[#161616] pl-4 sm:pl-6"
-        >
-          <span className="text-[#FF4E20] font-mono uppercase tracking-[0.25em] text-xs font-bold block mb-2">
-            CUSTOMER SPACE
-          </span>
-          <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-black uppercase tracking-tight text-[#161616] leading-none">
-            MY <span className="text-[#FF4E20] italic transform skew-x-3 inline-block">ORDERS</span>
-          </h1>
-        </motion.div>
-
-      {/* Filter and Search Bar */}
-      {orders.length > 0 && (
-        <div className="flex flex-col md:flex-row gap-4 mb-8">
-          {/* Search Input */}
-          <div className="flex-grow relative">
-            <input
-              type="text"
-              placeholder="Search by Order ID or Item Name..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full px-4 py-3 border border-cream3 rounded-2xl bg-white text-xs font-sans focus:outline-none focus:border-dark transition-colors placeholder:text-dark2/30"
-            />
-          </div>
-
-          {/* Status filter tabs */}
-          <div className="flex flex-wrap gap-2 overflow-x-auto pb-1 md:pb-0">
-            {['All', 'Custom Designs', 'Pending', 'Processing', 'Shipped', 'Delivered', 'Cancelled'].map(status => (
-              <button
-                key={status}
-                onClick={() => setSelectedStatus(status)}
-                className={`px-4 py-2 text-[10px] font-mono font-bold uppercase tracking-wider rounded-xl transition-all cursor-pointer border ${selectedStatus === status
-                    ? 'bg-dark border-dark text-primary shadow-sm'
-                    : 'bg-white border-cream3 text-dark2/70 hover:border-dark/30'
-                  }`}
+      <div className="min-h-screen pt-16 pb-24 px-6 md:px-12 max-w-[1400px] mx-auto text-dark relative selection:bg-accent selection:text-cream">
+        <div className="flex flex-col lg:flex-row gap-[40px] items-start">
+          
+          {/* Mobile Filter Toggle */}
+          {orders.length > 0 && (
+            <div className="lg:hidden w-full flex items-center justify-between bg-white border border-cream3 rounded-xl p-4 shadow-[0_4px_24px_rgba(0,0,0,0.02)] mb-2">
+              <span className="font-display font-black uppercase text-dark tracking-tight text-lg">Orders Menu</span>
+              <button 
+                onClick={() => setIsMobileSidebarOpen(true)}
+                className="px-4 py-2 bg-[#D9984E]/10 text-[#D9984E] rounded-xl flex items-center gap-2 font-mono font-bold text-xs uppercase"
               >
-                {status}
+                <Filter className="w-4 h-4" /> Filters
               </button>
-            ))}
+            </div>
+          )}
+
+          {/* Left Sidebar (Desktop Sticky + Mobile Drawer) */}
+          <div className={`
+            fixed inset-0 z-[100] lg:static lg:z-auto lg:w-[30%] shrink-0 
+            ${isMobileSidebarOpen ? 'pointer-events-auto' : 'pointer-events-none lg:pointer-events-auto'}
+          `}>
+            {/* Backdrop for mobile */}
+            <div 
+              className={`absolute inset-0 bg-dark/40 backdrop-blur-sm lg:hidden transition-opacity duration-300 ${isMobileSidebarOpen ? 'opacity-100' : 'opacity-0'}`}
+              onClick={() => setIsMobileSidebarOpen(false)}
+            />
+            
+            {/* Sidebar Content */}
+            <div className={`
+              absolute top-0 left-0 h-full w-[85%] max-w-sm bg-white shadow-2xl p-6 flex flex-col gap-6 overflow-y-auto lg:overflow-visible transition-transform duration-300
+              lg:static lg:h-auto lg:w-full lg:max-w-none lg:rounded-xl lg:shadow-[0_4px_24px_rgba(0,0,0,0.02)] lg:border lg:border-cream3 lg:transform-none lg:sticky lg:top-[120px] lg:mb-0
+              ${isMobileSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
+            `}>
+              
+              {/* Mobile Close Button */}
+              <button 
+                onClick={() => setIsMobileSidebarOpen(false)}
+                className="lg:hidden absolute top-6 right-6 p-2 bg-[#FAF9F6] rounded-full border border-cream3 text-dark2/50 hover:text-[#D9984E]"
+              >
+                <X className="w-4 h-4" />
+              </button>
+
+              {/* Title Header */}
+              <motion.div 
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8 }}
+                className="border-l-4 border-[#161616] pl-4 sm:pl-6"
+              >
+                <span className="text-[#D9984E] font-mono uppercase tracking-[0.25em] text-xs font-bold block mb-2">
+                  CUSTOMER SPACE
+                </span>
+                <h1 className="font-display text-3xl sm:text-4xl lg:text-4xl font-black uppercase tracking-tight text-[#161616] leading-none">
+                  MY <span className="text-[#D9984E] italic transform skew-x-3 inline-block">ORDERS</span>
+                </h1>
+              </motion.div>
+
+              {/* Filter and Search Bar */}
+              {orders.length > 0 && (
+                <div className="flex flex-col gap-6 mt-2">
+                  {/* Search Input */}
+                  <div className="relative">
+                    <input
+                      type="text"
+                      placeholder="Search by Order ID or Item Name..."
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      className="w-full px-4 py-3.5 border border-cream3 rounded-2xl bg-[#FAF9F6] text-xs font-sans focus:outline-none focus:border-dark transition-colors placeholder:text-dark2/40"
+                    />
+                  </div>
+
+                  {/* Status filter tabs */}
+                  <div className="flex flex-col gap-2.5 pb-2 lg:pb-0">
+                    {[
+                      { name: 'All', icon: Layers },
+                      { name: 'Pending', icon: Clock },
+                      { name: 'Processing', icon: RefreshCcw },
+                      { name: 'Shipped', icon: Truck },
+                      { name: 'Delivered', icon: CheckCircle },
+                      { name: 'Cancelled', icon: XCircle }
+                    ].map(statusObj => {
+                      const status = statusObj.name;
+                      const Icon = statusObj.icon;
+                      const isActive = selectedStatus === status;
+                      
+                      return (
+                      <button
+                        key={status}
+                        onClick={() => { setSelectedStatus(status); setIsMobileSidebarOpen(false); }}
+                        className={`w-full px-3 py-2 lg:px-5 lg:py-4 text-xs font-mono font-bold uppercase tracking-wider rounded-xl transition-all duration-300 cursor-pointer border text-left flex items-center gap-3 ${isActive
+                            ? 'bg-dark text-white border-dark shadow-md scale-[1.02]'
+                            : 'bg-white border-transparent text-dark2/70 hover:border-[#D9984E]/30 hover:bg-[#D9984E]/5 hover:text-[#D9984E]'
+                          }`}
+                      >
+                        <Icon className={`w-5 h-5 ${isActive ? 'text-[#D9984E]' : 'opacity-70'}`} />
+                        <span className="flex-1">{status}</span>
+                        {isActive && <span className="w-1.5 h-1.5 rounded-full bg-[#D9984E] shadow-[0_0_8px_rgba(217,152,78,0.8)]"></span>}
+                      </button>
+                    )})}
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
-        </div>
-      )}
+
+          {/* Right Content Area */}
+          <div className="lg:w-[70%]">
 
       {orders.length === 0 ? (
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-white border border-cream3 rounded-3xl p-12 text-center space-y-6 shadow-sm"
+          className="bg-white border border-cream3 rounded-xl p-12 text-center space-y-6 shadow-sm"
         >
           <ShoppingBag className="w-12 h-12 text-dark/30 mx-auto" />
           <div className="space-y-2">
@@ -623,7 +684,7 @@ export default function MyOrders() {
       ) : (
         <div className="space-y-6">
           {filteredOrders.length === 0 ? (
-            <div className="bg-white border border-cream3 rounded-3xl p-12 text-center text-xs text-dark2/50 font-sans shadow-sm">
+            <div className="bg-white border border-cream3 rounded-xl p-12 text-center text-xs text-dark2/50 font-sans shadow-sm">
               No orders found matching the filter criteria.
             </div>
           ) : (
@@ -651,161 +712,118 @@ export default function MyOrders() {
                 <motion.div
                   key={order.id}
                   layout="position"
-                  className="bg-white border border-cream3 rounded-3xl overflow-hidden shadow-sm hover:border-dark/25 transition-all duration-300"
+                  className="bg-white border border-cream3 rounded-xl overflow-hidden shadow-[0_4px_24px_rgba(0,0,0,0.02)] hover:shadow-[0_8px_32px_rgba(0,0,0,0.06)] hover:border-[#D9984E]/30 hover:-translate-y-1 transition-all duration-300 mb-6"
                 >
                   {/* Collapsed Header Info / Card Trigger */}
                   <div
                     onClick={() => toggleExpand(order.id)}
-                    className="p-6 md:p-8 cursor-pointer hover:bg-cream/10 transition-colors"
+                    className="p-6 md:p-8 cursor-pointer group"
                   >
                     {/* Top row: Order meta + status + chevron */}
-                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 flex-grow">
+                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-6">
+                      <div className="grid grid-cols-2 md:grid-cols-4 gap-6 flex-grow">
                         <div>
-                          <span className="text-[9px] font-mono text-dark2/45 uppercase font-black block">Order ID</span>
-                          <span className="font-mono text-xs font-black text-dark block mt-1">{order.id}</span>
+                          <span className="text-[10px] font-mono text-dark2/45 uppercase font-black block">Order ID</span>
+                          <span className="font-mono text-xs font-black text-dark block mt-1.5">{order.id}</span>
                         </div>
                         <div>
-                          <span className="text-[9px] font-mono text-dark2/45 uppercase font-black block">Placed On</span>
-                          <span className="text-xs font-bold text-dark block mt-1">{formatOrderDate(order.created_at)}</span>
+                          <span className="text-[10px] font-mono text-dark2/45 uppercase font-black block">Placed On</span>
+                          <span className="text-xs font-bold text-dark block mt-1.5">{formatOrderDate(order.created_at)}</span>
                         </div>
                         <div>
-                          <span className="text-[9px] font-mono text-dark2/45 uppercase font-black block">Grand Total</span>
-                          <span className="text-xs font-black font-mono text-dark block mt-1">₹{order.total.toLocaleString('en-IN')}</span>
+                          <span className="text-[10px] font-mono text-dark2/45 uppercase font-black block">Grand Total</span>
+                          <span className="text-xs font-black font-mono text-dark block mt-1.5">₹{order.total.toLocaleString('en-IN')}</span>
                         </div>
                         <div>
-                          <span className="text-[9px] font-mono text-dark2/45 uppercase font-black block">Status</span>
-                          <span className={`inline-block px-2.5 py-0.5 rounded-lg text-[9px] font-black uppercase mt-1 border ${isDelivered ? 'bg-green-50 text-green-700 border-green-150' :
-                              isShipped ? 'bg-blue-50 text-blue-700 border-blue-150' :
-                                isProcessing ? 'bg-purple-50 text-purple-700 border-purple-150' :
-                                  isCancelled ? 'bg-red-50 text-red-700 border-red-150' :
-                                    'bg-yellow-50 text-yellow-700 border-yellow-150'
-                            }`}>
+                          <span className="text-[10px] font-mono text-dark2/45 uppercase font-black block mb-1.5">Status</span>
+                          <span className={`inline-block px-3 py-1 rounded-xl text-[9px] font-black uppercase border transition-all ${
+                            isDelivered ? 'bg-green-50 text-green-700 border-green-200 shadow-[0_0_12px_rgba(34,197,94,0.15)]' :
+                            isShipped ? 'bg-purple-50 text-purple-700 border-purple-200 shadow-[0_0_12px_rgba(168,85,247,0.15)]' :
+                            isProcessing ? 'bg-blue-50 text-blue-700 border-blue-200 shadow-[0_0_12px_rgba(59,130,246,0.15)]' :
+                            isCancelled ? 'bg-red-50 text-red-700 border-red-200 shadow-[0_0_12px_rgba(239,68,68,0.15)]' :
+                            'bg-yellow-50 text-yellow-700 border-yellow-200 shadow-[0_0_12px_rgba(234,179,8,0.15)]'
+                          }`}>
                             {order.status || 'Pending'}
                           </span>
                         </div>
                       </div>
+                    </div>
 
-                      <div className="flex items-center justify-end gap-3 shrink-0">
-                        <span className="text-[10px] font-mono text-dark2/45 font-bold md:hidden">TAP TO VIEW DETAILS</span>
-                        <button className="p-2 rounded-full bg-cream3/60 text-dark2/75 hover:bg-dark hover:text-cream transition-all border-none cursor-pointer">
+                    {/* Middle Row: Product Preview Cards */}
+                    {order.items && order.items.length > 0 && (
+                      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 mb-6">
+                        {order.items.map((item, idx) => {
+                          const standardProductId = item.id && item.id.startsWith('ftw-') ? (item.id.split('-').length >= 4 ? item.id.split('-').slice(0, -2).join('-') : item.id) : null
+                          
+                          const itemContent = (
+                            <div className="flex items-center gap-3 shrink-0 bg-[#FAF9F6] border border-cream3 rounded-xl p-3 hover:scale-[1.02] transition-transform duration-300 w-full">
+                              {item.image ? (
+                                <img
+                                  src={item.image}
+                                  alt={item.name}
+                                  className="w-14 h-16 object-cover rounded-lg border border-cream3 bg-white shrink-0 group-hover:scale-105 transition-transform"
+                                />
+                              ) : (
+                                <div className="w-14 h-16 rounded-lg border border-cream3 bg-white flex items-center justify-center shrink-0">
+                                  <ShoppingBag className="w-5 h-5 text-dark2/30" />
+                                </div>
+                              )}
+                              <div className="flex-1 min-w-0">
+                                <p className="text-[11px] font-extrabold uppercase text-dark truncate leading-tight group-hover:text-[#D9984E] transition-colors">{item.name}</p>
+                                <p className="text-[10px] font-mono text-dark/50 mt-1 uppercase">Variant: {item.size || 'N/A'}</p>
+                                <p className="text-[11px] font-mono font-black mt-1">₹{((item.price || 0) * (item.qty || 1)).toLocaleString('en-IN')}</p>
+                              </div>
+                            </div>
+                          )
+
+                          return standardProductId ? (
+                            <Link
+                              key={idx}
+                              to={`/product/${standardProductId}`}
+                              onClick={(e) => e.stopPropagation()}
+                              className="decoration-none shrink-0"
+                            >
+                              {itemContent}
+                            </Link>
+                          ) : (
+                            <div key={idx} className="shrink-0">
+                              {itemContent}
+                            </div>
+                          )
+                        })}
+                      </div>
+                    )}
+
+                    {/* Bottom Row */}
+                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-t border-cream3 pt-5">
+                      <div className="flex flex-wrap items-center gap-3">
+                        <div className="flex items-center gap-1.5 bg-[#FAF9F6] border border-cream3 rounded-xl px-3 py-2">
+                          <ShoppingBag className="w-3.5 h-3.5 text-dark/50" />
+                          <span className="text-[10px] font-bold font-mono text-dark">{order.items?.reduce((sum, item) => sum + (item.qty || 1), 0) || 0} Items</span>
+                        </div>
+                        {order.payment_method && (
+                          <div className="flex items-center gap-1.5 bg-[#FAF9F6] border border-cream3 rounded-xl px-3 py-2">
+                            <CreditCard className="w-3.5 h-3.5 text-dark/50" />
+                            <span className="text-[10px] font-bold font-mono text-dark uppercase">{order.payment_method}</span>
+                          </div>
+                        )}
+                      </div>
+                      
+                      <div className="flex items-center gap-3">
+                        {isDelivered && (
+                          <button
+                            onClick={(e) => { e.stopPropagation(); generateInvoice(order) }}
+                            className="px-4 py-2 bg-dark text-white rounded-xl text-[10px] font-bold uppercase tracking-wider hover:bg-[#D9984E] hover:scale-105 transition-all flex items-center gap-1.5 border-none cursor-pointer shadow-md"
+                          >
+                            <Download className="w-3.5 h-3.5" /> Invoice
+                          </button>
+                        )}
+                        <button className="px-4 py-2 bg-[#FAF9F6] border border-cream3 rounded-xl text-[10px] font-bold uppercase tracking-wider hover:border-dark hover:scale-[1.02] transition-all flex items-center gap-2 cursor-pointer text-dark">
+                          {isExpanded ? 'Hide Details' : 'View Details'}
                           {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                         </button>
                       </div>
                     </div>
-
-                    {/* Product Preview Strip + Quick Info — always visible */}
-                    {order.items && order.items.length > 0 && (
-                      <div className="mt-5 pt-4 border-t border-cream3 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-                        {/* Left: Product thumbnails */}
-                        <div className="flex items-center gap-3 flex-wrap flex-grow">
-                          {order.items.slice(0, 5).map((item, idx) => {
-                            const standardProductId = item.id && item.id.startsWith('ftw-') ? (item.id.split('-').length >= 4 ? item.id.split('-').slice(0, -2).join('-') : item.id) : null
-
-                            const itemContent = (
-                              <>
-                                {item.image ? (
-                                  <img
-                                    src={item.image}
-                                    alt={item.name}
-                                    className="w-10 h-12 object-cover rounded-xl border border-cream3 bg-cream shrink-0 group-hover:scale-[1.03] transition-transform"
-                                  />
-                                ) : (
-                                  <div className="w-10 h-12 rounded-xl border border-cream3 bg-cream3/50 flex items-center justify-center shrink-0">
-                                    <ShoppingBag className="w-4 h-4 text-dark2/30" />
-                                  </div>
-                                )}
-                                <div className="min-w-0">
-                                  <p className="text-[10px] font-extrabold uppercase text-dark leading-tight group-hover:text-accent transition-colors">{item.name}</p>
-                                  <p className="text-[9px] font-mono text-accent font-black uppercase mt-0.5">
-                                    {item.size && `Sz ${item.size}`}{item.qty > 1 ? ` × ${item.qty}` : ''}
-                                  </p>
-                                  <p className="text-[9px] font-mono text-dark2/50 mt-0.5">₹{((item.price || 0) * (item.qty || 1)).toLocaleString('en-IN')}</p>
-                                </div>
-                              </>
-                            )
-
-                            return standardProductId ? (
-                              <Link
-                                key={idx}
-                                to={`/product/${standardProductId}`}
-                                onClick={(e) => e.stopPropagation()}
-                                className="flex items-center gap-2 shrink-0 bg-cream/60 border border-cream3 rounded-2xl px-3 py-2 hover:border-dark/30 hover:bg-cream/90 group transition-all decoration-none"
-                              >
-                                {itemContent}
-                              </Link>
-                            ) : (
-                              <div key={idx} className="flex items-center gap-2 shrink-0 bg-cream/60 border border-cream3 rounded-2xl px-3 py-2">
-                                {itemContent}
-                              </div>
-                            )
-                          })}
-                          {order.items.length > 5 && (
-                            <div className="shrink-0 w-10 h-12 rounded-xl bg-cream3/60 border border-cream3 flex items-center justify-center">
-                              <span className="text-[10px] font-black text-dark2/60">+{order.items.length - 5}</span>
-                            </div>
-                          )}
-                        </div>
-
-                        {/* Right: Quick-glance info + action buttons grouped */}
-                        <div className="flex flex-col gap-3 md:items-end justify-center shrink-0 mt-2 md:mt-0">
-                          {/* Info pills */}
-                          <div className="flex flex-wrap gap-2 md:justify-end">
-                            <div className="flex items-center gap-1.5 bg-cream/70 border border-cream3 rounded-xl px-3 py-1.5">
-                              <ShoppingBag className="w-3 h-3 text-dark2/45 shrink-0" />
-                              <span className="text-[10px] font-bold text-dark font-mono whitespace-nowrap">
-                                {order.items.reduce((s, i) => s + (i.qty || 1), 0)} item{order.items.reduce((s, i) => s + (i.qty || 1), 0) > 1 ? 's' : ''}
-                              </span>
-                            </div>
-                            {order.payment_method && (
-                              <div className="flex items-center gap-1.5 bg-cream/70 border border-cream3 rounded-xl px-3 py-1.5">
-                                <CreditCard className="w-3 h-3 text-dark2/45 shrink-0" />
-                                <span className="text-[10px] font-bold text-dark font-mono whitespace-nowrap uppercase">{order.payment_method}</span>
-                              </div>
-                            )}
-                            {order.address && (
-                              <div className="flex items-center gap-1.5 bg-cream/70 border border-cream3 rounded-xl px-3 py-1.5">
-                                <MapPin className="w-3 h-3 text-dark2/45 shrink-0" />
-                                <span className="text-[10px] font-bold text-dark font-mono whitespace-nowrap">
-                                  {order.address.split(',').slice(-2, -1)[0]?.trim() || order.address.substring(0, 18)}
-                                </span>
-                              </div>
-                            )}
-                          </div>
-
-                          {/* Delivered action buttons */}
-                          {isDelivered && (
-                            <div className="flex items-center gap-2">
-                              <button
-                                onClick={(e) => { e.stopPropagation(); generateInvoice(order) }}
-                                className="flex items-center gap-1.5 px-3 py-1.5 bg-dark text-primary text-[9px] font-mono font-black uppercase tracking-widest rounded-xl hover:bg-accent hover:text-dark transition-colors duration-200 border-none cursor-pointer whitespace-nowrap"
-                              >
-                                <Download className="w-3 h-3" /> Invoice
-                              </button>
-                              {order.items && (
-                                <button
-                                  onClick={(e) => { e.stopPropagation(); setRatingModal({ order, itemIdx: 0 }) }}
-                                  className={`flex items-center gap-1.5 px-3 py-1.5 border text-[9px] font-mono font-black uppercase tracking-widest rounded-xl transition-colors duration-200 cursor-pointer whitespace-nowrap ${order.items.every(item => userReviews.some(ur => ur.product_name === item.name))
-                                      ? 'bg-cream border-cream3 text-dark2/50 hover:text-accent hover:border-accent'
-                                      : 'bg-cream2 border-cream3 text-dark hover:border-accent hover:text-accent'
-                                    }`}
-                                >
-                                  {order.items.every(item => userReviews.some(ur => ur.product_name === item.name)) ? (
-                                    <>
-                                      <Eye className="w-3 h-3" /> Rated
-                                    </>
-                                  ) : (
-                                    <>
-                                      <Star className="w-3 h-3" /> Rate
-                                    </>
-                                  )}
-                                </button>
-                              )}
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    )}
                   </div>
 
                   {/* Expanded Details Section */}
@@ -925,15 +943,15 @@ export default function MyOrders() {
                             <span className="text-[9px] font-mono font-black uppercase tracking-widest text-dark2/35 self-center">Order Complete —</span>
                             <button
                               onClick={() => generateInvoice(order)}
-                              className="inline-flex items-center gap-2 px-5 py-2.5 bg-dark text-primary text-[10px] font-mono font-black uppercase tracking-widest rounded-xl hover:bg-accent hover:text-dark transition-colors duration-200 border-none cursor-pointer"
+                              className="inline-flex items-center gap-2 px-5 py-2.5 bg-dark text-white text-[10px] font-mono font-black uppercase tracking-widest rounded-xl hover:bg-[#D9984E] transition-colors duration-200 border-none cursor-pointer shadow-md"
                             >
                               <Download className="w-3.5 h-3.5" /> Download Invoice
                             </button>
                             <button
                               onClick={() => setRatingModal({ order, itemIdx: 0 })}
                               className={`inline-flex items-center gap-2 px-5 py-2.5 border text-[10px] font-mono font-black uppercase tracking-widest rounded-xl transition-colors duration-200 cursor-pointer ${order.items?.every(item => userReviews.some(ur => ur.product_name === item.name))
-                                  ? 'bg-cream border-cream3 text-dark/40 hover:text-accent hover:border-accent'
-                                  : 'bg-cream border-cream3 text-dark hover:border-accent hover:text-accent'
+                                  ? 'bg-cream border-cream3 text-dark/40 hover:text-[#D9984E] hover:border-[#D9984E]'
+                                  : 'bg-white border-cream3 text-dark hover:border-dark hover:shadow-md'
                                 }`}
                             >
                               {order.items?.every(item => userReviews.some(ur => ur.product_name === item.name)) ? (
@@ -942,7 +960,7 @@ export default function MyOrders() {
                                 </>
                               ) : (
                                 <>
-                                  <Star className="w-3.5 h-3.5" /> Rate Products
+                                  <Star className="w-3.5 h-3.5 text-[#D9984E]" /> Rate Products
                                 </>
                               )}
                             </button>
@@ -956,6 +974,8 @@ export default function MyOrders() {
             }))}
         </div>
       )}
+      </div>
+      </div>
 
       {/* ── Rating Modal ── */}
       <AnimatePresence>
@@ -1166,7 +1186,7 @@ export default function MyOrders() {
                 </div>
 
                 {/* The Shirt Preview Box */}
-                <div className="relative rounded-[24px] overflow-hidden shadow-xl border-4 border-white bg-white" style={{
+                <div className="relative rounded-[10px] overflow-hidden shadow-xl border-4 border-white bg-white" style={{
                   width: 320,
                   height: 380,
                   flexShrink: 0

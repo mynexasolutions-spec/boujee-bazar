@@ -1,0 +1,252 @@
+.quick-view-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  padding: 20px;
+}
+
+.quick-view-modal {
+  background: #fff;
+  width: 100%;
+  max-width: 900px;
+  border-radius: 24px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.quick-view-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: #fff;
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  z-index: 10;
+  color: #333;
+  padding: 0;
+}
+
+.quick-view-close i {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  line-height: 1;
+  font-size: 14px;
+}
+
+
+.quick-view-close:hover {
+  background: var(--ul-primary);
+  color: #fff;
+}
+
+.quick-view-img-col {
+  background-color: #f8f8f8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.quick-view-main-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.quick-view-info-col {
+  padding: 40px;
+}
+
+.quick-view-brand {
+  color: #888;
+  font-weight: 700;
+  font-size: 16px;
+  margin-bottom: 5px;
+  text-transform: capitalize;
+}
+
+.quick-view-title {
+  font-weight: 800;
+  font-size: 32px;
+  margin-bottom: 15px;
+  color: #222;
+  line-height: 1.2;
+}
+
+.quick-view-price-row {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.quick-view-price {
+  font-weight: 800;
+  font-size: 24px;
+  color: #222;
+}
+
+.quick-view-original-price {
+  text-decoration: line-through;
+  color: #999;
+  font-size: 18px;
+}
+
+.quick-view-desc {
+  color: #666;
+  font-size: 14px;
+  line-height: 1.6;
+  margin-bottom: 25px;
+}
+
+.quick-view-section {
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.quick-view-section h6 {
+  font-weight: 700;
+  font-size: 16px;
+  color: #222;
+  margin: 0;
+  min-width: 50px;
+}
+
+.quick-view-options {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.quick-view-options.colors .color-btn {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  position: relative;
+}
+
+.quick-view-options.colors .color-btn.active {
+  box-shadow: 0 0 0 2px #fff, 0 0 0 4px #ccc;
+}
+
+.quick-view-options.sizes .size-btn {
+  min-width: 30px;
+  height: 25px;
+  font-size: 15px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  background: transparent;
+  color: #333;
+  font-weight: 500;
+  cursor: pointer;
+  padding:8px 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.2s;
+}
+
+.quick-view-options.sizes .size-btn:hover {
+  border-color: #999;
+}
+
+.quick-view-options.sizes .size-btn.active {
+  background: #222;
+  color: #fff;
+  border-color: #222;
+}
+
+.quick-view-action-row {
+  display: flex;
+  gap: 15px;
+  margin-top: 30px;
+}
+
+.quick-view-qty {
+  display: flex;
+  align-items: center;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.quick-view-qty button {
+  width: 45px;
+  height: 48px;
+  background: transparent;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: #555;
+}
+
+.quick-view-qty span {
+  width: 45px;
+  text-align: center;
+  font-weight: 600;
+}
+
+.quick-view-add-cart {
+  flex: 1;
+  background: #222;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 16px;
+  height: 50px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.quick-view-add-cart:hover {
+  background: var(--ul-primary);
+}
+
+@media (max-width: 767px) {
+  .quick-view-modal {
+    flex-direction: column;
+  }
+  .quick-view-info-col {
+    padding: 25px;
+  }
+  .quick-view-title {
+    font-size: 24px;
+  }
+  .quick-view-img-col {
+    height: 250px;
+  }
+  .quick-view-action-row {
+    flex-direction: column;
+  }
+  .quick-view-qty {
+    justify-content: space-between;
+    width: 100%;
+  }
+  .quick-view-add-cart {
+    width: 100%;
+  }
+}

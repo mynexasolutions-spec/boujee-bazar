@@ -3,7 +3,7 @@ import { Link, NavLink, useNavigate, useSearchParams } from 'react-router-dom'
 import { useCart } from '../context/CartContext'
 import { useAuth } from '../context/AuthContext'
 import { useWishlist } from '../context/WishlistContext'
-import { X, Trash2, Minus, Plus, Lock } from 'lucide-react'
+import { X, Trash2, Minus, Plus, Lock, LogOut, ShoppingBag } from 'lucide-react'
 import { toast } from 'react-hot-toast'
 import { getStoreSettings } from '../lib/supabase'
 
@@ -40,8 +40,7 @@ export default function Navbar() {
   const handleLogout = async () => {
     try {
       await signOut()
-      toast.success('Logged out successfully!')
-      navigate('/')
+      window.location.href = '/'
     } catch (err) {
       toast.error('Logout failed: ' + err.message)
     }
@@ -66,12 +65,20 @@ export default function Navbar() {
             <Link to="/wishlist" style={{ fontWeight: 700, color: '#222', textDecoration: 'none' }}>Wishlist {wishlistCount > 0 ? `(${wishlistCount})` : ''}</Link>
             {user ? (
               <>
-                <Link to="/my-orders" style={{ fontWeight: 700, color: '#222', textDecoration: 'none' }}>My Orders</Link>
-                {isAdmin && <Link to="/admin" style={{ fontWeight: 700, color: '#c8961e', textDecoration: 'none' }}>Admin Panel</Link>}
-                <button onClick={handleLogout} style={{ background: 'none', border: 'none', fontWeight: 700, color: '#c0392b', cursor: 'pointer', textAlign: 'left', padding: 0 }}>Logout</button>
+                <Link to="/my-orders" className="px-3.5 py-2 bg-cream3 hover:bg-dark hover:text-accent text-dark border border-cream3 font-mono font-bold uppercase tracking-wider text-[10px] rounded-lg transition-all flex items-center justify-center gap-2 mt-2 w-full text-decoration-none sider-btns">
+                  <ShoppingBag size={14} /> My Orders
+                </Link>
+                {isAdmin && <Link to="/admin" className="px-3.5 py-2 bg-cream3 hover:bg-dark hover:text-accent text-dark border border-cream3 font-mono font-bold uppercase tracking-wider text-[10px] rounded-lg transition-all flex items-center justify-center gap-2 mt-2 w-full text-decoration-none sider-btns">
+                  <i className="flaticon-user" style={{ fontSize: '14px' }}></i> Admin Panel
+                </Link>}
+                <button onClick={handleLogout} className="px-3.5 py-2 bg-cream3 hover:bg-dark hover:text-accent text-dark border border-cream3 font-mono font-bold uppercase tracking-wider text-[10px] rounded-lg transition-all flex items-center justify-center gap-2 mt-2 w-full cursor-pointer sider-btns">
+                  <LogOut size={14} /> Logout
+                </button>
               </>
             ) : (
-              <Link to="/auth" style={{ fontWeight: 700, color: '#222', textDecoration: 'none' }}>Login / Register</Link>
+              <Link to="/auth" className="px-3.5 py-2.5 bg-cream3 hover:bg-dark hover:text-cream text-primary2 border border-cream3 font-mono font-bold uppercase tracking-wider text-xs rounded-lg transition-all flex items-center justify-center gap-2 mt-4 w-full text-decoration-none">
+                <i className="flaticon-user"></i> Login / Register
+              </Link>
             )}
           </nav>
         </div>
@@ -105,9 +112,9 @@ export default function Navbar() {
           <div className="ul-container">
             <div className="ul-header-bottom-wrapper">
               <div className="header-bottom-left">
-                <div className="logo-container">
-                  <Link to="/" className="d-inline-block" style={{ background: '#fff', borderRadius: '10px', padding: '4px 12px', display: 'inline-flex', alignItems: 'center' }}>
-                    <img src="/boujee-bazaar-logo.png" alt="Boujee Bazar" className="logo" style={{ height: '46px', width: 'auto' }} />
+                <div className="logo-container ">
+                  <Link to="/" className="d-inline-block" style={{ background: '#fff', borderRadius: '8px', padding: '4px 12px', display: 'inline-flex', alignItems: 'center',marginTop: '5px' }}>
+                    <img src="/boujee-bazaar-logo.png" alt="Boujee Bazar" className="logo" style={{ height: '40px', width: 'auto' }} />
                   </Link>
                 </div>
               </div>
@@ -173,20 +180,27 @@ export default function Navbar() {
                 <button className="ul-header-mobile-search-closer d-xxl-none"><i className="flaticon-close"></i></button>
               </div>
 
-              <div className="ul-header-actions">
+              <div className="ul-header-actions d-flex align-items-center">
                 <button className="ul-header-mobile-search-opener d-xxl-none">
                   <i className="flaticon-search-interface-symbol"></i>
                 </button>
                 {user ? (
-                  <div className="d-flex align-items-center gap-2">
-                    {isAdmin && <Link to="/admin" title="Admin Panel"><i className="flaticon-settings"></i></Link>}
-                    <Link to="/my-orders" title="My Orders"><i className="flaticon-user"></i></Link>
-                    <button onClick={handleLogout} title="Logout" style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>
-                      <i className="flaticon-logout"></i>
+                  <div className="hidden lg:flex items-center gap-2">
+                    {isAdmin && <Link to="/admin" title="Admin Panel" className="buttons-ad">
+                      <i className="flaticon-user" style={{ fontSize: '13px', margin: 0 }}></i>
+                      <span className="hidden sm:inline">Admin</span>
+                    </Link>}
+                    <Link to="/my-orders" title="My Orders" className="buttons-ad">
+                      <ShoppingBag className="w-3.5 h-3.5" />
+                      <span className="hidden sm:inline">Orders</span>
+                    </Link>
+                    <button onClick={handleLogout} title="Logout" className="buttons-ad">
+                      <LogOut className="w-3.5 h-3.5" />
+                      <span className="hidden sm:inline">Logout</span>
                     </button>
                   </div>
                 ) : (
-                  <Link to="/auth" title="Login"><i className="flaticon-user"></i></Link>
+                  <Link to="/auth" title="Login" className="hidden lg:block"><i className="flaticon-user"></i></Link>
                 )}
                 <Link to="/wishlist" title="Wishlist" style={{ position: 'relative' }}>
                   <i className="flaticon-heart"></i>
@@ -211,7 +225,7 @@ export default function Navbar() {
       </header>
 
       {/* CART DRAWER */}
-      <div className={`fixed inset-0 z-50 transition-opacity duration-300 ${cartOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`} style={{ fontFamily: 'Inter, sans-serif' }}>
+      <div className={`fixed inset-0 transition-opacity duration-300 ${cartOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`} style={{ fontFamily: 'Inter, sans-serif', zIndex: 1050 }}>
         <div onClick={() => setCartOpen(false)} className="absolute inset-0" style={{ background: 'rgba(0,0,0,0.5)' }} />
         <div className={`absolute top-0 right-0 bottom-0 w-full flex flex-col transition-transform duration-300 transform ${cartOpen ? 'translate-x-0' : 'translate-x-full'}`} style={{ maxWidth: '420px', background: '#fff', borderLeft: '1px solid #e5e5e5', boxShadow: '-4px 0 30px rgba(0,0,0,0.12)' }}>
           <div style={{ padding: '20px 24px', borderBottom: '1px solid #e5e5e5', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>

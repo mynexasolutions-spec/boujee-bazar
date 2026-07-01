@@ -10,7 +10,7 @@ const INFO_CARDS = [
     lines: ['171/C/1 Binay Singh Colony,', 'Picnic Garden Road,', 'Kolkata 700039, West Bengal'],
   },
   {
-    icon: 'flaticon-phone-call',
+    svg: <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#c8961e" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>,
     title: 'Call Us',
     lines: ['+91 7980781793'],
     sub: 'Mon – Sat: 10AM – 8PM',
@@ -22,7 +22,7 @@ const INFO_CARDS = [
     sub: 'We reply within 24 hours',
   },
   {
-    icon: 'flaticon-clock',
+    icon: 'flaticon-stopwatch',
     title: 'Store Hours',
     lines: ['Mon – Sat: 10AM – 8PM', 'Sunday: 11AM – 6PM'],
   },
@@ -70,7 +70,7 @@ export default function Contact() {
 
       {/* INFO CARDS */}
       <div className="ul-container">
-        <div className="ul-inner-container" style={{ paddingTop: 'clamp(40px, 4vw, 70px)', paddingBottom: 0 }}>
+        <div className="ul-inner-container">
           <div className="row ul-bs-row row-cols-lg-4 row-cols-sm-2 row-cols-1">
             {INFO_CARDS.map(card => (
               <div key={card.title} className="col">
@@ -91,12 +91,27 @@ export default function Contact() {
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                     margin: '0 auto 18px',
                   }}>
-                    <i className={card.icon} style={{ fontSize: '26px', color: '#c8961e' }}></i>
+                    {card.svg ? (
+                      card.svg
+                    ) : (
+                      <i className={card.icon} style={{ fontSize: '26px', color: '#c8961e', display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', paddingTop: '2px' }}></i>
+                    )}
                   </div>
                   <h4 style={{ fontWeight: 800, fontSize: '15px', marginBottom: '10px', color: '#1a1a1a' }}>{card.title}</h4>
-                  {card.lines.map(line => (
-                    <p key={line} style={{ color: '#555', fontSize: '13.5px', margin: '0 0 2px', lineHeight: 1.75 }}>{line}</p>
-                  ))}
+                  {card.lines.map(line => {
+                    const isPhone = card.title === 'Call Us';
+                    const isEmail = card.title === 'Email Us';
+                    
+                    if (isPhone || isEmail) {
+                      const href = isPhone ? `tel:${line.replace(/\s/g, '')}` : `mailto:${line}`;
+                      return (
+                        <p key={line} style={{ margin: '0 0 2px', lineHeight: 1.75 }}>
+                          <a href={href} style={{ color: '#555', fontSize: '13.5px', textDecoration: 'none', transition: 'color 0.2s' }} onMouseEnter={e => e.target.style.color = '#c8961e'} onMouseLeave={e => e.target.style.color = '#555'}>{line}</a>
+                        </p>
+                      );
+                    }
+                    return <p key={line} style={{ color: '#555', fontSize: '13.5px', margin: '0 0 2px', lineHeight: 1.75 }}>{line}</p>;
+                  })}
                   {card.sub && <p style={{ color: '#999', fontSize: '12px', marginTop: '6px', margin: 0 }}>{card.sub}</p>}
                 </div>
               </div>
@@ -108,7 +123,7 @@ export default function Contact() {
       {/* FORM + SOCIAL */}
       <div className="ul-container">
         <div className="ul-inner-container" style={{ paddingBottom: 'clamp(50px, 5vw, 90px)' }}>
-          <div className="row ul-bs-row" style={{ alignItems: 'flex-start', marginTop: 'clamp(40px, 4vw, 60px)' }}>
+          <div className="row ul-bs-row" style={{ alignItems: 'flex-start'}}>
 
             {/* LEFT — intro + social */}
             <div className="col-lg-4 col-md-5">
@@ -135,8 +150,8 @@ export default function Contact() {
                         background: '#1a1a1a', color: '#fff',
                         display: 'flex', alignItems: 'center', justifyContent: 'center',
                         fontSize: '17px', textDecoration: 'none', transition: 'background 0.2s',
-                      }}>
-                        <i className={icon}></i>
+                      }} onMouseEnter={e => e.currentTarget.style.background = '#c8961e'} onMouseLeave={e => e.currentTarget.style.background = '#1a1a1a'}>
+                        <i className={icon} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', paddingTop: '2px' }}></i>
                       </a>
                     ))}
                   </div>

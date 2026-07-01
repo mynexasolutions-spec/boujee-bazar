@@ -129,7 +129,7 @@ export default function HomepageTab({
       <div className="space-y-8 text-xs font-sans">
         
         {/* Section 1: Hero Carousel Images */}
-        <form onSubmit={handleSubmit} className="bg-white border border-cream3 p-5 sm:p-6 rounded-3xl space-y-5 hover:border-dark/25 hover:shadow-md transition-all duration-300 shadow-sm">
+        <form onSubmit={handleSubmit} className="bg-white border border-cream3 p-3 sm:p-6 rounded-2xl space-y-5 hover:border-dark/25 hover:shadow-md transition-all duration-300 shadow-sm">
           <div className="flex items-center gap-3 border-b border-cream3 pb-3">
             <div className="p-2.5 bg-dark/5 text-dark rounded-xl">
               <Image className="w-5 h-5 text-accent" />
@@ -276,7 +276,7 @@ export default function HomepageTab({
         </form>
 
         {/* Section 2: Featured Collection Selection */}
-        <form onSubmit={handleSubmit} className="bg-white border border-cream3 p-5 sm:p-6 rounded-3xl space-y-5 hover:border-dark/25 hover:shadow-md transition-all duration-300 shadow-sm">
+        <form onSubmit={handleSubmit} className="bg-white border border-cream3 p-3 sm:p-6 rounded-3xl space-y-5 hover:border-dark/25 hover:shadow-md transition-all duration-300 shadow-sm">
           <div className="flex items-center gap-3 border-b border-cream3 pb-3">
             <div className="p-2.5 bg-dark/5 text-dark rounded-xl">
               <Sparkles className="w-5 h-5 text-accent" />
@@ -323,7 +323,7 @@ export default function HomepageTab({
           <div className="flex justify-end pt-2 border-t border-cream3 mt-4">
             <button
               type="submit"
-              className="px-6 py-2.5 bg-dark text-cream hover:bg-accent hover:text-dark font-sans font-bold uppercase tracking-wider text-[10px] rounded-xl shadow-sm transition-all flex items-center gap-1.5 cursor-pointer border-none"
+              className="px-6 py-2.5 bg-dark text-cream hover:text-primary2 font-sans font-bold uppercase tracking-wider text-[10px] rounded-xl shadow-sm transition-all flex items-center gap-1.5 cursor-pointer border-none"
             >
               <Save className="w-3.5 h-3.5" /> Save Featured Collection
             </button>
@@ -331,7 +331,7 @@ export default function HomepageTab({
         </form>
 
         {/* Section 3: Sale Archive Selection */}
-        <form onSubmit={handleSubmit} className="bg-white border border-cream3 p-5 sm:p-6 rounded-3xl space-y-5 hover:border-dark/25 hover:shadow-md transition-all duration-300 shadow-sm">
+        <form onSubmit={handleSubmit} className="bg-white border border-cream3 p-3 sm:p-6 rounded-3xl space-y-5 hover:border-dark/25 hover:shadow-md transition-all duration-300 shadow-sm">
           <div className="flex items-center gap-3 border-b border-cream3 pb-3">
             <div className="p-2.5 bg-dark/5 text-dark rounded-xl">
               <Globe className="w-5 h-5 text-accent" />
@@ -342,7 +342,7 @@ export default function HomepageTab({
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3.5 max-h-[300px] overflow-y-auto pr-1 scrollbar-none">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 max-h-[300px]  pr-3 scrollbar-thin sales-archive">
             {products.map(prod => {
               const checked = config.sale_product_ids.includes(prod.id)
               return (
@@ -373,7 +373,7 @@ export default function HomepageTab({
           <div className="flex justify-end pt-2 border-t border-cream3 mt-4">
             <button
               type="submit"
-              className="px-6 py-2.5 bg-dark text-cream hover:bg-accent hover:text-dark font-sans font-bold uppercase tracking-wider text-[10px] rounded-xl shadow-sm transition-all flex items-center gap-1.5 cursor-pointer border-none"
+              className="px-6 py-2.5 bg-dark text-cream hover:text-primary2 font-sans font-bold uppercase tracking-wider text-[10px] rounded-xl shadow-sm transition-all flex items-center gap-1.5 cursor-pointer border-none"
             >
               <Save className="w-3.5 h-3.5" /> Save Sale Archive
             </button>
@@ -381,7 +381,7 @@ export default function HomepageTab({
         </form>
 
         {/* Section 4: Coming Soon & Countdown Section */}
-        <form onSubmit={handleSubmit} className="bg-white border border-cream3 p-5 sm:p-6 rounded-3xl space-y-6 hover:border-dark/25 hover:shadow-md transition-all duration-300 shadow-sm">
+        <form onSubmit={handleSubmit} className="bg-white border border-cream3 p-3 sm:p-6 rounded-3xl space-y-6 hover:border-dark/25 hover:shadow-md transition-all duration-300 shadow-sm">
           <div className="flex items-center gap-3 border-b border-cream3 pb-3">
             <div className="p-2.5 bg-dark/5 text-dark rounded-xl">
               <Clock className="w-5 h-5 text-accent" />
@@ -517,7 +517,7 @@ export default function HomepageTab({
           <div className="flex justify-end pt-3 border-t border-cream3 mt-4">
             <button
               type="submit"
-              className="px-6 py-2.5 bg-dark text-cream hover:bg-accent hover:text-dark font-sans font-bold uppercase tracking-wider text-[10px] rounded-xl shadow-sm transition-all flex items-center gap-1.5 cursor-pointer border-none"
+              className="px-6 py-2.5 bg-dark text-cream hover:text-primary2 font-sans font-bold uppercase tracking-wider text-[10px] rounded-xl shadow-sm transition-all flex items-center gap-1.5 cursor-pointer border-none"
             >
               <Save className="w-3.5 h-3.5" /> Save Teaser & Countdown
             </button>

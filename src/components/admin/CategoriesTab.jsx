@@ -42,7 +42,7 @@ export default function CategoriesTab({
             setSelectedCategory(null)
             setShowCategoryModal(true)
           }}
-          className="w-full sm:w-auto px-4 py-2.5 bg-dark text-cream hover:bg-accent hover:text-dark transition-all text-xs font-sans font-bold uppercase rounded-xl flex items-center justify-center gap-1.5 cursor-pointer shadow-sm border-none"
+          className="w-full sm:w-auto px-4 py-2.5 bg-dark text-cream hover:text-primary2 transition-all text-xs font-sans font-bold uppercase rounded-xl flex items-center justify-center gap-1.5 cursor-pointer shadow-sm border-none"
         >
           <Plus className="w-4 h-4" /> Add Category
         </button>
@@ -139,7 +139,7 @@ export default function CategoriesTab({
                             </button>
                             <button
                               onClick={() => handleDeleteCategory(cat.id)}
-                              className="p-1.5 bg-red-50 hover:bg-red-650 hover:text-white rounded-lg text-red-550 transition-all cursor-pointer border-none flex items-center justify-center shadow-xs"
+                              className="p-1.5 bg-red-50 hover:bg-red-650 hover:text-primary2 rounded-lg text-red-550 transition-all cursor-pointer border-none flex items-center justify-center shadow-xs"
                               title="Delete Category"
                             >
                               <Trash2 className="w-3.5 h-3.5" />

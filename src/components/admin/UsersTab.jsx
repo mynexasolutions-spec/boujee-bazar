@@ -229,7 +229,7 @@ export default function UsersTab({
                           <div className="flex items-center justify-end gap-2">
                             <a
                               href={`mailto:${userObj.email}?subject=For%20The%20Win%20Support`}
-                              className="inline-flex items-center gap-1 px-3 py-1.5 bg-dark text-cream hover:bg-accent hover:text-dark rounded-xl text-[9px] font-mono font-black uppercase tracking-wider transition-colors shadow-xs border-none"
+                              className="inline-flex items-center gap-1 px-3 py-1.5 bg-dark text-cream hover:text-primary2 hover:text-dark rounded-xl text-[9px] font-mono font-black uppercase tracking-wider transition-colors shadow-xs border-none"
                               title="Mail Customer"
                             >
                               <Mail className="w-3 h-3" /> Email

@@ -280,8 +280,8 @@ export default function OrdersTab({
                     <th className="p-4 pl-6">Order Reference</th>
                     <th className="p-4">Customer Details</th>
                     <th className="p-4">Amount</th>
-                    <th className="p-4">Payment Info</th>
-                    <th className="p-4">Order Status</th>
+                    <th className="p-4 text-center">Payment Info</th>
+                    <th className="p-4 text-center">Order Status</th>
                     <th className="p-4">Placed Date</th>
                     <th className="p-4">Modify Status</th>
                     <th className="p-4 text-right pr-6">Details</th>
@@ -302,13 +302,13 @@ export default function OrdersTab({
                           <span className="text-[9px] text-dark2/45 block mt-0.5">{order.email}</span>
                         </td>
                         <td className="p-4 font-bold text-dark font-mono">₹{order.total.toLocaleString('en-IN')}</td>
-                        <td className="p-4">
+                        <td className="p-4 text-center">
                           <div className="space-y-1">
                             <span className="text-[9px] uppercase font-black text-dark2/50 block leading-none">{order.payment_method}</span>
                             <span className={`text-[8.5px] font-black uppercase px-2 py-0.5 rounded-md border inline-flex items-center ${statusText?.toLowerCase().includes('paid') && !statusText?.toLowerCase().includes('unpaid') ? 'bg-emerald-550/10 text-emerald-700 border-emerald-150' : 'bg-amber-555/10 text-amber-700 border-amber-150'}`}>{statusText || 'Unpaid'}</span>
                           </div>
                         </td>
-                        <td className="p-4">
+                        <td className="p-4 text-center">
                           <span className={`text-[9px] font-black uppercase px-2.5 py-1 rounded-full border inline-flex items-center ${order.status === 'Delivered' ? 'bg-green-550/10 text-green-700 border-green-150' : order.status === 'Shipped' || order.status === 'Dispatched' ? 'bg-blue-550/10 text-blue-700 border-blue-150' : order.status === 'Processing' ? 'bg-purple-550/10 text-purple-700 border-purple-150' : order.status === 'Cancelled' ? 'bg-red-550/10 text-red-700 border-red-150' : order.status === 'Pending' ? 'bg-yellow-550/10 text-yellow-700 border-yellow-150' : 'bg-yellow-550/10 text-yellow-700 border-yellow-150'}`}>{order.status || 'Pending'}</span>
                         </td>
                         <td className="p-4 text-dark2/50 font-mono text-[10px]">{formatOrderDate(order.created_at)}</td>
@@ -352,14 +352,18 @@ export default function OrdersTab({
                       <span className="font-extrabold text-dark font-mono text-sm shrink-0">₹{order.total.toLocaleString('en-IN')}</span>
                     </div>
                     <div className="grid grid-cols-2 gap-3 bg-white border border-cream3 p-3 rounded-xl shadow-xs text-[10px]">
-                      <div>
+                      <div className="text-center">
                         <span className="text-[8px] uppercase font-black text-dark2/45 block mb-0.5">Payment</span>
-                        <span className="font-bold text-dark">{order.payment_method}</span>
-                        <span className={`ml-2 text-[8px] font-black uppercase px-1.5 py-0.5 rounded border inline-flex items-center ${statusText?.toLowerCase().includes('paid') && !statusText?.toLowerCase().includes('unpaid') ? 'bg-emerald-550/10 text-emerald-700 border-emerald-150' : 'bg-amber-555/10 text-amber-700 border-amber-150'}`}>{statusText || 'Unpaid'}</span>
+                        <div className="flex flex-col items-center justify-center gap-1">
+                          <span className="font-bold text-dark">{order.payment_method}</span>
+                          <span className={`text-[8px] font-black uppercase px-1.5 py-0.5 rounded border inline-flex items-center ${statusText?.toLowerCase().includes('paid') && !statusText?.toLowerCase().includes('unpaid') ? 'bg-emerald-550/10 text-emerald-700 border-emerald-150' : 'bg-amber-555/10 text-amber-700 border-amber-150'}`}>{statusText || 'Unpaid'}</span>
+                        </div>
                       </div>
-                      <div className="text-right border-l border-cream3/50 pl-3">
+                      <div className="text-center border-l border-cream3/50">
                         <span className="text-[8px] uppercase font-black text-dark2/45 block mb-0.5">Status</span>
-                        <span className={`text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full border inline-flex items-center ${order.status === 'Delivered' ? 'bg-green-550/10 text-green-700 border-green-150' : order.status === 'Shipped' || order.status === 'Dispatched' ? 'bg-blue-550/10 text-blue-700 border-blue-150' : order.status === 'Processing' ? 'bg-purple-550/10 text-purple-700 border-purple-150' : order.status === 'Cancelled' ? 'bg-red-550/10 text-red-700 border-red-150' : 'bg-yellow-555/10 text-yellow-700 border-yellow-150'}`}>{order.status || 'Pending'}</span>
+                        <div className="flex flex-col items-center justify-center gap-1">
+                          <span className={`text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full border inline-flex items-center ${order.status === 'Delivered' ? 'bg-green-550/10 text-green-700 border-green-150' : order.status === 'Shipped' || order.status === 'Dispatched' ? 'bg-blue-550/10 text-blue-700 border-blue-150' : order.status === 'Processing' ? 'bg-purple-550/10 text-purple-700 border-purple-150' : order.status === 'Cancelled' ? 'bg-red-550/10 text-red-700 border-red-150' : 'bg-yellow-555/10 text-yellow-700 border-yellow-150'}`}>{order.status || 'Pending'}</span>
+                        </div>
                       </div>
                     </div>
                     <div className="flex gap-2.5 justify-between items-center pt-1 flex-wrap">

@@ -1,10 +1,10 @@
 import { Link } from 'react-router-dom'
 
 const VALUES = [
-  { icon: 'flaticon-medal',         title: 'Quality First',       text: 'Every product is inspected before it reaches you. We only stock items we would proudly wear ourselves.' },
-  { icon: 'flaticon-padlock',       title: 'Transparent Pricing', text: 'No hidden charges. No surprise fees. What you see is what you pay — honest and straightforward.' },
-  { icon: 'flaticon-delivery-truck',title: 'Fast Delivery',       text: 'We know you can\'t wait. We ship fast and track every order carefully so it reaches you safely.' },
-  { icon: 'flaticon-return',        title: 'Easy Returns',        text: 'Not happy? No problem. Our hassle-free 7-day return policy means you can shop with full confidence.' },
+  { icon: 'flaticon-checked',       title: 'Quality First',       text: 'Every product is inspected before it reaches you. We only stock items we would proudly wear ourselves.' },
+  { icon: 'flaticon-price-tag',     title: 'Transparent Pricing', text: 'No hidden charges. No surprise fees. What you see is what you pay — honest and straightforward.' },
+  { icon: 'flaticon-airplane',      title: 'Fast Delivery',       text: 'We know you can\'t wait. We ship fast and track every order carefully so it reaches you safely.' },
+  { icon: 'flaticon-left-arrow',    title: 'Easy Returns',        text: 'Not happy? No problem. Our hassle-free 7-day return policy means you can shop with full confidence.' },
   { icon: 'flaticon-heart',         title: 'Customer Love',       text: 'Our customers are the heart of everything we do. Your satisfaction drives every decision we make.' },
   { icon: 'flaticon-star',          title: 'Curated Selection',   text: 'Our team hand-picks every piece, ensuring each item meets our standard for beauty and craftsmanship.' },
 ]
@@ -44,7 +44,7 @@ export default function About() {
       {/* STORY SECTION */}
       <div className="ul-container">
         <div className="ul-about">
-          <div className="row ul-bs-row" style={{ alignItems: 'center' }}>
+          <div className="row ul-bs-row" style={{ alignItems: 'start' }}>
             <div className="col-lg-6 col-md-6">
               <div className="ul-about-img">
                 <img
@@ -53,7 +53,7 @@ export default function About() {
                 />
               </div>
             </div>
-            <div className="col-lg-6 col-md-6">
+            <div className="col-lg-6 col-md-6 our-story">
               <span className="ul-section-sub-title">Our Story</span>
               <h2 className="ul-section-title">Born From a Love of Beautiful Things</h2>
               <p style={{ color: '#666', lineHeight: 2, marginBottom: '20px', fontSize: 'clamp(13px, 0.84vw, 15px)' }}>
@@ -77,8 +77,8 @@ export default function About() {
             {STATS.map(s => (
               <div key={s.label} className="col">
                 <div style={{ padding: 'clamp(16px, 1.5vw, 24px)' }}>
-                  <div style={{ fontSize: 'clamp(28px, 3vw, 48px)', fontWeight: 900, color: '#1a1a1a', lineHeight: 1, marginBottom: '8px' }}>{s.number}</div>
-                  <div style={{ fontSize: 'clamp(12px, 0.84vw, 14px)', color: '#666', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.06em' }}>{s.label}</div>
+                  <div style={{ fontSize: 'clamp(28px, 3vw, 48px)', fontWeight: 900, color: '#1a1a1a', lineHeight: 1, marginBottom: '12px' }}>{s.number}</div>
+                  <div style={{ fontSize: 'clamp(12px, 0.84vw, 14px)', color: '#ffffff', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.06em' }}>{s.label}</div>
                 </div>
               </div>
             ))}
@@ -89,8 +89,8 @@ export default function About() {
       {/* WHAT WE DO SECTION */}
       <div className="ul-container">
         <div className="ul-about" style={{ borderBottom: 'none' }}>
-          <div className="row ul-bs-row" style={{ alignItems: 'center' }}>
-            <div className="col-lg-6 col-md-6 order-lg-2">
+          <div className="row ul-bs-row" style={{ alignItems: 'start' }}>
+            <div className="col-lg-6 col-md-6 order-lg-2 what-we">
               <div className="ul-about-img">
                 <img
                   src="https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=900&q=80"
@@ -132,16 +132,17 @@ export default function About() {
           <div className="row ul-bs-row row-cols-lg-3 row-cols-sm-2 row-cols-1">
             {VALUES.map(v => (
               <div key={v.title} className="col">
-                <div style={{
+                <div className='our-values' style={{
                   background: '#fff',
-                  border: '1.5px solid #ede8e0',
+                  borderLeft: '3.5px solid #D9974B',
                   borderRadius: '20px',
                   padding: 'clamp(24px, 2.1vw, 36px) clamp(20px, 1.6vw, 28px)',
                   height: '100%',
                   boxShadow: '0 2px 12px rgba(0,0,0,0.04)',
-                }}>
+                  transition: 'all 0.3s',
+                }} >
                   <div style={{ width: '56px', height: '56px', borderRadius: '14px', background: 'linear-gradient(135deg, #f5f0e8 0%, #ede4d0 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '18px' }}>
-                    <i className={v.icon} style={{ fontSize: '24px', color: '#c8961e' }}></i>
+                    <i className={v.icon} style={{ fontSize: '24px', color: '#c8961e', display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', paddingTop: '2px' }}></i>
                   </div>
                   <h4 style={{ fontWeight: 800, marginBottom: '10px', fontSize: 'clamp(14px, 1vw, 16px)' }}>{v.title}</h4>
                   <p style={{ color: '#666', fontSize: '13.5px', lineHeight: 1.8, margin: 0 }}>{v.text}</p>
@@ -176,7 +177,7 @@ export default function About() {
               <Link to="/shop" className="ul-btn">
                 Shop Now <i className="flaticon-up-right-arrow"></i>
               </Link>
-              <Link to="/contact" style={{ padding: '14px 28px', border: '2px solid rgba(255,255,255,0.4)', color: '#fff', borderRadius: '8px', fontWeight: 700, textDecoration: 'none', fontSize: '14px', transition: 'border-color 0.2s' }}>
+              <Link to="/contact" style={{ padding: '14px 28px', border: '2px solid rgba(255,255,255,0.4)', color: '#fff', fontWeight: 700, textDecoration: 'none', fontSize: '14px', transition: 'border-color 0.2s', borderRadius: '999px' }}>
                 Contact Us
               </Link>
             </div>

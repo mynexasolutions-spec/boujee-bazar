@@ -4,6 +4,8 @@ const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://placeholder-pr
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.placeholder'
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey)
+const supabaseServiceKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN5bnF0bGdyeWZ6amNvZnpuemV6Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4MjU4MDMwOCwiZXhwIjoyMDk4MTU2MzA4fQ.8cbculRXEKGCWUAdZ65AndmQN1jE1apabWjYA7U-GGs'
+export const adminSupabase = createClient(supabaseUrl, supabaseServiceKey)
 
 // ─── PRODUCTS API ────────────────────────────────────────────────────────────
 export async function getProducts() {
@@ -46,7 +48,8 @@ function sanitizeProduct(product) {
     fabric_info: product.fabric_info,
     washing_instructions: product.washing_instructions,
     size_guide: product.size_guide,
-    size_chart: product.size_chart
+    size_chart: product.size_chart,
+    color_images: product.color_images
   }
 }
 
@@ -411,14 +414,20 @@ export async function getApprovedReviews() {
 
 export async function insertReview(review) {
   const newR = {
-    ...review,
     id: review.id || `r-${Date.now()}`,
+    product_id: review.product_id || null,
+    product_name: review.product_name || null,
+    customer_name: review.customer_name || review.name || 'Anonymous',
+    name: review.name || review.customer_name || 'Anonymous',
+    user_id: review.user_id || null,
+    rating: review.rating,
+    review: review.review || review.comment || '',
     approved: review.approved ?? false,
     created_at: new Date().toISOString()
   };
 
   try {
-    const { data, error } = await supabase
+    const { data, error } = await adminSupabase
       .from('reviews')
       .insert([newR])
       .select();
@@ -433,7 +442,7 @@ export async function insertReview(review) {
 
 export async function approveReview(id) {
   try {
-    const { error } = await supabase
+    const { error } = await adminSupabase
       .from('reviews')
       .update({ approved: true })
       .eq('id', id);
@@ -448,7 +457,7 @@ export async function approveReview(id) {
 
 export async function deleteReview(id) {
   try {
-    const { error } = await supabase
+    const { error } = await adminSupabase
       .from('reviews')
       .delete()
       .eq('id', id);

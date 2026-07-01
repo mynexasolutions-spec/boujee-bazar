@@ -37,7 +37,7 @@ export default function ProductsTab({
         </div>
         <button
           onClick={handleAddProduct}
-          className="w-full sm:w-auto px-4 py-2.5 bg-dark text-cream hover:bg-accent hover:text-dark transition-all duration-300 text-xs font-sans font-bold uppercase rounded-xl flex items-center justify-center gap-1.5 cursor-pointer shadow-md hover:scale-105 active:scale-95 border-none"
+          className="w-full sm:w-auto px-4 py-2.5 bg-dark text-cream  hover:text-primary2 transition-all duration-300 text-xs font-sans font-bold uppercase rounded-xl flex items-center justify-center gap-1.5 cursor-pointer shadow-md hover:scale-105 active:scale-95 border-none"
         >
           <Plus className="w-4 h-4" /> Add Product
         </button>

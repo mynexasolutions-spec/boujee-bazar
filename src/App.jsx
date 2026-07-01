@@ -14,8 +14,9 @@ import Wishlist from './pages/Wishlist'
 import Admin from './pages/Admin'
 import MyOrders from './pages/MyOrders'
 import ResetPassword from './pages/ResetPassword'
+import BackToTop from './components/BackToTop'
 
-function App() {
+function App() { 
   const location = useLocation()
   const isAdmin = location.pathname === '/admin'
 
@@ -44,6 +45,7 @@ function App() {
         </Routes>
       </main>
       {!isAdmin && <Footer />}
+      <BackToTop />
     </div>
   )
 }

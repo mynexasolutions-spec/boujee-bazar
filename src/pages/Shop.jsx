@@ -4,6 +4,8 @@ import { getProducts, getCategories } from '../lib/supabase'
 import { useCart } from '../context/CartContext'
 import { useWishlist } from '../context/WishlistContext'
 import { toast } from 'react-hot-toast'
+import { RiseLoader } from 'react-spinners'
+import QuickViewModal from '../components/QuickViewModal'
 
 const PER_PAGE = 12
 
@@ -12,7 +14,6 @@ function ProductCard({ product }) {
   const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist()
   const inWish = isInWishlist(product.id)
   const discount = product.originalPrice && product.price
-    ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100) : null
 
   const handleAddToCart = () => {
     const sizes = Array.isArray(product.sizes) ? product.sizes : (product.sizes ? String(product.sizes).split(',').map(s => s.trim()) : ['Free Size'])
@@ -27,10 +28,12 @@ function ProductCard({ product }) {
         {discount > 0 && <span className="ul-product-discount-tag">{discount}% Off</span>}
       </div>
       <div className="ul-product-img">
-        <img src={product.image} alt={product.name} />
+        <Link to={`/product/${product.id}`} style={{ display: 'block' }}>
+          <img src={product.image} alt={product.name} />
+        </Link>
         <div className="ul-product-actions">
           <button onClick={handleAddToCart}><i className="flaticon-shopping-bag"></i></button>
-          <Link to={`/product/${product.id}`}><i className="flaticon-hide"></i></Link>
+          <button onClick={() => product.onQuickView(product)}><i className="flaticon-hide"></i></button>
           <button onClick={() => inWish ? removeFromWishlist(product.id) : addToWishlist(product)} style={inWish ? { color: '#e74c3c' } : {}}>
             <i className="flaticon-heart"></i>
           </button>
@@ -56,6 +59,8 @@ export default function Shop() {
   const [colorFilter, setColorFilter] = useState('')
   const [sizeFilter, setSizeFilter] = useState('')
   const [currentPage, setCurrentPage] = useState(1)
+  const [isFiltering, setIsFiltering] = useState(false)
+  const [quickViewProduct, setQuickViewProduct] = useState(null)
 
   const categoryFilter = searchParams.get('category') || ''
   const tagFilter = searchParams.get('tag') || ''
@@ -80,11 +85,20 @@ export default function Shop() {
   useEffect(() => { setCurrentPage(1) }, [categoryFilter, tagFilter, searchFilter, colorFilter, sizeFilter])
 
   useEffect(() => {
+    // Skip if still loading initial data
+    if (loading) return
+    setIsFiltering(true)
+    const timer = setTimeout(() => setIsFiltering(false), 400)
+    return () => clearTimeout(timer)
+  }, [categoryFilter, tagFilter, searchFilter, colorFilter, sizeFilter, priceFilter, loading])
+
+  useEffect(() => {
     if (loading || !window.noUiSlider) return
     const slider = document.getElementById('ul-products-price-filter-slider')
     if (!slider || slider.noUiSlider) return
     try {
-      window.noUiSlider.create(slider, { start: [minPrice, maxPrice], connect: true, range: { min: minPrice, max: maxPrice || 10000 } })
+      const safeMax = maxPrice > minPrice ? maxPrice : minPrice + 1
+      window.noUiSlider.create(slider, { start: [minPrice, safeMax], connect: true, range: { min: minPrice, max: safeMax } })
       slider.noUiSlider.on('update', (values) => {
         const lo = Math.round(values[0]); const hi = Math.round(values[1])
         setPriceFilter([lo, hi])
@@ -93,7 +107,9 @@ export default function Shop() {
         if (minEl) minEl.textContent = '₹' + lo
         if (maxEl) maxEl.textContent = '₹' + hi
       })
-    } catch(e) {}
+    } catch(e) {
+      console.error("Error creating slider:", e)
+    }
   }, [loading, minPrice, maxPrice])
 
   const parseList = (val) => Array.isArray(val) ? val : (val ? String(val).split(',').map(x => x.trim()) : [])
@@ -149,6 +165,11 @@ export default function Shop() {
 
   return (
     <>
+      <QuickViewModal 
+        product={quickViewProduct} 
+        isOpen={!!quickViewProduct} 
+        onClose={() => setQuickViewProduct(null)} 
+      />
       {/* BREADCRUMB */}
       <div className="ul-container">
         <div className="ul-breadcrumb">
@@ -333,8 +354,12 @@ export default function Shop() {
 
               {loading ? (
                 <div style={{ textAlign: 'center', padding: '80px 0', color: '#999' }}>
-                  <div style={{ width: '40px', height: '40px', border: '3px solid #eee', borderTopColor: '#222', borderRadius: '50%', animation: 'spin 0.8s linear infinite', margin: '0 auto 16px' }}></div>
+                  <RiseLoader color="#D9974B" cssOverride={{ display: 'block', margin: '0 auto 16px' }} />
                   Loading products...
+                </div>
+              ) : isFiltering ? (
+                <div style={{ textAlign: 'center', padding: '80px 0', color: '#999' }}>
+                  <RiseLoader color="#D9974B" cssOverride={{ display: 'block', margin: '0 auto 16px' }} />
                 </div>
               ) : filteredProducts.length === 0 ? (
                 <div style={{ textAlign: 'center', padding: '80px 0' }}>
@@ -346,34 +371,112 @@ export default function Shop() {
                   <div className="row ul-bs-row row-cols-lg-3 row-cols-2">
                     {pagedProducts.map(p => (
                       <div key={p.id} className="col">
-                        <ProductCard product={p} />
+                        <ProductCard product={{ ...p, onQuickView: setQuickViewProduct }} />
                       </div>
                     ))}
                   </div>
 
                   {/* Pagination */}
                   {totalPages > 1 && (
-                    <div className="ul-pagination">
-                      <ul>
-                        <li>
-                          <a href="#" onClick={e => { e.preventDefault(); setCurrentPage(pg => Math.max(1, pg - 1)) }}>
-                            <i className="flaticon-left-arrow"></i>
-                          </a>
-                        </li>
-                        <li className="pages">
-                          {Array.from({ length: totalPages }).map((_, i) => (
-                            <a key={i} href="#" className={currentPage === i + 1 ? 'active' : ''}
-                              onClick={e => { e.preventDefault(); setCurrentPage(i + 1) }}>
-                              {String(i + 1).padStart(2, '0')}
-                            </a>
-                          ))}
-                        </li>
-                        <li>
-                          <a href="#" onClick={e => { e.preventDefault(); setCurrentPage(pg => Math.min(totalPages, pg + 1)) }}>
-                            <i className="flaticon-arrow-point-to-right"></i>
-                          </a>
-                        </li>
-                      </ul>
+                    <div className="pagination-wrapper">
+                      <button 
+                        className={`page-btn ${currentPage === 1 ? 'disabled' : ''}`} 
+                        onClick={() => setCurrentPage(1)}
+                        disabled={currentPage === 1}
+                        title="First Page"
+                      >
+                        <i className="flaticon-left-arrow" style={{marginRight: '-4px'}}></i>
+                        <i className="flaticon-left-arrow"></i>
+                      </button>
+                      <button 
+                        className={`page-btn ${currentPage === 1 ? 'disabled' : ''}`} 
+                        onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                        disabled={currentPage === 1}
+                        title="Previous Page"
+                      >
+                        <i className="flaticon-left-arrow"></i>
+                      </button>
+
+                      {(() => {
+                        const pages = [];
+                        const maxPagesToShow = 5;
+                        
+                        let startPage = Math.max(1, currentPage - Math.floor(maxPagesToShow / 2));
+                        let endPage = startPage + maxPagesToShow - 1;
+
+                        if (endPage > totalPages) {
+                          endPage = totalPages;
+                          startPage = Math.max(1, endPage - maxPagesToShow + 1);
+                        }
+
+                        if (startPage > 1) {
+                          pages.push(<button key={1} className="page-btn" onClick={() => setCurrentPage(1)}>1</button>);
+                          if (startPage > 2) {
+                            pages.push(<span key="ellipsis-start" className="page-ellipsis">...</span>);
+                          }
+                        }
+
+                        for (let i = startPage; i <= endPage; i++) {
+                          pages.push(
+                            <button 
+                              key={i} 
+                              className={`page-btn ${currentPage === i ? 'active' : ''}`}
+                              onClick={() => setCurrentPage(i)}
+                            >
+                              {i}
+                            </button>
+                          );
+                        }
+
+                        if (endPage < totalPages) {
+                          if (endPage < totalPages - 1) {
+                            pages.push(<span key="ellipsis-end" className="page-ellipsis">...</span>);
+                          }
+                          pages.push(<button key={totalPages} className="page-btn" onClick={() => setCurrentPage(totalPages)}>{totalPages}</button>);
+                        }
+
+                        return pages;
+                      })()}
+
+                      <button 
+                        className={`page-btn ${currentPage === totalPages ? 'disabled' : ''}`} 
+                        onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                        disabled={currentPage === totalPages}
+                        title="Next Page"
+                      >
+                        <i className="flaticon-arrow-point-to-right"></i>
+                      </button>
+                      <button 
+                        className={`page-btn ${currentPage === totalPages ? 'disabled' : ''}`} 
+                        onClick={() => setCurrentPage(totalPages)}
+                        disabled={currentPage === totalPages}
+                        title="Last Page"
+                      >
+                        <i className="flaticon-arrow-point-to-right" style={{marginRight: '-4px'}}></i>
+                        <i className="flaticon-arrow-point-to-right"></i>
+                      </button>
+                      
+                      <div className="page-selector-container">
+                        <span>Go to:</span>
+                        <form className="page-input-form" onSubmit={(e) => {
+                          e.preventDefault();
+                          const val = parseInt(e.currentTarget.elements.pageInput.value, 10);
+                          if (!isNaN(val) && val >= 1 && val <= totalPages) {
+                            setCurrentPage(val);
+                            e.currentTarget.elements.pageInput.value = '';
+                          }
+                        }}>
+                          <input 
+                            type="number" 
+                            name="pageInput"
+                            min="1" 
+                            max={totalPages} 
+                            className="page-input" 
+                            placeholder={`e.g. ${totalPages}`}
+                          />
+                          <button type="submit" className="page-go-btn">Go</button>
+                        </form>
+                      </div>
                     </div>
                   )}
 
