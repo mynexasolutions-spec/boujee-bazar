@@ -300,8 +300,7 @@ export default function Admin() {
       fabric_info: '',
       washing_instructions: '',
       size_guide: '',
-      size_chart: {},
-      color_images: {}
+      size_chart: {}
     })
     setShowProductModal(true)
   }
@@ -332,16 +331,16 @@ export default function Admin() {
       fabric_info: prod.fabric_info || prod.fabric || '',
       washing_instructions: prod.washing_instructions || prod.washing || '',
       size_guide: prod.size_guide || '',
-      size_chart: prod.size_chart || {},
-      color_images: prod.color_images || {}
+      size_chart: prod.size_chart || {}
     })
     setShowProductModal(true)
   }
 
   const handleSaveProduct = async (e) => {
     e.preventDefault()
+    const { color_images, ...restForm } = productForm
     const productPayload = {
-      ...productForm,
+      ...restForm,
       price: Number(productForm.price),
       originalPrice: productForm.mrp ? Number(productForm.mrp) : null,
       stock: Number(productForm.stock),
@@ -349,8 +348,7 @@ export default function Admin() {
       fabric_info: productForm.fabric_info,
       washing_instructions: productForm.washing_instructions,
       size_guide: productForm.size_guide,
-      size_chart: productForm.size_chart || {},
-      color_images: productForm.color_images || {}
+      size_chart: productForm.size_chart || {}
     }
 
     try {
@@ -364,7 +362,8 @@ export default function Admin() {
       setShowProductModal(false)
       loadAdminData()
     } catch (err) {
-      toast.error("Failed to save product changes.")
+      console.error("Save product error:", err)
+      toast.error(err?.message ? `Failed to save: ${err.message}` : "Failed to save product changes.")
     }
   }
 
@@ -1049,7 +1048,7 @@ export default function Admin() {
         </aside>
 
         {/* Dynamic Display Panel */}
-        <main className="flex-1 w-full bg-white border border-cream3 p-4 sm:p-8 lg:p-10 rounded-xl shadow-sm min-h-[500px]">
+        <main className="flex-1 w-full bg-white border border-cream3 p-4 sm:p-8 lg:p-10 rounded-xl shadow-sm min-h-[500px] admin-right-section">
 
           {loading ? (
             <div className="text-center py-24 font-sans text-dark2/60 text-sm">

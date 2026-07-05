@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from 'react'
 import { Link } from 'react-router-dom'
-import { getProducts, getCategories, getApprovedReviews } from '../lib/supabase'
+import { getProducts, getCategories, getApprovedReviews, getHomepageConfig } from '../lib/supabase'
 import { useCart } from '../context/CartContext'
 import { useWishlist } from '../context/WishlistContext'
 import { toast } from 'react-hot-toast'
@@ -110,6 +110,7 @@ const FAQ_ITEMS = [
 export default function Home() {
   const [products, setProducts]     = useState([])
   const [reviews, setReviews]       = useState([])
+  const [homepageConfig, setHomepageConfig] = useState(null)
   const [loading, setLoading]       = useState(true)
   const [sellFilter, setSellFilter] = useState('all')
   const [faqOpen, setFaqOpen]       = useState(null)
@@ -120,10 +121,11 @@ export default function Home() {
 
   // Load data
   useEffect(() => {
-    Promise.all([getProducts(), getApprovedReviews()])
-      .then(([prods, revs]) => {
+    Promise.all([getProducts(), getApprovedReviews(), getHomepageConfig()])
+      .then(([prods, revs, config]) => {
         setProducts(prods || [])
         setReviews(revs?.length ? revs : STATIC_REVIEWS)
+        setHomepageConfig(config || null)
       })
       .catch(() => setReviews(STATIC_REVIEWS))
       .finally(() => setLoading(false))
@@ -166,7 +168,7 @@ export default function Home() {
 
   // Hero animation (ported from inline script in index.html)
   useEffect(() => {
-    if (heroInitRef.current) return
+    if (loading || heroInitRef.current) return
     heroInitRef.current = true
 
     const heroEl  = document.getElementById('hero')
@@ -175,7 +177,7 @@ export default function Home() {
     const dotsEl  = document.getElementById('phaseDots')
     if (!heroEl || !ringEl || !flowEl || !dotsEl) return
 
-    const heroProducts = [
+    const defaultHeroProducts = [
       { image: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=600&q=80', label: 'Layered Necklace' },
       { image: 'https://images.unsplash.com/photo-1611652022419-a9419f74343d?auto=format&fit=crop&w=600&q=80', label: 'Crystal Earrings' },
       { image: 'https://images.unsplash.com/photo-1617038260897-41a1f14a8ca0?auto=format&fit=crop&w=600&q=80', label: 'Stackable Rings' },
@@ -183,10 +185,16 @@ export default function Home() {
       { image: 'https://images.unsplash.com/photo-1606760227091-3dd870d97f1d?auto=format&fit=crop&w=600&q=80', label: 'Pearl Studs' },
       { image: 'https://images.unsplash.com/photo-1631982690223-8aa4cf87b7f5?auto=format&fit=crop&w=600&q=80', label: 'Gold Bangle' },
     ]
+    const heroProducts = (homepageConfig?.hero_cards?.length > 0)
+      ? homepageConfig.hero_cards
+      : ((homepageConfig?.hero_images?.length > 0)
+        ? homepageConfig.hero_images.map((img, idx) => ({ image: typeof img === 'string' ? img : img.image, label: typeof img === 'string' ? `Collection #${idx + 1}` : img.label }))
+        : defaultHeroProducts)
+
     const bannerConfig = {
       title: 'The Boujee <span>Bazar</span>',
       buttonText: 'Shop Collection',
-      backgroundImage: 'https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=1600&q=80'
+      backgroundImage: homepageConfig?.hero_bg_banner || 'https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=1600&q=80'
     }
     const timing = { perProductFocus: 1000, rotationTotal: 4200, flowTravel: 3400 }
 
@@ -367,11 +375,26 @@ export default function Home() {
     }, 350)
     startRotation()
     setTimeout(startFlow, timing.rotationTotal)
-  }, [])
+  }, [loading, homepageConfig])
+
+  // Dynamically update banner background when homepageConfig changes
+  useEffect(() => {
+    const bannerBgEl = document.getElementById('bannerBg')
+    if (bannerBgEl && homepageConfig?.hero_bg_banner) {
+      bannerBgEl.style.backgroundImage = `url("${homepageConfig.hero_bg_banner}")`
+    }
+  }, [homepageConfig])
 
   // Derived product lists
-  const newArrivals    = products.filter(p => p.tag === 'New')
-  const saleProducts   = products.filter(p => p.tag === 'Sale')
+  const matchedFeatured = homepageConfig?.featured_product_ids?.length > 0
+    ? products.filter(p => homepageConfig.featured_product_ids.includes(p.id))
+    : []
+  const newArrivals = matchedFeatured.length > 0 ? matchedFeatured : products.filter(p => p.tag === 'New')
+
+  const matchedSale = homepageConfig?.sale_product_ids?.length > 0
+    ? products.filter(p => homepageConfig.sale_product_ids.includes(p.id))
+    : []
+  const saleProducts = matchedSale.length > 0 ? matchedSale : products.filter(p => p.tag === 'Sale')
   const bestSellers    = products.filter(p => p.tag === 'Best Seller')
   // Large images (bb-001 to bb-006) — used in sliders
   const largeProducts  = products.filter(p => p.image && !p.image.includes('-sm-'))

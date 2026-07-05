@@ -3,6 +3,7 @@ import { Palette, Plus, Trash2, Save, Upload, Sparkles, AlertCircle, X, Eye, Edi
 import { toast } from 'react-hot-toast'
 import { motion } from 'framer-motion'
 import { getCustomizerConfig, saveCustomizerConfig, getStoreSettings, saveStoreSettings } from '../../lib/supabase'
+import { uploadToCloudinary } from '../../lib/cloudinary'
 
 export default function CustomizerTab({ onPreviewImage }) {
   const [config, setConfig] = useState({ colors: [] })
@@ -74,31 +75,13 @@ export default function CustomizerTab({ onPreviewImage }) {
 
     const toastId = toast.loading(`Uploading ${file.name} to Cloudinary...`)
 
-    const reader = new FileReader()
-    reader.readAsDataURL(file)
-    reader.onload = async () => {
-      try {
-        const base64Image = reader.result
-        const res = await fetch('/.netlify/functions/cloudinary-upload', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ image: base64Image })
-        })
-        if (!res.ok) {
-          const errText = await res.text()
-          throw new Error(errText || 'Upload failed')
-        }
-        const data = await res.json()
-        setMockup(data.url)
-        toast.success(`Mockup uploaded to Cloudinary successfully!`, { id: toastId })
-      } catch (err) {
-        console.error('Mockup upload error:', err)
-        toast.error(`Upload failed: ${err.message || 'Server error'}`, { id: toastId })
-      }
-    }
-    reader.onerror = () => {
-      toast.close(toastId)
-      toast.error('Failed to read file local data.')
+    try {
+      const url = await uploadToCloudinary(file)
+      setMockup(url)
+      toast.success(`Mockup uploaded to Cloudinary successfully!`, { id: toastId })
+    } catch (err) {
+      console.error('Mockup upload error:', err)
+      toast.error(`Upload failed: ${err.message || 'Server error'}`, { id: toastId })
     }
   }
 

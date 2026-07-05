@@ -15,8 +15,6 @@ export default function ProductFormModal({
 }) {
   const [uploadingImage, setUploadingImage] = useState(false)
   const [customSizeInput, setCustomSizeInput] = useState('')
-  const [colorNameInput, setColorNameInput] = useState('')
-  const [selectedColorHex, setSelectedColorHex] = useState('#8A1525')
 
   if (!show) return null
 
@@ -317,7 +315,7 @@ export default function ProductFormModal({
               <div className="bg-[#FAF9F5] border-2 border-cream3 p-6 rounded-3xl space-y-6 shadow-sm hover:border-dark/15 transition-all">
                 <div className="flex items-center gap-2 border-b border-cream3 pb-2">
                   <Sparkles className="w-4 h-4 text-accent" />
-                  <span className="text-[10px] font-mono text-dark font-black uppercase tracking-widest">3. Size & Color Matrices</span>
+                  <span className="text-[10px] font-mono text-dark font-black uppercase tracking-widest">3. Size Matrix & Measurements</span>
                 </div>
                 
                 {/* Size list selector */}
@@ -334,7 +332,7 @@ export default function ProductFormModal({
                       {['XS', 'S', 'M', 'L', 'XL', 'XXL'].map(sz => {
                         const isChecked = productForm.sizes.includes(sz)
                         return (
-                          <label key={sz} className={`flex items-center justify-center min-w-[42px] h-[36px] px-3 rounded-xl border cursor-pointer select-none text-[10px] font-mono font-black transition-all ${
+                          <label key={sz} className={`flex items-center justify-center gap-1.5 min-w-[48px] h-[36px] px-3 rounded-xl border cursor-pointer select-none text-[10px] font-mono font-black transition-all ${
                             isChecked ? 'bg-dark border-dark text-white shadow-sm scale-[1.03]' : 'bg-white border-cream3 text-dark/70 hover:border-dark/30 hover:bg-cream2/20'
                           }`}>
                             <input
@@ -346,9 +344,9 @@ export default function ProductFormModal({
                                   : [...productForm.sizes, sz]
                                 setProductForm({ ...productForm, sizes: newSizes })
                               }}
-                              className="hidden"
+                              className="w-3.5 h-3.5 rounded accent-[#D9984E] cursor-pointer"
                             />
-                            {sz}
+                            <span>{sz}</span>
                           </label>
                         )
                       })}
@@ -362,7 +360,7 @@ export default function ProductFormModal({
                       {['30', '32', '34', '36', '38', '40', '42'].map(sz => {
                         const isChecked = productForm.sizes.includes(sz)
                         return (
-                          <label key={sz} className={`flex items-center justify-center min-w-[42px] h-[36px] px-3 rounded-xl border cursor-pointer select-none text-[10px] font-mono font-black transition-all ${
+                          <label key={sz} className={`flex items-center justify-center gap-1.5 min-w-[48px] h-[36px] px-3 rounded-xl border cursor-pointer select-none text-[10px] font-mono font-black transition-all ${
                             isChecked ? 'bg-dark border-dark text-white shadow-sm scale-[1.03]' : 'bg-white border-cream3 text-dark/70 hover:border-dark/30 hover:bg-cream2/20'
                           }`}>
                             <input
@@ -374,9 +372,9 @@ export default function ProductFormModal({
                                   : [...productForm.sizes, sz]
                                 setProductForm({ ...productForm, sizes: newSizes })
                               }}
-                              className="hidden"
+                              className="w-3.5 h-3.5 rounded accent-[#D9984E] cursor-pointer"
                             />
-                            {sz}
+                            <span>{sz}</span>
                           </label>
                         )
                       })}
@@ -408,6 +406,23 @@ export default function ProductFormModal({
                         <span>Add</span>
                       </button>
                     </div>
+                    {productForm.sizes.filter(s => !['XS', 'S', 'M', 'L', 'XL', 'XXL', '30', '32', '34', '36', '38', '40', '42'].includes(s)).length > 0 && (
+                      <div className="flex flex-wrap gap-1.5 pt-2.5">
+                        {productForm.sizes.filter(s => !['XS', 'S', 'M', 'L', 'XL', 'XXL', '30', '32', '34', '36', '38', '40', '42'].includes(s)).map(sz => (
+                          <label key={sz} className="flex items-center justify-center gap-1.5 min-w-[48px] h-[36px] px-3 rounded-xl border cursor-pointer select-none text-[10px] font-mono font-black transition-all bg-dark border-dark text-white shadow-sm scale-[1.03]">
+                            <input
+                              type="checkbox"
+                              checked={true}
+                              onChange={() => {
+                                setProductForm({ ...productForm, sizes: productForm.sizes.filter(s => s !== sz) })
+                              }}
+                              className="w-3.5 h-3.5 rounded accent-[#D9984E] cursor-pointer"
+                            />
+                            <span>{sz}</span>
+                          </label>
+                        ))}
+                      </div>
+                    )}
                   </div>
 
                   {/* Size Chart measurements */}
@@ -512,185 +527,6 @@ export default function ProductFormModal({
                       </div>
                     </div>
                   )}
-                </div>
-
-                {/* Divider */}
-                <div className="border-t border-cream3/80 my-4" />
-
-                {/* Color swatches list */}
-                <div className="space-y-4">
-                  <div className="flex justify-between items-center">
-                    <label className="text-[10px] uppercase font-black text-dark/65 tracking-wider block">Active Colors</label>
-                    <span className="text-[9px] font-mono text-dark/40 uppercase">{productForm.colors.length} Variants</span>
-                  </div>
-
-                  {productForm.colors.length === 0 ? (
-                    <div className="text-center py-4 bg-white/50 border border-dashed border-cream3 rounded-2xl text-xs text-dark/40 font-medium">
-                      No colors added yet. Select presets or create a custom variant color.
-                    </div>
-                  ) : (
-                    <div className="flex flex-wrap gap-2">
-                      {productForm.colors.map(col => {
-                        let hexValue = '#CCCCCC'
-                        const hexMatch = col.match(/#([0-9a-fA-F]{3,6})/)
-                        if (hexMatch) {
-                          hexValue = `#${hexMatch[1]}`
-                        } else {
-                          const COLOR_MAP = {
-                            'Black': '#0F0F0F', 'White': '#FFFFFF', 'Lime': '#CCFF00', 'Charcoal': '#3E3E3E',
-                            'Beige': '#E1D9C1', 'Cream': '#FDF6E2', 'Navy': '#1A2536', 'Olive': '#4D5844',
-                            'Cyber Blue': '#00E5FF', 'Acid Purple': '#583F72', 'Acid Olive': '#595C43',
-                            'Sand': '#D2C4A8', 'Off-White': '#FAF9F6'
-                          }
-                          hexValue = COLOR_MAP[col] || COLOR_MAP[col.charAt(0).toUpperCase() + col.slice(1).toLowerCase()] || '#CCCCCC'
-                        }
-
-                        return (
-                          <div key={col} className="flex flex-col gap-1.5">
-                            <div className="group inline-flex items-center gap-2.5 pl-2.5 pr-1.5 py-1.5 bg-white border border-cream3 rounded-2xl text-[10px] font-black font-sans shadow-xs hover:border-dark/25 transition-all">
-                              <span className="w-4 h-4 rounded-full border border-cream3 shrink-0 shadow-inner" style={{ backgroundColor: hexValue }} />
-                              <span className="text-dark tracking-tight">{col}</span>
-                              <button
-                                type="button"
-                                onClick={() => {
-                                  const newColorImages = { ...(productForm.color_images || {}) }
-                                  delete newColorImages[col]
-                                  setProductForm({ ...productForm, colors: productForm.colors.filter(c => c !== col), color_images: newColorImages })
-                                }}
-                                className="text-dark/40 hover:text-red-500 font-bold border-none bg-cream2 hover:bg-red-50 rounded-lg cursor-pointer flex items-center justify-center p-1.5 transition-all"
-                                title="Delete variant color"
-                              >
-                                <Trash2 className="w-3.5 h-3.5" />
-                              </button>
-                            </div>
-                            {productForm.images && productForm.images.length > 0 && (
-                              <select 
-                                value={(productForm.color_images && productForm.color_images[col]) || ''}
-                                onChange={(e) => {
-                                  setProductForm({
-                                    ...productForm,
-                                    color_images: {
-                                      ...(productForm.color_images || {}),
-                                      [col]: e.target.value
-                                    }
-                                  })
-                                }}
-                                className="text-[9px] p-1 border border-cream3 rounded bg-white text-dark/70 w-full focus:outline-none"
-                              >
-                                <option value="">Default Image</option>
-                                {productForm.images.map((img, i) => (
-                                  <option key={i} value={img}>Image {i + 1}</option>
-                                ))}
-                              </select>
-                            )}
-                          </div>
-                        )
-                      })}
-                    </div>
-                  )}
-
-                  {/* Preset Colors Grid */}
-                  <div className="space-y-2 bg-white/70 p-4 rounded-2xl border border-cream3/80">
-                    <span className="text-[8px] uppercase font-mono font-black text-dark/40 tracking-wider block mb-1">Quick Add Preset Colors</span>
-                    <div className="grid grid-cols-3 sm:grid-cols-4 gap-1.5">
-                      {[
-                        { name: 'Black', hex: '#0F0F0F' },
-                        { name: 'White', hex: '#FFFFFF' },
-                        { name: 'Off-White', hex: '#FAF9F6' },
-                        { name: 'Cream', hex: '#FDF6E2' },
-                        { name: 'Beige', hex: '#E1D9C1' },
-                        { name: 'Sand', hex: '#D2C4A8' },
-                        { name: 'Charcoal', hex: '#3E3E3E' },
-                        { name: 'Navy', hex: '#1A2536' },
-                        { name: 'Olive', hex: '#4D5844' },
-                        { name: 'Lime', hex: '#CCFF00' },
-                        { name: 'Cyber Blue', hex: '#00E5FF' },
-                        { name: 'Acid Purple', hex: '#583F72' }
-                      ].map(preset => {
-                        const labelWithName = `${preset.name} (${preset.hex})`
-                        const isAdded = productForm.colors.includes(labelWithName) || productForm.colors.includes(preset.name)
-                        return (
-                          <button
-                            type="button"
-                            key={preset.name}
-                            onClick={() => {
-                              if (isAdded) {
-                                setProductForm({
-                                  ...productForm,
-                                  colors: productForm.colors.filter(c => c !== preset.name && c !== labelWithName)
-                                })
-                              } else {
-                                setProductForm({
-                                  ...productForm,
-                                  colors: [...productForm.colors, labelWithName]
-                                })
-                              }
-                            }}
-                            className={`flex items-center gap-1.5 px-2 py-1.5 rounded-xl border text-[9px] font-bold text-left cursor-pointer transition-all ${
-                              isAdded ? 'bg-dark/5 border-dark text-dark font-black' : 'bg-white border-cream3 text-dark2/70 hover:border-dark/20 hover:bg-cream2/10'
-                            }`}
-                          >
-                            <span className="w-3.5 h-3.5 rounded-full border border-cream3 shrink-0" style={{ backgroundColor: preset.hex }} />
-                            <span className="truncate">{preset.name}</span>
-                          </button>
-                        )
-                      })}
-                    </div>
-                  </div>
-
-                  {/* Add Color variant picker panel */}
-                  <div className="bg-cream2/30 p-4 rounded-2xl border-2 border-cream3 space-y-3">
-                    <span className="text-[8px] uppercase font-mono font-black text-dark/40 tracking-wider block">Custom Color Creator</span>
-                    <div className="flex flex-col sm:flex-row gap-2.5 items-stretch sm:items-center">
-                      <div className="flex gap-2.5 items-center flex-grow">
-                        <div className="relative w-10 h-10 border-2 border-cream3 rounded-2xl flex items-center justify-center bg-white cursor-pointer hover:border-dark shrink-0 shadow-xs transition-colors">
-                          <input
-                            type="color"
-                            value={selectedColorHex}
-                            className="absolute inset-0 opacity-0 w-full h-full cursor-pointer"
-                            onChange={(e) => {
-                              const hex = e.target.value.toUpperCase()
-                              setSelectedColorHex(hex)
-                              if (!colorNameInput || colorNameInput.startsWith('Custom') || colorNameInput.includes('#')) {
-                                setColorNameInput(`Custom (${hex})`)
-                              }
-                            }}
-                          />
-                          <div className="w-7 h-7 rounded-xl border border-cream3/50 shadow-inner" style={{ backgroundColor: selectedColorHex }} />
-                        </div>
-
-                        <div className="flex-grow space-y-0.5">
-                          <input
-                            type="text"
-                            placeholder="Variant name e.g. Sage Green"
-                            value={colorNameInput}
-                            onChange={(e) => setColorNameInput(e.target.value)}
-                            className="w-full px-3 py-2 bg-white border-2 border-cream3 rounded-xl focus:outline-none focus:border-dark text-[11px] font-sans transition-all"
-                          />
-                        </div>
-                      </div>
-
-                      <button
-                        type="button"
-                        onClick={() => {
-                          let finalName = colorNameInput.trim()
-                          if (!finalName) {
-                            finalName = `Custom (${selectedColorHex})`
-                          } else if (!finalName.includes(selectedColorHex)) {
-                            finalName = `${finalName} (${selectedColorHex})`
-                          }
-                          if (!productForm.colors.includes(finalName)) {
-                            setProductForm({ ...productForm, colors: [...productForm.colors, finalName] })
-                            setColorNameInput('')
-                          }
-                        }}
-                        className="px-4 py-2.5 bg-[#161616] hover:bg-accent text-white font-black rounded-xl text-[10px] uppercase tracking-wider cursor-pointer border-none shrink-0 transition-colors flex items-center justify-center gap-1.5 shadow-sm"
-                      >
-                        <Plus className="w-3.5 h-3.5" />
-                        <span>Add Color</span>
-                      </button>
-                    </div>
-                  </div>
                 </div>
               </div>
 

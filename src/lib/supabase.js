@@ -30,7 +30,7 @@ export async function getProducts() {
 }
 
 function sanitizeProduct(product) {
-  return {
+  const sanitized = {
     id: product.id,
     name: product.name,
     sku: product.sku,
@@ -54,9 +54,12 @@ function sanitizeProduct(product) {
     fabric_info: product.fabric_info,
     washing_instructions: product.washing_instructions,
     size_guide: product.size_guide,
-    size_chart: product.size_chart,
-    color_images: product.color_images
+    size_chart: product.size_chart
   }
+  if (product.created_at !== undefined) {
+    sanitized.created_at = product.created_at
+  }
+  return sanitized
 }
 
 export async function insertProduct(product) {
@@ -527,6 +530,14 @@ export async function getHomepageConfig() {
       '/images/img4.webp',
       '/images/img5.webp'
     ],
+    hero_cards: [
+      { image: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=600&q=80', label: 'Layered Necklace' },
+      { image: 'https://images.unsplash.com/photo-1611652022419-a9419f74343d?auto=format&fit=crop&w=600&q=80', label: 'Crystal Earrings' },
+      { image: 'https://images.unsplash.com/photo-1617038260897-41a1f14a8ca0?auto=format&fit=crop&w=600&q=80', label: 'Stackable Rings' },
+      { image: 'https://images.unsplash.com/photo-1573408301185-9519f94815f0?auto=format&fit=crop&w=600&q=80', label: 'Charm Bracelet' },
+      { image: 'https://images.unsplash.com/photo-1606760227091-3dd870d97f1d?auto=format&fit=crop&w=600&q=80', label: 'Pearl Studs' },
+      { image: 'https://images.unsplash.com/photo-1631982690223-8aa4cf87b7f5?auto=format&fit=crop&w=600&q=80', label: 'Gold Bangle' }
+    ],
     featured_product_ids: ['ftw-sig-01', 'ftw-cyber-02', 'ftw-acid-03', 'ftw-box-04'],
     sale_product_ids: ['ftw-sale-01', 'ftw-sale-02'],
     coming_soon_title: '',
@@ -538,15 +549,56 @@ export async function getHomepageConfig() {
   };
 
   try {
+    let localBanner = null;
+    let localCards = null;
+    if (typeof window !== 'undefined') {
+      localBanner = localStorage.getItem('boujee_hero_bg_banner');
+      const storedCards = localStorage.getItem('boujee_hero_cards');
+      if (storedCards) {
+        try { localCards = JSON.parse(storedCards); } catch (e) {}
+      }
+    }
+
+    let storeBanner = null;
+    let storeCards = null;
+    try {
+      const { data: bannerData } = await supabase
+        .from('store_settings')
+        .select('key, value')
+        .in('key', ['hero_bg_banner', 'hero_cards']);
+      if (bannerData) {
+        const b = bannerData.find(x => x.key === 'hero_bg_banner');
+        const c = bannerData.find(x => x.key === 'hero_cards');
+        if (b?.value?.url) storeBanner = b.value.url;
+        if (c?.value?.cards) storeCards = c.value.cards;
+      }
+    } catch (e) {}
+
     const { data, error } = await supabase
       .from('homepage_config')
       .select('*')
       .eq('id', 'main')
       .maybeSingle();
-    if (error) throw error;
-    if (!data) return defaultHomepage;
+
+    const resultBanner = data?.hero_bg_banner || storeBanner || localBanner || defaultHomepage.hero_bg_banner;
+    const resultCards = data?.hero_cards || storeCards || localCards || defaultHomepage.hero_cards;
+
+    if (!data) {
+      if (typeof window !== 'undefined') {
+        const localConfig = localStorage.getItem('boujee_homepage_config');
+        if (localConfig) {
+          try {
+            const parsed = JSON.parse(localConfig);
+            return { ...defaultHomepage, ...parsed, hero_bg_banner: resultBanner, hero_cards: resultCards };
+          } catch (e) {}
+        }
+      }
+      return { ...defaultHomepage, hero_bg_banner: resultBanner, hero_cards: resultCards };
+    }
+
     return {
       hero_images: data.hero_images || defaultHomepage.hero_images,
+      hero_cards: resultCards,
       featured_product_ids: data.featured_product_ids || defaultHomepage.featured_product_ids,
       sale_product_ids: data.sale_product_ids || defaultHomepage.sale_product_ids,
       coming_soon_title: data.coming_soon_title || defaultHomepage.coming_soon_title,
@@ -554,19 +606,52 @@ export async function getHomepageConfig() {
       coming_soon_description: data.coming_soon_description || defaultHomepage.coming_soon_description,
       coming_soon_countdown: data.coming_soon_countdown || defaultHomepage.coming_soon_countdown,
       coming_soon_images: Array.isArray(data.coming_soon_images) ? data.coming_soon_images : defaultHomepage.coming_soon_images,
-      hero_bg_banner: data.hero_bg_banner || defaultHomepage.hero_bg_banner
+      hero_bg_banner: resultBanner
     };
   } catch (err) {
     console.error("Supabase getHomepageConfig error:", err.message);
-    return defaultHomepage;
+    let localBanner = null;
+    let localCards = null;
+    if (typeof window !== 'undefined') {
+      localBanner = localStorage.getItem('boujee_hero_bg_banner');
+      const storedCards = localStorage.getItem('boujee_hero_cards');
+      if (storedCards) {
+        try { localCards = JSON.parse(storedCards); } catch (e) {}
+      }
+    }
+    return { ...defaultHomepage, hero_bg_banner: localBanner || defaultHomepage.hero_bg_banner, hero_cards: localCards || defaultHomepage.hero_cards };
   }
 }
 
 export async function saveHomepageConfig(config) {
   try {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('boujee_homepage_config', JSON.stringify(config));
+      if (config.hero_bg_banner) {
+        localStorage.setItem('boujee_hero_bg_banner', config.hero_bg_banner);
+      }
+      if (config.hero_cards) {
+        localStorage.setItem('boujee_hero_cards', JSON.stringify(config.hero_cards));
+      }
+    }
+
+    try {
+      await adminSupabase
+        .from('store_settings')
+        .upsert({ key: 'hero_bg_banner', value: { url: config.hero_bg_banner }, updated_at: new Date().toISOString() });
+      if (config.hero_cards) {
+        await adminSupabase
+          .from('store_settings')
+          .upsert({ key: 'hero_cards', value: { cards: config.hero_cards }, updated_at: new Date().toISOString() });
+      }
+    } catch (e) {
+      console.warn("Could not save banner/cards to store_settings:", e.message);
+    }
+
     const payload = {
       id: 'main',
       hero_images: config.hero_images,
+      hero_cards: config.hero_cards,
       featured_product_ids: config.featured_product_ids,
       sale_product_ids: config.sale_product_ids,
       coming_soon_title: config.coming_soon_title,
@@ -578,12 +663,25 @@ export async function saveHomepageConfig(config) {
       updated_at: new Date().toISOString()
     };
 
-    const { data, error } = await adminSupabase
+    let { data, error } = await adminSupabase
       .from('homepage_config')
       .upsert(payload)
       .select();
-    if (error) throw error;
-    return data[0] || config;
+
+    if (error && error.message && (error.message.includes('hero_bg_banner') || error.message.includes('hero_cards'))) {
+      console.warn("Column hero_bg_banner or hero_cards missing in DB schema, saving without them...");
+      const { hero_bg_banner, hero_cards, ...payloadWithoutBanner } = payload;
+      const res = await adminSupabase
+        .from('homepage_config')
+        .upsert(payloadWithoutBanner)
+        .select();
+      if (res.error) throw res.error;
+      data = res.data;
+    } else if (error) {
+      throw error;
+    }
+
+    return data?.[0] || config;
   } catch (err) {
     console.error("Supabase saveHomepageConfig error:", err.message);
     throw err;

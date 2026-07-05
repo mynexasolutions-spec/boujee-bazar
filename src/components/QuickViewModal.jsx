@@ -81,23 +81,6 @@ export default function QuickViewModal({ product, isOpen, onClose }) {
               <p>{product.description || 'No description available for this product.'}</p>
             </div>
 
-            {colors.length > 0 && (
-              <div className="quick-view-section">
-                <h6>Color : </h6>
-                <div className="quick-view-options colors">
-                  {colors.map(c => (
-                    <button
-                      key={c}
-                      className={`color-btn ${selectedColor === c ? 'active' : ''}`}
-                      style={colorStyle(c)}
-                      title={c.replace(/\s*\(\#[0-9a-fA-F]+\)/g, '').trim()}
-                      onClick={() => setSelectedColor(c)}
-                    ></button>
-                  ))}
-                </div>
-              </div>
-            )}
-
             {sizes.length > 0 && (
               <div className="quick-view-section">
                 <h6>Size : </h6>

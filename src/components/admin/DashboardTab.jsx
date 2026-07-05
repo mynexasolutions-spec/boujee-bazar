@@ -35,16 +35,16 @@ export default function DashboardTab({ orders, totalSalesVal, pendingOrders, avg
             </div>
             Sales Overview
           </h2>
-          <p className="text-xs text-dark2/50 mt-1 font-medium">Track total revenues, average ticket values, paid transactions, and metrics.</p>
+          <p className="text-xs text-dark2/50 mt-1 font-medium mt-2">Track total revenues, average ticket values, paid transactions, and metrics.</p>
         </div>
       </div>
 
       {/* KPI grid */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-6">
         {/* Revenue Card */}
-        <div className="bg-gradient-to-br from-violet-50/60 to-purple-100/30 hover:to-purple-200/40 border border-purple-100 hover:border-purple-200 p-4 sm:p-5 rounded-2xl shadow-xs hover:shadow-md transition-all duration-300 relative overflow-hidden flex flex-col justify-between min-h-[110px] sm:min-h-[125px] group hover:-translate-y-1">
+        <div className="bg-gradient-to-br from-violet-50/60 to-purple-100/30 hover:to-purple-200/40 border border-purple-100 hover:border-purple-200 p-4 sm:p-5 rounded-2xl shadow-xs hover:shadow-md transition-all duration-300 relative overflow-hidden flex flex-col justify-between min-h-[112px] sm:min-h-[125px] group hover:-translate-y-1">
           <div>
-            <span className="text-[9px] sm:text-[10px] font-sans font-black text-purple-700/80 uppercase tracking-widest block">Total Revenue</span>
+            <span className="text-[9px] sm:text-[12px] font-sans font-black text-purple-700/80 uppercase tracking-widest block">Total Revenue</span>
             <p className="text-lg sm:text-2xl lg:text-3xl font-sans font-black text-purple-950 mt-0.5 sm:mt-1 truncate">₹{totalSalesVal.toLocaleString('en-IN')}</p>
           </div>
           <div className="flex justify-between items-center mt-2 sm:mt-3">
@@ -56,9 +56,9 @@ export default function DashboardTab({ orders, totalSalesVal, pendingOrders, avg
         </div>
         
         {/* Orders Card */}
-        <div className="bg-gradient-to-br from-blue-50/60 to-indigo-100/30 hover:to-indigo-200/40 border border-blue-100 hover:border-blue-200 p-4 sm:p-5 rounded-2xl shadow-xs hover:shadow-md transition-all duration-300 relative overflow-hidden flex flex-col justify-between min-h-[110px] sm:min-h-[125px] group hover:-translate-y-1">
+        <div className="bg-gradient-to-br from-blue-50/60 to-indigo-100/30 hover:to-indigo-200/40 border border-blue-100 hover:border-blue-200 p-4 sm:p-5 rounded-2xl shadow-xs hover:shadow-md transition-all duration-300 relative overflow-hidden flex flex-col justify-between min-h-[112px] sm:min-h-[125px] group hover:-translate-y-1">
           <div>
-            <span className="text-[9px] sm:text-[10px] font-sans font-black text-blue-700/80 uppercase tracking-widest block">Total Orders</span>
+            <span className="text-[9px] sm:text-[12px] font-sans font-black text-blue-700/80 uppercase tracking-widest block">Total Orders</span>
             <p className="text-lg sm:text-2xl lg:text-3xl font-sans font-black text-blue-950 mt-0.5 sm:mt-1 truncate">{orders.length}</p>
           </div>
           <div className="flex justify-between items-center mt-2 sm:mt-3">
@@ -70,9 +70,9 @@ export default function DashboardTab({ orders, totalSalesVal, pendingOrders, avg
         </div>
         
         {/* Pending Card */}
-        <div className="bg-gradient-to-br from-amber-50/60 to-orange-100/30 hover:to-orange-200/40 border border-orange-100 hover:border-orange-200 p-4 sm:p-5 rounded-2xl shadow-xs hover:shadow-md transition-all duration-300 relative overflow-hidden flex flex-col justify-between min-h-[110px] sm:min-h-[125px] group hover:-translate-y-1">
+        <div className="bg-gradient-to-br from-amber-50/60 to-orange-100/30 hover:to-orange-200/40 border border-orange-100 hover:border-orange-200 p-4 sm:p-5 rounded-2xl shadow-xs hover:shadow-md transition-all duration-300 relative overflow-hidden flex flex-col justify-between min-h-[112px] sm:min-h-[125px] group hover:-translate-y-1">
           <div>
-            <span className="text-[9px] sm:text-[10px] font-sans font-black text-amber-700/80 uppercase tracking-widest block">Pending Orders</span>
+            <span className="text-[9px] sm:text-[12px] font-sans font-black text-amber-700/80 uppercase tracking-widest block">Pending Orders</span>
             <p className="text-lg sm:text-2xl lg:text-3xl font-sans font-black text-amber-950 mt-0.5 sm:mt-1 truncate">{pendingOrders}</p>
           </div>
           <div className="flex justify-between items-center mt-2 sm:mt-3">
@@ -84,9 +84,9 @@ export default function DashboardTab({ orders, totalSalesVal, pendingOrders, avg
         </div>
         
         {/* AOV Card */}
-        <div className="bg-gradient-to-br from-emerald-50/60 to-teal-100/30 hover:to-teal-200/40 border border-teal-100 hover:border-teal-200 p-4 sm:p-5 rounded-2xl shadow-xs hover:shadow-md transition-all duration-300 relative overflow-hidden flex flex-col justify-between min-h-[110px] sm:min-h-[125px] group hover:-translate-y-1">
+        <div className="bg-gradient-to-br from-emerald-50/60 to-teal-100/30 hover:to-teal-200/40 border border-teal-100 hover:border-teal-200 p-4 sm:p-5 rounded-2xl shadow-xs hover:shadow-md transition-all duration-300 relative overflow-hidden flex flex-col justify-between min-h-[112px] sm:min-h-[125px] group hover:-translate-y-1">
           <div>
-            <span className="text-[9px] sm:text-[10px] font-sans font-black text-emerald-700/80 uppercase tracking-widest block">Avg Order Value</span>
+            <span className="text-[9px] sm:text-[12px] font-sans font-black text-emerald-700/80 uppercase tracking-widest block">Avg Order Value</span>
             <p className="text-lg sm:text-2xl lg:text-3xl font-sans font-black text-emerald-950 mt-0.5 sm:mt-1 truncate">₹{avgOrderVal.toLocaleString('en-IN')}</p>
           </div>
           <div className="flex justify-between items-center mt-2 sm:mt-3">
@@ -107,7 +107,7 @@ export default function DashboardTab({ orders, totalSalesVal, pendingOrders, avg
               <Sparkles className="w-4 h-4 text-accent" />
               Order Matrix (Custom vs Catalog)
             </h4>
-            <span className="text-[10px] font-bold text-dark">{orders.length} Total</span>
+            <span className="text-[12px] font-bold text-dark">{orders.length} Total</span>
           </div>
           
           <div className="space-y-3.5">
@@ -124,14 +124,14 @@ export default function DashboardTab({ orders, totalSalesVal, pendingOrders, avg
                   <span className="w-2.5 h-2.5 rounded-sm bg-accent inline-block" />
                   <span className="font-bold text-dark">Custom Prints</span>
                 </div>
-                <p className="text-[10px] text-dark2/50 font-mono">{customOrdersCount} orders ({customRatio}%)</p>
+                <p className="text-[12px] text-dark2/50 font-mono font-bold">{customOrdersCount} orders ({customRatio}%)</p>
               </div>
               <div className="space-y-1">
                 <div className="flex items-center gap-1.5 justify-end">
                   <span className="font-bold text-dark">Standard Catalog</span>
                   <span className="w-2.5 h-2.5 rounded-sm bg-dark/80 inline-block" />
                 </div>
-                <p className="text-[10px] text-dark2/50 font-mono text-right">{catalogOrdersCount} orders ({catalogRatio}%)</p>
+                <p className="text-[12px] text-dark2/50 font-mono text-right font-bold">{catalogOrdersCount} orders ({catalogRatio}%)</p>
               </div>
             </div>
           </div>
@@ -144,7 +144,7 @@ export default function DashboardTab({ orders, totalSalesVal, pendingOrders, avg
               <CreditCard className="w-4 h-4 text-accent" />
               Payment Splits (Online vs COD)
             </h4>
-            <span className="text-[10px] font-bold text-dark">{onlineCount} Online · {codCount} COD</span>
+            <span className="text-[12px] font-bold text-dark">{onlineCount} Online · {codCount} COD</span>
           </div>
           
           <div className="space-y-3.5">
@@ -161,14 +161,14 @@ export default function DashboardTab({ orders, totalSalesVal, pendingOrders, avg
                   <span className="w-2.5 h-2.5 rounded-sm bg-emerald-500 inline-block" />
                   <span className="font-bold text-dark">Online Prepaid</span>
                 </div>
-                <p className="text-[10px] text-dark2/50 font-mono">{onlineCount} orders ({onlineRatio}%)</p>
+                <p className="text-[12px] text-dark2/50 font-mono font-bold">{onlineCount} orders ({onlineRatio}%)</p>
               </div>
               <div className="space-y-1">
                 <div className="flex items-center gap-1.5 justify-end">
                   <span className="font-bold text-dark">COD (Unpaid)</span>
                   <span className="w-2.5 h-2.5 rounded-sm bg-amber-500 inline-block" />
                 </div>
-                <p className="text-[10px] text-dark2/50 font-mono text-right">{codCount} orders ({codRatio}%)</p>
+                <p className="text-[12px] text-dark2/50 font-mono text-right font-bold">{codCount} orders ({codRatio}%)</p>
               </div>
             </div>
           </div>
@@ -187,7 +187,7 @@ export default function DashboardTab({ orders, totalSalesVal, pendingOrders, avg
             <div className="overflow-x-auto">
               <table className="w-full min-w-[650px] text-left border-collapse text-xs font-sans">
                 <thead>
-                  <tr className="bg-cream/40 border-b border-cream3 text-[10px] uppercase font-bold text-dark2/60 tracking-wider">
+                  <tr className="bg-cream/40 border-b border-cream3 text-[12px] uppercase font-bold text-dark2/60 tracking-wider">
                     <th className="p-4">Customer</th>
                     <th className="p-4">Transaction ID</th>
                     <th className="p-4">Date</th>
@@ -217,11 +217,11 @@ export default function DashboardTab({ orders, totalSalesVal, pendingOrders, avg
                                   </span>
                                 )}
                               </div>
-                              <span className="text-[10px] text-dark2/45 block">{o.email}</span>
+                              <span className="text-[12px] text-dark2/45 block">{o.email}</span>
                             </div>
                           </div>
                         </td>
-                        <td className="p-4 font-mono text-dark2/50 text-[10px]" title={o.id}>{o.id}</td>
+                        <td className="p-4 font-mono text-dark2/50 text-[12px]" title={o.id}>{o.id}</td>
                         <td className="p-4 text-dark2/70">{new Date(o.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}</td>
                         <td className="p-4 font-bold text-dark">₹{o.total.toLocaleString('en-IN')}</td>
                         <td className="p-4">

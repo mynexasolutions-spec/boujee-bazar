@@ -239,20 +239,6 @@ export default function ProductDetail() {
                       </div>
                     )}
 
-                    {colors.length > 0 && (
-                      <div className="ul-product-details-option ul-product-details-colors">
-                        <span className="title">Color</span>
-                        <form className="variants">
-                          {colors.map((c, i) => (
-                            <label key={c} htmlFor={`pd-color-${i}`} title={c.replace(/\s*\(#[0-9a-fA-F]+\)/g, '').trim()}>
-                              <input type="radio" name="product-color" id={`pd-color-${i}`} checked={selectedColor === c} onChange={() => setSelectedColor(c)} hidden />
-                              <span className="color-btn" style={colorStyle(c)}></span>
-                            </label>
-                          ))}
-                        </form>
-                      </div>
-                    )}
-
                     <div className="ul-product-details-option ul-product-details-quantity">
                       <span className="title">Quantity</span>
                       <form className="ul-product-quantity-wrapper">
@@ -291,6 +277,28 @@ export default function ProductDetail() {
               <h3 className="ul-product-details-inner-title">Item Description</h3>
               <p>{product.description || 'No description available for this product.'}</p>
               {product.long_details && <><br /><p>{product.long_details}</p></>}
+              
+              {product.fabric_info && (
+                <>
+                  <h4 className="ul-product-details-inner-title" style={{ marginTop: '30px', fontSize: '18px', marginBottom: '10px' }}>Fabric & Fit Info</h4>
+                  <p style={{ whiteSpace: 'pre-line' }}>{product.fabric_info}</p>
+                </>
+              )}
+
+              {product.washing_instructions && (
+                <>
+                  <h4 className="ul-product-details-inner-title" style={{ marginTop: '30px', fontSize: '18px', marginBottom: '10px' }}>Care/Wash Notes</h4>
+                  <p style={{ whiteSpace: 'pre-line' }}>{product.washing_instructions}</p>
+                </>
+              )}
+
+              {product.size_guide && (
+                <>
+                  <h4 className="ul-product-details-inner-title" style={{ marginTop: '30px', fontSize: '18px', marginBottom: '10px' }}>Size Guide Notes</h4>
+                  <p style={{ whiteSpace: 'pre-line' }}>{product.size_guide}</p>
+                </>
+              )}
+
               <br />
               <p>
                 <strong>Brand:</strong> {product.brand || 'Boujee Bazar'}&nbsp;&nbsp;
@@ -367,7 +375,6 @@ export default function ProductDetail() {
 
       {/* RELATED PRODUCTS */}
       {related.length > 0 && (
-
         <div className="ul-inner-page-container" style={{ paddingTop: 0 }}>
           <div style={{ marginBottom: '32px' }}>
             <span className="ul-section-sub-title">You may also like</span>

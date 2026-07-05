@@ -148,17 +148,18 @@
 }
 
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 10px;
+  height: 10px;
 }
 
 ::-webkit-scrollbar-track {
-  background: transparent;
+  background: #f8f6f3;
 }
 
 ::-webkit-scrollbar-thumb {
   background: var(--accent);
   border-radius: 9999px;
+  border: 2px solid #f8f6f3;
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -520,4 +521,101 @@ input::-ms-clear {
 }
 .ul-products-color-filter-colors a.white .color-prview {
   background-color: white;
+}
+
+/* ==========================================================================
+   Admin Right Section Custom Typography Boost
+   Increases small text sizes for legibility and boosts headings by ~5%
+   Only applies within the right-hand main display panel of Admin dashboard
+   ========================================================================== */
+
+.admin-right-section {
+  font-size: 1.05rem;
+}
+
+/* Base elements without explicit text-* utility classes */
+.admin-right-section input:not([class*="text-"]),
+.admin-right-section select:not([class*="text-"]),
+.admin-right-section textarea:not([class*="text-"]),
+.admin-right-section button:not([class*="text-"]),
+.admin-right-section table:not([class*="text-"]),
+.admin-right-section th:not([class*="text-"]),
+.admin-right-section td:not([class*="text-"]) {
+  font-size: 1.05em;
+}
+
+/* Small Font Sizes Boost (Increased for better legibility and readability) */
+.admin-right-section .text-\[8px\] { font-size: 9px !important; }
+.admin-right-section .text-\[8\.5px\] { font-size: 9.5px !important; }
+.admin-right-section .text-\[9px\] { font-size: 10px !important; }
+.admin-right-section .text-\[9\.5px\] { font-size: 10.5px !important; }
+.admin-right-section .text-\[10px\] { font-size: 11px !important; }
+.admin-right-section .text-\[10\.5px\] { font-size: 11.5px !important; }
+.admin-right-section .text-\[11px\] { font-size: 12px !important; }
+.admin-right-section .text-\[12px\] { font-size: 13px !important; }
+.admin-right-section .text-\[13px\] { font-size: 14px !important; }
+.admin-right-section .text-\[14px\] { font-size: 15px !important; }
+.admin-right-section .text-\[15px\] { font-size: 16px !important; }
+.admin-right-section .text-\[16px\] { font-size: 17px !important; }
+.admin-right-section .text-xs { font-size: 0.85rem !important; } /* ~13.6px (up from 12px) */
+.admin-right-section .text-sm { font-size: 0.95rem !important; } /* ~15.2px (up from 14px) */
+.admin-right-section .text-base { font-size: 1.05rem !important; } /* ~16.8px (up by 5%) */
+
+/* Responsive Small Font Sizes Boost */
+@media (min-width: 640px) {
+  .admin-right-section .sm\:text-\[8px\] { font-size: 9px !important; }
+  .admin-right-section .sm\:text-\[9px\] { font-size: 10px !important; }
+  .admin-right-section .sm\:text-\[10px\] { font-size: 11px !important; }
+  .admin-right-section .sm\:text-\[11px\] { font-size: 12px !important; }
+  .admin-right-section .sm\:text-\[12px\] { font-size: 13px !important; }
+  .admin-right-section .sm\:text-\[13px\] { font-size: 14px !important; }
+  .admin-right-section .sm\:text-\[14px\] { font-size: 15px !important; }
+  .admin-right-section .sm\:text-xs { font-size: 0.85rem !important; }
+  .admin-right-section .sm\:text-sm { font-size: 0.95rem !important; }
+  .admin-right-section .sm\:text-base { font-size: 1.05rem !important; }
+}
+
+@media (min-width: 1024px) {
+  .admin-right-section .lg\:text-\[10px\] { font-size: 11px !important; }
+  .admin-right-section .lg\:text-\[11px\] { font-size: 12px !important; }
+  .admin-right-section .lg\:text-\[12px\] { font-size: 13px !important; }
+  .admin-right-section .lg\:text-xs { font-size: 0.85rem !important; }
+  .admin-right-section .lg\:text-sm { font-size: 0.95rem !important; }
+  .admin-right-section .lg\:text-base { font-size: 1.05rem !important; }
+}
+
+/* Headings and Larger Text Sizes Boost (Exact ~5% increase as requested) */
+.admin-right-section h1:not([class*="text-"]),
+.admin-right-section h2:not([class*="text-"]),
+.admin-right-section h3:not([class*="text-"]),
+.admin-right-section h4:not([class*="text-"]),
+.admin-right-section h5:not([class*="text-"]),
+.admin-right-section h6:not([class*="text-"]) {
+  font-size: 1.05em;
+}
+
+.admin-right-section .text-lg { font-size: 1.18rem !important; } /* ~18.9px (up by 5% from 18px) */
+.admin-right-section .text-xl { font-size: 1.3125rem !important; } /* ~21px (up by 5% from 20px) */
+.admin-right-section .text-2xl { font-size: 1.575rem !important; } /* ~25.2px (up by 5% from 24px) */
+.admin-right-section .text-3xl { font-size: 1.96875rem !important; } /* ~31.5px (up by 5% from 30px) */
+.admin-right-section .text-4xl { font-size: 2.3625rem !important; } /* ~37.8px (up by 5% from 36px) */
+.admin-right-section .text-5xl { font-size: 3.15rem !important; } /* ~50.4px (up by 5% from 48px) */
+
+/* Responsive Headings Boost (~5% increase) */
+@media (min-width: 640px) {
+  .admin-right-section .sm\:text-lg { font-size: 1.18rem !important; }
+  .admin-right-section .sm\:text-xl { font-size: 1.3125rem !important; }
+  .admin-right-section .sm\:text-2xl { font-size: 1.575rem !important; }
+  .admin-right-section .sm\:text-3xl { font-size: 1.96875rem !important; }
+  .admin-right-section .sm\:text-4xl { font-size: 2.3625rem !important; }
+  .admin-right-section .sm\:text-5xl { font-size: 3.15rem !important; }
+}
+
+@media (min-width: 1024px) {
+  .admin-right-section .lg\:text-lg { font-size: 1.18rem !important; }
+  .admin-right-section .lg\:text-xl { font-size: 1.3125rem !important; }
+  .admin-right-section .lg\:text-2xl { font-size: 1.575rem !important; }
+  .admin-right-section .lg\:text-3xl { font-size: 1.96875rem !important; }
+  .admin-right-section .lg\:text-4xl { font-size: 2.3625rem !important; }
+  .admin-right-section .lg\:text-5xl { font-size: 3.15rem !important; }
 }
