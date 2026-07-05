@@ -4,8 +4,14 @@ const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://placeholder-pr
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.placeholder'
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey)
-const supabaseServiceKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN5bnF0bGdyeWZ6amNvZnpuemV6Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4MjU4MDMwOCwiZXhwIjoyMDk4MTU2MzA4fQ.8cbculRXEKGCWUAdZ65AndmQN1jE1apabWjYA7U-GGs'
-export const adminSupabase = createClient(supabaseUrl, supabaseServiceKey)
+const supabaseServiceKey = import.meta.env.VITE_SUPABASE_SERVICE_ROLE_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN5bnF0bGdyeWZ6amNvZnpuemV6Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4MjU4MDMwOCwiZXhwIjoyMDk4MTU2MzA4fQ.8cbculRXEKGCWUAdZ65AndmQN1jE1apabWjYA7U-GGs'
+export const adminSupabase = createClient(supabaseUrl, supabaseServiceKey, {
+  auth: {
+    persistSession: false,
+    autoRefreshToken: false,
+    detectSessionInUrl: false
+  }
+})
 
 // ─── PRODUCTS API ────────────────────────────────────────────────────────────
 export async function getProducts() {
@@ -62,7 +68,7 @@ export async function insertProduct(product) {
 
   try {
     const sanitized = sanitizeProduct(newProduct)
-    const { data, error } = await supabase
+    const { data, error } = await adminSupabase
       .from('products')
       .insert([sanitized])
       .select()
@@ -77,7 +83,7 @@ export async function insertProduct(product) {
 export async function updateProduct(productId, product) {
   try {
     const sanitized = sanitizeProduct({ ...product, id: productId })
-    const { data, error } = await supabase
+    const { data, error } = await adminSupabase
       .from('products')
       .update(sanitized)
       .eq('id', productId)
@@ -92,7 +98,7 @@ export async function updateProduct(productId, product) {
 
 export async function deleteProduct(productId) {
   try {
-    const { error } = await supabase
+    const { error } = await adminSupabase
       .from('products')
       .delete()
       .eq('id', productId)
@@ -106,7 +112,7 @@ export async function deleteProduct(productId) {
 
 export async function decrementProductStock(productId, quantityToSubtract) {
   try {
-    const { data: product, error: fetchError } = await supabase
+    const { data: product, error: fetchError } = await adminSupabase
       .from('products')
       .select('stock')
       .eq('id', productId)
@@ -118,7 +124,7 @@ export async function decrementProductStock(productId, quantityToSubtract) {
     const currentStock = product.stock || 0
     const newStock = Math.max(0, currentStock - quantityToSubtract)
 
-    const { error: updateError } = await supabase
+    const { error: updateError } = await adminSupabase
       .from('products')
       .update({ stock: newStock })
       .eq('id', productId)
@@ -138,7 +144,11 @@ export async function getOrders() {
       .select('*')
       .order('created_at', { ascending: false })
     if (error) throw error
-    return data || []
+    return (data || []).map(order => ({
+      ...order,
+      status: order.status ? (order.status.charAt(0).toUpperCase() + order.status.slice(1).toLowerCase()) : 'Pending',
+      payment_status: order.payment_status ? (order.payment_status.toLowerCase() === 'pending' ? 'Pending' : order.payment_status) : 'Unpaid'
+    }))
   } catch (err) {
     console.error("Supabase orders fetch failed:", err.message)
     throw err
@@ -149,12 +159,13 @@ export async function insertOrder(order) {
   const newOrder = {
     ...order,
     id: order.id || `BB-${Math.floor(100000 + Math.random() * 900000)}`,
-    status: order.status || 'Pending',
+    status: order.status ? (order.status.charAt(0).toUpperCase() + order.status.slice(1).toLowerCase()) : 'Pending',
+    payment_status: order.payment_status ? (order.payment_status.toLowerCase() === 'pending' ? 'Pending' : order.payment_status) : 'Unpaid',
     created_at: new Date().toISOString()
   }
 
   try {
-    const { data, error } = await supabase
+    const { data, error } = await adminSupabase
       .from('orders')
       .insert([newOrder])
       .select()
@@ -168,9 +179,10 @@ export async function insertOrder(order) {
 
 export async function updateOrderStatus(orderId, status) {
   try {
-    const { error } = await supabase
+    const normalizedStatus = status ? (status.charAt(0).toUpperCase() + status.slice(1).toLowerCase()) : 'Pending'
+    const { error } = await adminSupabase
       .from('orders')
-      .update({ status })
+      .update({ status: normalizedStatus })
       .eq('id', orderId)
     if (error) throw error
     return true
@@ -218,7 +230,7 @@ export async function insertInquiry(inquiry) {
   }
 
   try {
-    const { data, error } = await supabase
+    const { data, error } = await adminSupabase
       .from('inquiries')
       .insert([newInquiry])
       .select()
@@ -232,7 +244,7 @@ export async function insertInquiry(inquiry) {
 
 export async function deleteInquiry(id) {
   try {
-    const { error } = await supabase
+    const { error } = await adminSupabase
       .from('inquiries')
       .delete()
       .eq('id', id)
@@ -270,7 +282,7 @@ export async function insertCategory(category) {
   }
 
   try {
-    const { data, error } = await supabase
+    const { data, error } = await adminSupabase
       .from('categories')
       .insert([newCat])
       .select()
@@ -284,7 +296,7 @@ export async function insertCategory(category) {
 
 export async function deleteCategory(categoryId) {
   try {
-    const { error } = await supabase
+    const { error } = await adminSupabase
       .from('categories')
       .delete()
       .eq('id', categoryId)
@@ -298,7 +310,7 @@ export async function deleteCategory(categoryId) {
 
 export async function updateCategory(categoryId, categoryUpdates) {
   try {
-    const { error } = await supabase
+    const { error } = await adminSupabase
       .from('categories')
       .update(categoryUpdates)
       .eq('id', categoryId)
@@ -358,7 +370,7 @@ export async function insertCoupon(coupon) {
   };
 
   try {
-    const { data, error } = await supabase
+    const { data, error } = await adminSupabase
       .from('coupons')
       .insert([newC])
       .select();
@@ -372,7 +384,7 @@ export async function insertCoupon(coupon) {
 
 export async function deleteCoupon(id) {
   try {
-    const { error } = await supabase
+    const { error } = await adminSupabase
       .from('coupons')
       .delete()
       .eq('id', id);
@@ -494,7 +506,7 @@ export async function getStoreSettings() {
 
 export async function saveStoreSettings(settings) {
   try {
-    const { data, error } = await supabase
+    const { data, error } = await adminSupabase
       .from('store_settings')
       .upsert({ key: 'global_settings', value: settings, updated_at: new Date().toISOString() })
       .select();
@@ -566,7 +578,7 @@ export async function saveHomepageConfig(config) {
       updated_at: new Date().toISOString()
     };
 
-    const { data, error } = await supabase
+    const { data, error } = await adminSupabase
       .from('homepage_config')
       .upsert(payload)
       .select();
@@ -613,7 +625,7 @@ export async function saveCustomDesign(design) {
   }
 
   try {
-    const { data, error } = await supabase
+    const { data, error } = await adminSupabase
       .from('custom_designs')
       .upsert([newDesign])
       .select()
@@ -671,7 +683,7 @@ export async function getCustomDesign(id) {
 
 export async function deleteCustomDesign(id) {
   try {
-    const { error } = await supabase
+    const { error } = await adminSupabase
       .from('custom_designs')
       .delete()
       .eq('id', id)
@@ -714,7 +726,7 @@ export async function saveCustomizerConfig(config) {
     );
 
     if (namesToDelete.length > 0) {
-      const { error: deleteError } = await supabase
+      const { error: deleteError } = await adminSupabase
         .from('customizer_mockups')
         .delete()
         .in('name', namesToDelete);
@@ -723,7 +735,7 @@ export async function saveCustomizerConfig(config) {
 
     // 2. Upsert pricing settings into dedicated __pricing__ row
     if (config.pricing) {
-      const { error: pricingError } = await supabase
+      const { error: pricingError } = await adminSupabase
         .from('customizer_mockups')
         .upsert({
           name: '__pricing__',
@@ -744,7 +756,7 @@ export async function saveCustomizerConfig(config) {
         created_at: new Date(Date.now() + index * 10).toISOString()
       }));
 
-      const { data, error: upsertError } = await supabase
+      const { data, error: upsertError } = await adminSupabase
         .from('customizer_mockups')
         .upsert(rowsToUpsert, { onConflict: 'name' })
         .select();

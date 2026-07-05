@@ -377,9 +377,13 @@ export default function Admin() {
   }
 
   const handleStatusChange = async (orderId, newStatus) => {
-    await updateOrderStatus(orderId, newStatus)
-    toast.success(`Status updated to ${newStatus}`)
-    loadAdminData()
+    try {
+      await updateOrderStatus(orderId, newStatus)
+      toast.success(`Status updated to ${newStatus}`)
+      loadAdminData()
+    } catch (err) {
+      toast.error("Failed to update status: " + (err.message || "Unknown error"))
+    }
   }
 
   // Coupon Logic

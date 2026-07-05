@@ -65,8 +65,8 @@ export default function Checkout() {
         coupon_code: appliedCoupon?.code || null,
         total: grandTotal,
         payment_method: 'COD',
-        payment_status: 'pending',
-        status: 'pending',
+        payment_status: 'Pending',
+        status: 'Pending',
         user_id: user?.id || null
       }
       await insertOrder(orderData)

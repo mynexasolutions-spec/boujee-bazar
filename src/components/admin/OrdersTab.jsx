@@ -56,6 +56,9 @@ export default function OrdersTab({
       statusText = parts[0].trim()
       rzpOrderId = parts[1].trim()
     }
+    if (statusText.toLowerCase() === 'pending') statusText = 'Pending'
+    else if (statusText.toLowerCase() === 'paid') statusText = 'Paid'
+    else if (statusText.toLowerCase() === 'unpaid') statusText = 'Unpaid'
     return { statusText, rzpOrderId }
   }
 
